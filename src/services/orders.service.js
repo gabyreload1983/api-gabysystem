@@ -17,4 +17,14 @@ const getOrder = async (nrocompro) => await orderManager.getById(nrocompro);
 const take = async (nrocompro, code_technical) =>
   await orderManager.take(nrocompro, code_technical);
 
-export { getInProcess, getPendings, getInProgressByTechnical, getOrder, take };
+const update = async (nrocompro, diagnostico, costo, code_technical) =>
+  await orderManager.update(nrocompro, diagnostico, costo, code_technical);
+
+export {
+  getInProcess,
+  getPendings,
+  getInProgressByTechnical,
+  getOrder,
+  take,
+  update,
+};

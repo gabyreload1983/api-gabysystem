@@ -45,4 +45,10 @@ export default class Orders {
     await this
       .getFromUrbano(`UPDATE trabajos SET estado = 22, tecnico = '${code_technical}'
     WHERE nrocompro = '${nrocompro}'`);
+
+  update = async (nrocompro, diagnostico, costo, code_technical) =>
+    await this
+      .getFromUrbano(`UPDATE trabajos SET diagnostico = '${diagnostico}', costo = ${costo}, pendiente = ${costo}, 
+      tecnico = '${code_technical}', diagnosticado = NOW()
+      WHERE nrocompro = '${nrocompro}'`);
 }

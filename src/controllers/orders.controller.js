@@ -4,6 +4,7 @@ import {
   getInProgressByTechnical as getInProgressByTechnicalService,
   getOrder as getOrderService,
   take as takeService,
+  update as updateService,
 } from "../services/orders.service.js";
 
 const getInProcess = async (req, res) => {
@@ -65,4 +66,29 @@ const take = async (req, res) => {
   }
 };
 
-export { getInProcess, getPendings, getInProgressByTechnical, getOrder, take };
+const update = async (req, res) => {
+  try {
+    const { nrocompro, diagnostico, costo, code_technical } = req.body;
+
+    const result = await updateService(
+      nrocompro,
+      diagnostico,
+      costo,
+      code_technical
+    );
+
+    res.send(result);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(error);
+  }
+};
+
+export {
+  getInProcess,
+  getPendings,
+  getInProgressByTechnical,
+  getOrder,
+  take,
+  update,
+};
