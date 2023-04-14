@@ -6,6 +6,7 @@ import {
   take as takeService,
   update as updateService,
   close as closeService,
+  free as freeService,
 } from "../services/orders.service.js";
 
 const getInProcess = async (req, res) => {
@@ -104,6 +105,19 @@ const close = async (req, res) => {
   }
 };
 
+const free = async (req, res) => {
+  try {
+    const { nrocompro } = req.body;
+
+    const result = await freeService(nrocompro);
+
+    res.send(result);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(error);
+  }
+};
+
 export {
   getInProcess,
   getPendings,
@@ -112,4 +126,5 @@ export {
   take,
   update,
   close,
+  free,
 };

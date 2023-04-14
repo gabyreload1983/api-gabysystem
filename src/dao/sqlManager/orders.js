@@ -59,4 +59,9 @@ export default class Orders {
       diagnosticado = NOW(), tecnico = '${code_technical}'
       WHERE nrocompro = '${nrocompro}'`
     );
+
+  free = async (nrocompro) =>
+    await this
+      .getFromUrbano(`UPDATE trabajos SET estado = 21, diag = 21, tecnico = '', diagnosticado = NOW() 
+    WHERE nrocompro = '${nrocompro}'`);
 }
