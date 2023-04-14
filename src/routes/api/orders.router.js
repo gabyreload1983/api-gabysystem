@@ -4,6 +4,7 @@ const router = Router();
 import {
   getPendings,
   getToDeliver,
+  getFinalDisposition,
   getInProcess,
   getInProgressByTechnical,
   getOrder,
@@ -15,6 +16,7 @@ import {
 
 router.get("/in-process", getInProcess);
 router.get("/to-deliver", getToDeliver);
+router.get("/final-disposition", getFinalDisposition);
 router.get("/pending/:sector", getPendings);
 router.get("/technical/:code_technical", getInProgressByTechnical);
 router.get("/:nrocompro", getOrder);

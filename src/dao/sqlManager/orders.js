@@ -30,6 +30,14 @@ export default class Orders {
       ORDER BY ingresado DESC`
     );
 
+  getFinalDisposition = async () =>
+    await this.getFromUrbano(
+      `SELECT * FROM trabajos WHERE 
+    ingresado < DATE_ADD(NOW(),INTERVAL - 1 YEAR) AND codigo != 'ANULADO' AND 
+    estado = 23  AND diag = 23 AND ubicacion = 21 
+    ORDER BY ingresado DESC LIMIT 100`
+    );
+
   getPendings = async (sector) =>
     await this.getFromUrbano(
       `SELECT * FROM trabajos 
