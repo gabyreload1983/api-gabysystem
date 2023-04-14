@@ -5,6 +5,7 @@ import {
   getOrder as getOrderService,
   take as takeService,
   update as updateService,
+  close as closeService,
 } from "../services/orders.service.js";
 
 const getInProcess = async (req, res) => {
@@ -84,6 +85,25 @@ const update = async (req, res) => {
   }
 };
 
+const close = async (req, res) => {
+  try {
+    const { nrocompro, diagnostico, costo, code_technical, diag } = req.body;
+
+    const result = await closeService(
+      nrocompro,
+      diagnostico,
+      costo,
+      code_technical,
+      diag
+    );
+
+    res.send(result);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(error);
+  }
+};
+
 export {
   getInProcess,
   getPendings,
@@ -91,4 +111,5 @@ export {
   getOrder,
   take,
   update,
+  close,
 };

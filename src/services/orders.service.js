@@ -20,6 +20,9 @@ const take = async (nrocompro, code_technical) =>
 const update = async (nrocompro, diagnostico, costo, code_technical) =>
   await orderManager.update(nrocompro, diagnostico, costo, code_technical);
 
+const close = async (nrocompro, diagnostico, costo, code_technical, diag) =>
+  await orderManager.close(nrocompro, diagnostico, costo, code_technical, diag);
+
 export {
   getInProcess,
   getPendings,
@@ -27,4 +30,5 @@ export {
   getOrder,
   take,
   update,
+  close,
 };
