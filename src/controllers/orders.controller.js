@@ -3,6 +3,7 @@ import {
   getPendings as getPendingsService,
   getInProgressByTechnical as getInProgressByTechnicalService,
   getOrder as getOrderService,
+  take as takeService,
 } from "../services/orders.service.js";
 
 const getInProcess = async (req, res) => {
@@ -51,4 +52,17 @@ const getOrder = async (req, res) => {
   }
 };
 
-export { getInProcess, getPendings, getInProgressByTechnical, getOrder };
+const take = async (req, res) => {
+  try {
+    const { nrocompro, code_technical } = req.body;
+
+    const result = await takeService(nrocompro, code_technical);
+
+    res.send(result);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(error);
+  }
+};
+
+export { getInProcess, getPendings, getInProgressByTechnical, getOrder, take };
