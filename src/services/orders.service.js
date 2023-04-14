@@ -2,22 +2,45 @@ import Orders from "./../dao/sqlManager/orders.js";
 
 const orderManager = new Orders();
 
-const getInProcess = async () => await orderManager.getInProcess();
-
-const getToDeliver = async () => await orderManager.getToDeliver();
-
-const getFinalDisposition = async () =>
-  await orderManager.getFinalDisposition();
-
-const getPendings = async (sector) => {
-  sector = sector.toUpperCase();
-  return await orderManager.getPendings(sector);
+const addingProductsInOrders = async (orders) => {
+  for (let order of orders) {
+    order.products = await orderManager.getProductsInOrder(order.nrocompro);
+  }
+  return orders;
 };
 
-const getInProgressByTechnical = async (code_technical) =>
-  await orderManager.getInProgressByTechnical(code_technical);
+const getInProcess = async () => {
+  const orders = await orderManager.getInProcess();
+  return await addingProductsInOrders(orders);
+};
 
-const getOrder = async (nrocompro) => await orderManager.getById(nrocompro);
+const getToDeliver = async () => {
+  const orders = await orderManager.getToDeliver();
+  return await addingProductsInOrders(orders);
+};
+
+const getFinalDisposition = async () => {
+  const orders = await orderManager.getFinalDisposition();
+  return await addingProductsInOrders(orders);
+};
+
+const getPendings = async (sector) => {
+  const orders = await orderManager.getPendings(sector.toUpperCase());
+  return await addingProductsInOrders(orders);
+};
+
+const getInProgressByTechnical = async (code_technical) => {
+  const orders = await orderManager.getInProgressByTechnical(
+    code_technical.toUpperCase()
+  );
+  return await addingProductsInOrders(orders);
+};
+
+const getOrder = async (nrocompro) => {
+  const order = await orderManager.getById(nrocompro);
+  order[0].products = await orderManager.getProductsInOrder(nrocompro);
+  return order;
+};
 
 const take = async (nrocompro, code_technical) =>
   await orderManager.take(nrocompro, code_technical);

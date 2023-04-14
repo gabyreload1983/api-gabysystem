@@ -57,6 +57,12 @@ export default class Orders {
       `SELECT * FROM trabajos WHERE nrocompro = '${nrocompro}'`
     );
 
+  getProductsInOrder = async (nrocompro) =>
+    await this.getFromUrbano(
+      `SELECT * FROM trrenglo INNER JOIN articulo ON trrenglo.codart = articulo.codigo
+     WHERE trrenglo.nrocompro = '${nrocompro}'`
+    );
+
   take = async (nrocompro, code_technical) =>
     await this
       .getFromUrbano(`UPDATE trabajos SET estado = 22, tecnico = '${code_technical}'
