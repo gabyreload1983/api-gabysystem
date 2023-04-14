@@ -3,6 +3,7 @@ import { Router } from "express";
 const router = Router();
 import {
   getPendings,
+  getToDeliver,
   getInProcess,
   getInProgressByTechnical,
   getOrder,
@@ -13,6 +14,7 @@ import {
 } from "../../controllers/orders.controller.js";
 
 router.get("/in-process", getInProcess);
+router.get("/to-deliver", getToDeliver);
 router.get("/pending/:sector", getPendings);
 router.get("/technical/:code_technical", getInProgressByTechnical);
 router.get("/:nrocompro", getOrder);

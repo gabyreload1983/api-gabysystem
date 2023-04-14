@@ -2,6 +2,7 @@ import {
   getInProcess as getInProcessService,
   getPendings as getPendingsService,
   getInProgressByTechnical as getInProgressByTechnicalService,
+  getToDeliver as getToDeliverService,
   getOrder as getOrderService,
   take as takeService,
   update as updateService,
@@ -12,6 +13,17 @@ import {
 const getInProcess = async (req, res) => {
   try {
     const orders = await getInProcessService();
+
+    res.send(orders);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(error);
+  }
+};
+
+const getToDeliver = async (req, res) => {
+  try {
+    const orders = await getToDeliverService();
 
     res.send(orders);
   } catch (error) {
@@ -120,6 +132,7 @@ const free = async (req, res) => {
 
 export {
   getInProcess,
+  getToDeliver,
   getPendings,
   getInProgressByTechnical,
   getOrder,

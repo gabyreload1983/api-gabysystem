@@ -4,6 +4,8 @@ const orderManager = new Orders();
 
 const getInProcess = async () => await orderManager.getInProcess();
 
+const getToDeliver = async () => await orderManager.getToDeliver();
+
 const getPendings = async (sector) => {
   sector = sector.toUpperCase();
   return await orderManager.getPendings(sector);
@@ -27,6 +29,7 @@ const free = async (nrocompro) => await orderManager.free(nrocompro);
 
 export {
   getInProcess,
+  getToDeliver,
   getPendings,
   getInProgressByTechnical,
   getOrder,

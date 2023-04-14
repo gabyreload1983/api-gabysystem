@@ -22,6 +22,14 @@ export default class Orders {
       `SELECT * FROM trabajos WHERE estado = 22 ORDER BY tecnico`
     );
 
+  getToDeliver = async (from = "1 YEAR") =>
+    await this.getFromUrbano(
+      `SELECT * FROM trabajos WHERE 
+      ingresado BETWEEN DATE_ADD(NOW(),INTERVAL - ${from}) AND NOW() AND
+      codigo != 'ANULADO' AND estado = 23  AND diag = 22 AND ubicacion = 21
+      ORDER BY ingresado DESC`
+    );
+
   getPendings = async (sector) =>
     await this.getFromUrbano(
       `SELECT * FROM trabajos 
