@@ -8,6 +8,7 @@ import { __dirname } from "./utils.js";
 import initializePassport from "./config/passport.config.js";
 
 import usersRouter from "./routes/api/users.router.js";
+import ordersRouter from "./routes/api/orders.router.js";
 
 import "./dao/dbMongoConfig.js";
 
@@ -27,6 +28,7 @@ initializePassport();
 app.use(passport.initialize());
 
 app.use("/api/users", usersRouter);
+app.use("/api/orders", ordersRouter);
 
 const port = config.port;
 app.listen(port, () => console.log(`Listening on port ${port}`));
