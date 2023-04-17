@@ -84,7 +84,7 @@ const loginUser = async (req, res) => {
     const accessToken = generateToken(user);
 
     res
-      .cookie("coderCookieToken", accessToken, {
+      .cookie("gabySystemCookieToken", accessToken, {
         maxAge: 60 * 60 * 24 * 7,
         httpOnly: true,
       })
