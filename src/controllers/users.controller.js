@@ -37,11 +37,23 @@ const createUser = async (req, res) => {
   try {
     const { first_name, last_name, email, code_technical, password } = req.body;
 
+    if (!first_name || !last_name || !email || !code_technical || !password)
+      return res
+        .status(400)
+        .send({ status: "error", message: "Incomplete values!" });
+
     const user = await getByEmailService(email);
     if (user) {
       return res
         .status(400)
         .send({ status: "error", message: "User already exists" });
+    }
+
+    const codeTechnical = await getUserByCodeService(code_technical);
+    if (codeTechnical) {
+      return res
+        .status(400)
+        .send({ status: "error", message: "Code technical already exists" });
     }
 
     const newUser = {
