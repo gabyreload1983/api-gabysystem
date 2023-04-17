@@ -25,7 +25,7 @@ const getFinalDisposition = async () => {
 };
 
 const getPendings = async (sector) => {
-  const orders = await orderManager.getPendings(sector.toUpperCase());
+  const orders = await orderManager.getPendings(sector);
   return await addingProductsInOrders(orders);
 };
 
