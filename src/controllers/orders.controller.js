@@ -72,7 +72,16 @@ const getInProgressByTechnical = async (req, res) => {
 const getOrder = async (req, res) => {
   try {
     const { nrocompro } = req.params;
+    if (incompleteValues(nrocompro))
+      return res
+        .status(400)
+        .send({ status: "error", message: "Incomplete values" });
+
     const order = await getOrderService(nrocompro);
+    if (!order)
+      return res
+        .status(400)
+        .send({ status: "error", message: "No se encontro orden" });
     res.send(order);
   } catch (error) {
     console.log(error);

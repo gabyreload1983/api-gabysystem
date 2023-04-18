@@ -38,6 +38,7 @@ const getInProgressByTechnical = async (code_technical) => {
 
 const getOrder = async (nrocompro) => {
   const order = await orderManager.getById(nrocompro);
+  if (order.length === 0) return null;
   order[0].products = await orderManager.getProductsInOrder(nrocompro);
   return order;
 };
