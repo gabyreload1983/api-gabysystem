@@ -1,6 +1,9 @@
+import Customers from "../dao/sqlManager/customers.js";
 import Orders from "./../dao/sqlManager/orders.js";
+import sendMail from "./../nodemailer/config.js";
 
 const orderManager = new Orders();
+const customersManager = new Customers();
 
 const addingProductsInOrders = async (orders) => {
   for (let order of orders) {
@@ -49,8 +52,35 @@ const take = async (nrocompro, code_technical) =>
 const update = async (nrocompro, diagnostico, costo, code_technical) =>
   await orderManager.update(nrocompro, diagnostico, costo, code_technical);
 
-const close = async (nrocompro, diagnostico, costo, code_technical, diag) =>
-  await orderManager.close(nrocompro, diagnostico, costo, code_technical, diag);
+const close = async (
+  nrocompro,
+  diagnostico,
+  costo,
+  code_technical,
+  diag,
+  notification
+) => {
+  const result = await orderManager.close(
+    nrocompro,
+    diagnostico,
+    costo,
+    code_technical,
+    diag
+  );
+  if (notification) {
+    const order = await orderManager.getById(nrocompro);
+    const customer = await customersManager.getByCode(order[0].codigo);
+    console.log(customer[0]);
+    const info = await sendMail(
+      customer[0].mail,
+      "ORDEN REPARACION",
+      "Notificacion Servicio Tecnico",
+      `<p>La orden de reparacion ${nrocompro} esta finalaizada. ya la puede retirar. Servicio tecnico Sinapsis</p>`
+    );
+    return info;
+  }
+  return result;
+};
 
 const free = async (nrocompro) => {
   const order = await orderManager.getById(nrocompro);

@@ -130,7 +130,14 @@ const update = async (req, res) => {
 
 const close = async (req, res) => {
   try {
-    const { nrocompro, diagnostico, costo, code_technical, diag } = req.body;
+    const {
+      nrocompro,
+      diagnostico,
+      costo,
+      code_technical,
+      diag,
+      notification = false,
+    } = req.body;
     if (incompleteValues(nrocompro, diagnostico, costo, code_technical, diag))
       return res
         .status(400)
@@ -141,7 +148,8 @@ const close = async (req, res) => {
       diagnostico,
       costo,
       code_technical,
-      diag
+      diag,
+      notification
     );
 
     res.send(result);
