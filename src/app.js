@@ -29,6 +29,9 @@ app.use(passport.initialize());
 
 app.use("/api/users", usersRouter);
 app.use("/api/orders", ordersRouter);
+app.use("*", (req, res) =>
+  res.status(404).send({ error: "error", message: "Page Not Found" })
+);
 
 const port = config.port;
 app.listen(port, () => console.log(`Listening on port ${port}`));
