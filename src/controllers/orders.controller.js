@@ -10,6 +10,7 @@ import {
   close as closeService,
   free as freeService,
 } from "../services/orders.service.js";
+import { incompleteValues } from "../validators/validator.js";
 
 const getInProcess = async (req, res) => {
   try {
@@ -82,6 +83,10 @@ const getOrder = async (req, res) => {
 const take = async (req, res) => {
   try {
     const { nrocompro, code_technical } = req.body;
+    if (incompleteValues(nrocompro, code_technical))
+      return res
+        .status(400)
+        .send({ status: "error", message: "Incomplete values" });
 
     const result = await takeService(nrocompro, code_technical);
 
@@ -95,6 +100,10 @@ const take = async (req, res) => {
 const update = async (req, res) => {
   try {
     const { nrocompro, diagnostico, costo, code_technical } = req.body;
+    if (incompleteValues(nrocompro, diagnostico, costo, code_technical))
+      return res
+        .status(400)
+        .send({ status: "error", message: "Incomplete values" });
 
     const result = await updateService(
       nrocompro,
@@ -113,6 +122,10 @@ const update = async (req, res) => {
 const close = async (req, res) => {
   try {
     const { nrocompro, diagnostico, costo, code_technical, diag } = req.body;
+    if (incompleteValues(nrocompro, diagnostico, costo, code_technical, diag))
+      return res
+        .status(400)
+        .send({ status: "error", message: "Incomplete values" });
 
     const result = await closeService(
       nrocompro,
@@ -131,7 +144,11 @@ const close = async (req, res) => {
 
 const free = async (req, res) => {
   try {
-    const { nrocompro } = req.body;
+    const { nrocompro, code_technical } = req.body;
+    if (incompleteValues(nrocompro, code_technical))
+      return res
+        .status(400)
+        .send({ status: "error", message: "Incomplete values" });
 
     const result = await freeService(nrocompro);
     if (result?.status === "error")
