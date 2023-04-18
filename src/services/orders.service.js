@@ -51,7 +51,16 @@ const update = async (nrocompro, diagnostico, costo, code_technical) =>
 const close = async (nrocompro, diagnostico, costo, code_technical, diag) =>
   await orderManager.close(nrocompro, diagnostico, costo, code_technical, diag);
 
-const free = async (nrocompro) => await orderManager.free(nrocompro);
+const free = async (nrocompro) => {
+  const order = await orderManager.getById(nrocompro);
+  if (order.length === 0)
+    return { status: "error", message: "No se encontro orden!" };
+
+  if (order[0].ubicacion === 22)
+    return { status: "error", message: "La orden ya fue entregada!" };
+
+  return await orderManager.free(nrocompro);
+};
 
 export {
   getInProcess,

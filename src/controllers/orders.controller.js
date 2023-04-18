@@ -134,6 +134,8 @@ const free = async (req, res) => {
     const { nrocompro } = req.body;
 
     const result = await freeService(nrocompro);
+    if (result?.status === "error")
+      return res.status(400).send({ status: "error", message: result.message });
 
     res.send(result);
   } catch (error) {
