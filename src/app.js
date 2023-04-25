@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import passport from "passport";
 import cookieParser from "cookie-parser";
 import handlebars from "express-handlebars";
@@ -14,6 +15,8 @@ import customersRouter from "./routes/api/customers.router.js";
 import "./dao/dbMongoConfig.js";
 
 const app = express();
+
+app.use(cors());
 
 app.use(express.static(`${__dirname}/public`));
 
