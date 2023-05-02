@@ -21,9 +21,9 @@ router.get("/pending/:sector", getPendings);
 router.get("/technical/:code_technical", getInProgressByTechnical);
 router.get("/:nrocompro", getOrder);
 
-router.post("/take/", take);
-router.post("/update/", update);
-router.post("/close/", close);
-router.post("/free/", free);
+router.put("/take/", take);
+router.put("/update/", update);
+router.put("/close/", close);
+router.put("/free/", free);
 
 export default router;
