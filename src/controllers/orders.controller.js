@@ -98,8 +98,8 @@ const take = async (req, res) => {
         .send({ status: "error", message: "Incomplete values" });
 
     const result = await takeService(nrocompro, code_technical);
-
-    res.send(result);
+    if (result.affectedRows)
+      res.send({ status: "success", message: "Order Taked", result });
   } catch (error) {
     console.log(error);
     res.status(500).send(error);
