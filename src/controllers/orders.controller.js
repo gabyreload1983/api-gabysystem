@@ -121,7 +121,7 @@ const update = async (req, res) => {
       code_technical
     );
 
-    res.send(result);
+    res.send({ status: "success", message: "Order Updated", result });
   } catch (error) {
     console.log(error);
     res.status(500).send(error);

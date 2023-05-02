@@ -1,9 +1,11 @@
 import Customers from "../dao/sqlManager/customers.js";
+import Products from "../dao/sqlManager/products.js";
 import Orders from "./../dao/sqlManager/orders.js";
 import sendMail from "./../nodemailer/config.js";
 
 const orderManager = new Orders();
 const customersManager = new Customers();
+const productManager = new Products();
 
 const addingProductsInOrders = async (orders) => {
   for (let order of orders) {
@@ -40,9 +42,23 @@ const getInProgressByTechnical = async (code_technical) => {
 };
 
 const getOrder = async (nrocompro) => {
-  const order = await orderManager.getById(nrocompro);
+  let order = await orderManager.getById(nrocompro);
   if (order.length === 0) return null;
-  order[0].products = await orderManager.getProductsInOrder(nrocompro);
+  order = order[0];
+  order.products = await orderManager.getProductsInOrder(nrocompro);
+  const dollar = await productManager.getDollarValue();
+
+  order.products = order.products.map((p) => {
+    const iva = p.grabado === "1" ? 1.21 : 1.105;
+    const moneda = p.moneda === "D" ? dollar : 1;
+    p.priceWithTax = (Number(p.lista1) * Number(iva) * moneda).toFixed(2);
+    return p;
+  });
+
+  order.total = Number(order.costo);
+  order.total = order.products.reduce((acc, val) => {
+    return (acc += Number(val.priceWithTax));
+  }, order.total);
   return order;
 };
 
