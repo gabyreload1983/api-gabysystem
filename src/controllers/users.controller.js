@@ -95,12 +95,12 @@ const loginUser = async (req, res) => {
 
     const accessToken = generateToken(user);
 
-    res
-      .cookie("gabySystemCookieToken", accessToken, {
-        maxAge: 60 * 60 * 24 * 7,
-        httpOnly: true,
-      })
-      .send({ status: "success", message: "login success" });
+    res.send({
+      status: "success",
+      message: "login success",
+      accessToken,
+      user,
+    });
   } catch (error) {
     console.log(error);
     res.status(500).send(error);

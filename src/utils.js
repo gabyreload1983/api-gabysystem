@@ -10,6 +10,19 @@ export const __dirname = dirname(__filename);
 export const generateToken = (user) =>
   jwt.sign({ user }, config.private_key_jwt, { expiresIn: "7 days" });
 
+export const authToken = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader) return res.status(401).send({ error: "Not authenticated" });
+
+  const token = authHeader.split(" ")[1];
+  jwt.verify(token, config.private_key_jwt, (error, credentials) => {
+    if (error) return res.status(403).send({ error: "Not authorized" });
+    req.user = credentials.user;
+    next();
+  });
+};
+
 export const createHash = (password) =>
   bcrypt.hashSync(password, bcrypt.genSaltSync(10));
 
