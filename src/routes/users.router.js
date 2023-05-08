@@ -13,12 +13,7 @@ import { authorization } from "../utils.js";
 router.get("/", getUsers);
 router.get("/code/:code_technical", getUserByCode);
 
-router.post(
-  "/register",
-  passport.authenticate("jwt", { session: false }),
-  authorization("admin"),
-  createUser
-);
+router.post("/register", createUser);
 router.post("/login", loginUser);
 
 export default router;
