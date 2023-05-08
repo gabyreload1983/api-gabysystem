@@ -171,7 +171,7 @@ const free = async (req, res) => {
     if (result?.status === "error")
       return res.status(400).send({ status: "error", message: result.message });
 
-    res.send(result);
+    res.send({ status: "success", message: "Order Close", result });
   } catch (error) {
     console.log(error);
     res.status(500).send(error);
