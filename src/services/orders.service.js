@@ -86,14 +86,13 @@ const close = async (
   if (notification) {
     const order = await orderManager.getById(nrocompro);
     const customer = await customersManager.getByCode(order[0].codigo);
-    console.log(customer[0]);
     const info = await sendMail(
       customer[0].mail,
       "ORDEN REPARACION",
       "Notificacion Servicio Tecnico",
       `<p>La orden de reparacion ${nrocompro} esta finalaizada. ya la puede retirar. Servicio tecnico Sinapsis</p>`
     );
-    return info;
+    result.email = info;
   }
   return result;
 };

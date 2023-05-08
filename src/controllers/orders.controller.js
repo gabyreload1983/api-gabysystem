@@ -152,7 +152,7 @@ const close = async (req, res) => {
       notification
     );
 
-    res.send(result);
+    res.send({ status: "success", message: "Order Close", result });
   } catch (error) {
     console.log(error);
     res.status(500).send(error);
