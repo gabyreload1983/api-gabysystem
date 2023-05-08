@@ -12,7 +12,7 @@ import {
   update,
   close,
   free,
-} from "../../controllers/orders.controller.js";
+} from "../controllers/orders.controller.js";
 
 router.get("/in-process", getInProcess);
 router.get("/to-deliver", getToDeliver);

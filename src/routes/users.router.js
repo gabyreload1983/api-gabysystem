@@ -6,9 +6,9 @@ import {
   getUserByCode,
   createUser,
   loginUser,
-} from "../../controllers/users.controller.js";
+} from "../controllers/users.controller.js";
 import passport from "passport";
-import { authorization } from "../../utils.js";
+import { authorization } from "../utils.js";
 
 router.get("/", getUsers);
 router.get("/code/:code_technical", getUserByCode);
