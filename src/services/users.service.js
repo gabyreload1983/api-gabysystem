@@ -1,14 +1,15 @@
 import User from "../dao/mongoManagers/users.js";
+import UsersDto from "./../dao/DTOs/users.dto.js";
 
 const userManager = new User();
 
-const getUsers = async () => await userManager.getAll();
+export const getUsers = async () => await userManager.getAll();
 
-const getUserByCode = async (code_technical) =>
+export const getUserByCode = async (code_technical) =>
   await userManager.getByCodeTechnical(code_technical.toUpperCase());
 
-const getByEmail = async (email) => await userManager.getByEmail(email);
+export const getByEmail = async (email) => await userManager.getByEmail(email);
 
-const createUser = async (user) => await userManager.create(user);
+export const createUser = async (user) => await userManager.create(user);
 
-export { getUsers, getUserByCode, getByEmail, createUser };
+export const login = async (user) => new UsersDto(user);

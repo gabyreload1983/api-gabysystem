@@ -1,15 +1,10 @@
-import {
-  getUsers as getUsersService,
-  getUserByCode as getUserByCodeService,
-  createUser as createUserService,
-  getByEmail as getByEmailService,
-} from "../services/users.service.js";
+import * as userService from "../services/users.service.js";
 import { generateToken } from "../utils.js";
 import { createHash, validatePassword } from "../utils.js";
 
 const getUsers = async (req, res) => {
   try {
-    const users = await getUsersService();
+    const users = await userService.getUsers();
     res.send(users);
   } catch (error) {
     console.log(error);
@@ -20,7 +15,7 @@ const getUserByCode = async (req, res) => {
   try {
     let { code_technical } = req.params;
 
-    const user = await getUserByCodeService(code_technical);
+    const user = await userService.getUserByCode(code_technical);
     if (!user)
       return res
         .status(404)
@@ -42,14 +37,14 @@ const createUser = async (req, res) => {
         .status(400)
         .send({ status: "error", message: "Incomplete values!" });
 
-    const user = await getByEmailService(email);
+    const user = await userService.getByEmail(email);
     if (user) {
       return res
         .status(400)
         .send({ status: "error", message: "User already exists" });
     }
 
-    const codeTechnical = await getUserByCodeService(code_technical);
+    const codeTechnical = await userService.getUserByCode(code_technical);
     if (codeTechnical) {
       return res
         .status(400)
@@ -65,7 +60,7 @@ const createUser = async (req, res) => {
       role: "user",
     };
 
-    await createUserService(newUser);
+    await userService.createUser(newUser);
 
     res.send({ status: "success", message: "user registered" });
   } catch (error) {
@@ -78,7 +73,7 @@ const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const user = await getByEmailService(email);
+    const user = await userService.getByEmail(email);
 
     if (!user) {
       return res
@@ -91,15 +86,15 @@ const loginUser = async (req, res) => {
         .status(401)
         .send({ status: "error", message: "Invalid credentials" });
 
-    user.password = "";
+    const userDto = await userService.login(user);
 
-    const accessToken = generateToken(user);
+    const accessToken = generateToken(userDto);
 
     res.send({
       status: "success",
       message: "login success",
       accessToken,
-      user,
+      user: userDto,
     });
   } catch (error) {
     console.log(error);
