@@ -21,4 +21,9 @@ export default class Customers {
     await this.#getFromUrbano(
       `SELECT * FROM clientes WHERE codigo = '${codigo}'`
     );
+
+  getByName = async (description) =>
+    await this.#getFromUrbano(
+      `SELECT * FROM clientes WHERE nombre LIKE '%${description}%'`
+    );
 }

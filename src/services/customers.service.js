@@ -2,7 +2,8 @@ import Customers from "../dao/sqlManager/customers.js";
 
 const customerManager = new Customers();
 
-const getCustomerByCode = async (codigo) =>
+export const getByCode = async (codigo) =>
   await customerManager.getByCode(codigo);
 
-export { getCustomerByCode };
+export const getCustomersByName = async (name) =>
+  await customerManager.getByName(name);
