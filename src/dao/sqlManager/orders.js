@@ -1,8 +1,9 @@
+import logger from "../../logger/logger.js";
 import { connectionUrbano } from "../dbMySqlConfig.js";
 
 export default class Orders {
   constructor() {
-    console.log("Working Orders with DB in MySQL");
+    logger.info("Working Orders with DB in MySQL");
   }
 
   getFromUrbano = (querySelect) => {

@@ -1,8 +1,9 @@
+import logger from "../../logger/logger.js";
 import { connectionUrbano } from "../dbMySqlConfig.js";
 
 export default class Products {
   constructor() {
-    console.log("Working Products with DB in MySQL");
+    logger.info("Working Products with DB in MySQL");
   }
 
   #getFromUrbano = (querySelect) => {

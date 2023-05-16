@@ -4,6 +4,7 @@ dotenv.config();
 
 export default {
   port: process.env.PORT,
+  env: process.env.NODE_ENV,
   mongoUrl: process.env.MONGO_URL,
   sql_host: process.env.SQL_HOST,
   sql_user: process.env.SQL_USER,

@@ -3,6 +3,7 @@ import { dirname } from "path";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import config from "./config/config.js";
+import logger from "./logger/logger.js";
 
 const __filename = fileURLToPath(import.meta.url);
 export const __dirname = dirname(__filename);
@@ -31,7 +32,7 @@ export const validatePassword = (user, password) =>
 
 export const authorization = (role) => {
   return async (req, res, next) => {
-    console.log("authorization", req.user);
+    logger.info("authorization", req.user);
     if (req.user.role !== role)
       return res.status(403).send({ error: "Not permissions" });
     next();

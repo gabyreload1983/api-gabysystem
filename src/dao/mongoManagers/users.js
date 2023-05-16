@@ -1,8 +1,9 @@
+import logger from "../../logger/logger.js";
 import userModel from "./models/users.js";
 
 export default class Users {
   constructor() {
-    console.log("Working Users with DB in mongoDB");
+    logger.info("Working Users with DB in mongoDB");
   }
 
   create = async (user) => await userModel.create(user);

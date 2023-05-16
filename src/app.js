@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 
 import config from "./config/config.js";
 import initializePassport from "./config/passport.config.js";
+import logger from "./logger/logger.js";
 
 import usersRouter from "./routes/users.router.js";
 import ordersRouter from "./routes/orders.router.js";
@@ -31,4 +32,4 @@ app.use("*", (req, res) =>
 );
 
 const port = config.port;
-app.listen(port, () => console.log(`Listening on port ${port}`));
+app.listen(port, () => logger.info(`Listening on port ${port}`));

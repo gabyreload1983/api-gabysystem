@@ -1,3 +1,4 @@
+import logger from "../logger/logger.js";
 import {
   getInProcess as getInProcessService,
   getPendings as getPendingsService,
@@ -18,7 +19,7 @@ const getInProcess = async (req, res) => {
 
     res.send(orders);
   } catch (error) {
-    console.log(error);
+    logger.error(error);
     res.status(500).send(error);
   }
 };
@@ -29,7 +30,7 @@ const getToDeliver = async (req, res) => {
 
     res.send(orders);
   } catch (error) {
-    console.log(error);
+    logger.error(error);
     res.status(500).send(error);
   }
 };
@@ -40,7 +41,7 @@ const getFinalDisposition = async (req, res) => {
 
     res.send(orders);
   } catch (error) {
-    console.log(error);
+    logger.error(error);
     res.status(500).send(error);
   }
 };
@@ -52,7 +53,7 @@ const getPendings = async (req, res) => {
 
     res.send(orders);
   } catch (error) {
-    console.log(error);
+    logger.error(error);
     res.status(500).send(error);
   }
 };
@@ -64,7 +65,7 @@ const getInProgressByTechnical = async (req, res) => {
 
     res.send(orders);
   } catch (error) {
-    console.log(error);
+    logger.error(error);
     res.status(500).send(error);
   }
 };
@@ -84,7 +85,7 @@ const getOrder = async (req, res) => {
         .send({ status: "error", message: "No se encontro orden" });
     res.send(order);
   } catch (error) {
-    console.log(error);
+    logger.error(error);
     res.status(500).send(error);
   }
 };
@@ -101,7 +102,7 @@ const take = async (req, res) => {
     if (result.affectedRows)
       res.send({ status: "success", message: "Order Taked", result });
   } catch (error) {
-    console.log(error);
+    logger.error(error);
     res.status(500).send(error);
   }
 };
@@ -123,7 +124,7 @@ const update = async (req, res) => {
 
     res.send({ status: "success", message: "Order Updated", result });
   } catch (error) {
-    console.log(error);
+    logger.error(error);
     res.status(500).send(error);
   }
 };
@@ -154,7 +155,7 @@ const close = async (req, res) => {
 
     res.send({ status: "success", message: "Order Close", result });
   } catch (error) {
-    console.log(error);
+    logger.error(error);
     res.status(500).send(error);
   }
 };
@@ -173,7 +174,7 @@ const free = async (req, res) => {
 
     res.send({ status: "success", message: "Order Close", result });
   } catch (error) {
-    console.log(error);
+    logger.error(error);
     res.status(500).send(error);
   }
 };
