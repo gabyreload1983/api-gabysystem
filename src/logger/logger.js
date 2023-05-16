@@ -1,9 +1,7 @@
-import winston from "winston";
+import { createLogger, format, transports } from "winston";
+const { combine, timestamp, printf, colorize } = format;
 import config from "../config/config.js";
 import { __dirname } from "../utils.js";
-
-const ENVIRONMENT = config.env;
-const loggerPath = `${__dirname}/logger/logs`;
 
 const customLevelOptions = {
   levels: {
@@ -15,52 +13,65 @@ const customLevelOptions = {
   },
   colors: {
     fatal: "red",
-    error: "red",
+    error: "magenta",
     warning: "yellow",
     info: "green",
     debug: "blue",
   },
 };
 
+const customTimestamp = { format: "DD-MM-YYYY T hh:mm:ss A" };
+
+const customFormat = printf(({ level, message, timestamp }) => {
+  return `${timestamp} ${level.toLocaleUpperCase()}: ${message}`;
+});
+
+const ENVIRONMENT = config.env;
+const loggerPath = `${__dirname}/logger/logs`;
+
 let logger;
 
 if (ENVIRONMENT === "production") {
-  logger = winston.createLogger({
+  logger = createLogger({
     levels: customLevelOptions.levels,
     transports: [
-      new winston.transports.Console({
+      new transports.Console({
         level: "error",
-        format: winston.format.combine(
-          winston.format.colorize({
+        format: combine(
+          timestamp(customTimestamp),
+          customFormat,
+          colorize({
             all: true,
             colors: customLevelOptions.colors,
-          }),
-          winston.format.simple()
+          })
         ),
       }),
-      new winston.transports.File({
+      new transports.File({
         filename: `${loggerPath}/prod.log`,
         level: "error",
+        format: combine(timestamp(customTimestamp), customFormat),
       }),
     ],
   });
 } else {
-  logger = winston.createLogger({
+  logger = createLogger({
     levels: customLevelOptions.levels,
     transports: [
-      new winston.transports.Console({
+      new transports.Console({
         level: "debug",
-        format: winston.format.combine(
-          winston.format.colorize({
+        format: combine(
+          timestamp(customTimestamp),
+          customFormat,
+          colorize({
             all: true,
             colors: customLevelOptions.colors,
-          }),
-          winston.format.simple()
+          })
         ),
       }),
-      new winston.transports.File({
+      new transports.File({
         filename: `${loggerPath}/dev.log`,
         level: "debug",
+        format: combine(timestamp(customTimestamp), customFormat),
       }),
     ],
   });
