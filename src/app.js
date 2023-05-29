@@ -12,6 +12,7 @@ import ordersRouter from "./routes/orders.router.js";
 import customersRouter from "./routes/customers.router.js";
 
 import "./dao/dbMongoConfig.js";
+import { authToken } from "./utils.js";
 
 const app = express();
 
@@ -25,7 +26,7 @@ initializePassport();
 app.use(passport.initialize());
 
 app.use("/api/users", usersRouter);
-app.use("/api/orders", ordersRouter);
+app.use("/api/orders", authToken, ordersRouter);
 app.use("/api/customers", customersRouter);
 app.use("*", (req, res) =>
   res.status(404).send({ error: "error", message: "Page Not Found" })
