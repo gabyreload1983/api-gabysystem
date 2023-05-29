@@ -83,7 +83,7 @@ const getOrder = async (req, res) => {
       return res
         .status(400)
         .send({ status: "error", message: "No se encontro orden" });
-    res.send(order);
+    res.send({ status: "success", order });
   } catch (error) {
     logger.error(error);
     res.status(500).send(error);
