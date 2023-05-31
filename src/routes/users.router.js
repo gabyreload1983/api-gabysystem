@@ -7,13 +7,17 @@ import {
   createUser,
   loginUser,
 } from "../controllers/users.controller.js";
-import passport from "passport";
-import { authorization } from "../utils.js";
+import { authToken, authorization } from "../utils.js";
 
-router.get("/", getUsers);
-router.get("/code/:code_technical", getUserByCode);
+router.get("/", authToken, authorization("admin"), getUsers);
+router.get(
+  "/code/:code_technical",
+  authToken,
+  authorization("admin"),
+  getUserByCode
+);
+router.post("/register", authToken, authorization("admin"), createUser);
 
-router.post("/register", createUser);
 router.post("/login", loginUser);
 
 export default router;

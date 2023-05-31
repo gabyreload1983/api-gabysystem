@@ -27,7 +27,7 @@ app.use(passport.initialize());
 
 app.use("/api/users", usersRouter);
 app.use("/api/orders", authToken, ordersRouter);
-app.use("/api/customers", customersRouter);
+app.use("/api/customers", authToken, customersRouter);
 app.use("*", (req, res) =>
   res.status(404).send({ error: "error", message: "Page Not Found" })
 );

@@ -13,6 +13,7 @@ import {
   close,
   free,
 } from "../controllers/orders.controller.js";
+import { authorization } from "../utils.js";
 
 router.get("/in-process", getInProcess);
 router.get("/to-deliver", getToDeliver);
@@ -21,9 +22,9 @@ router.get("/pending/:sector", getPendings);
 router.get("/technical/:code_technical", getInProgressByTechnical);
 router.get("/:nrocompro", getOrder);
 
-router.put("/take/", take);
-router.put("/update/", update);
-router.put("/close/", close);
-router.put("/free/", free);
+router.put("/take/", authorization("technical", "admin"), take);
+router.put("/update/", authorization("technical", "admin"), update);
+router.put("/close/", authorization("technical", "admin"), close);
+router.put("/free/", authorization("technical", "admin"), free);
 
 export default router;

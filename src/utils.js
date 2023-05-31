@@ -30,11 +30,12 @@ export const createHash = (password) =>
 export const validatePassword = (user, password) =>
   bcrypt.compareSync(password, user.password);
 
-export const authorization = (role) => {
+export const authorization = (...roles) => {
   return async (req, res, next) => {
-    logger.info("authorization", req.user);
-    if (req.user.role !== role)
-      return res.status(403).send({ error: "Not permissions" });
+    if (!roles.includes(req.user.role))
+      return res
+        .status(403)
+        .send({ status: "error", message: "You don't have permissions" });
     next();
   };
 };
