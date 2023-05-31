@@ -19,7 +19,7 @@ const getInProcess = async (req, res) => {
 
     res.send(orders);
   } catch (error) {
-    logger.error(error);
+    logger.error(error.message);
     res.status(500).send(error);
   }
 };
@@ -30,7 +30,7 @@ const getToDeliver = async (req, res) => {
 
     res.send(orders);
   } catch (error) {
-    logger.error(error);
+    logger.error(error.message);
     res.status(500).send(error);
   }
 };
@@ -41,7 +41,7 @@ const getFinalDisposition = async (req, res) => {
 
     res.send(orders);
   } catch (error) {
-    logger.error(error);
+    logger.error(error.message);
     res.status(500).send(error);
   }
 };
@@ -53,7 +53,7 @@ const getPendings = async (req, res) => {
 
     res.send(orders);
   } catch (error) {
-    logger.error(error);
+    logger.error(error.message);
     res.status(500).send(error);
   }
 };
@@ -65,7 +65,7 @@ const getInProgressByTechnical = async (req, res) => {
 
     res.send(orders);
   } catch (error) {
-    logger.error(error);
+    logger.error(error.message);
     res.status(500).send(error);
   }
 };
@@ -85,7 +85,7 @@ const getOrder = async (req, res) => {
         .send({ status: "error", message: "No se encontro orden" });
     res.send({ status: "success", order });
   } catch (error) {
-    logger.error(error);
+    logger.error(error.message);
     res.status(500).send(error);
   }
 };
@@ -102,7 +102,7 @@ const take = async (req, res) => {
     if (result.affectedRows)
       res.send({ status: "success", message: "Order Taked", result });
   } catch (error) {
-    logger.error(error);
+    logger.error(error.message);
     res.status(500).send(error);
   }
 };
@@ -124,7 +124,7 @@ const update = async (req, res) => {
 
     res.send({ status: "success", message: "Order Updated", result });
   } catch (error) {
-    logger.error(error);
+    logger.error(error.message);
     res.status(500).send(error);
   }
 };
@@ -155,7 +155,7 @@ const close = async (req, res) => {
 
     res.send({ status: "success", message: "Order Close", result });
   } catch (error) {
-    logger.error(error);
+    logger.error(error.message);
     res.status(500).send(error);
   }
 };
@@ -174,7 +174,7 @@ const free = async (req, res) => {
 
     res.send({ status: "success", message: "Order Close", result });
   } catch (error) {
-    logger.error(error);
+    logger.error(error.message);
     res.status(500).send(error);
   }
 };

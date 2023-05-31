@@ -8,7 +8,7 @@ const getUsers = async (req, res) => {
     const users = await userService.getUsers();
     res.send(users);
   } catch (error) {
-    logger.error(error);
+    logger.error(error.message);
     res.status(500).send(error);
   }
 };
@@ -24,7 +24,7 @@ const getUserByCode = async (req, res) => {
 
     res.send(user);
   } catch (error) {
-    logger.error(error);
+    logger.error(error.message);
     res.status(500).send(error);
   }
 };
@@ -65,7 +65,7 @@ const createUser = async (req, res) => {
 
     res.send({ status: "success", message: "user registered" });
   } catch (error) {
-    logger.error(error);
+    logger.error(error.message);
     res.status(500).send(error);
   }
 };
@@ -98,7 +98,7 @@ const loginUser = async (req, res) => {
       user: userDto,
     });
   } catch (error) {
-    logger.error(error);
+    logger.error(error.message);
     res.status(500).send(error);
   }
 };

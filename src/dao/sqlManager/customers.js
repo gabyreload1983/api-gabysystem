@@ -10,7 +10,7 @@ export default class Customers {
     return new Promise((resolve, reject) => {
       connectionUrbano.query(querySelect, (error, result) => {
         if (error) {
-          reject(new Error(error));
+          reject(new error(error.message));
         } else {
           resolve(result);
         }
