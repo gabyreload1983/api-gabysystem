@@ -1,7 +1,7 @@
 {
-  "name": "gabysystem",
+  "name": "gabysystem-api",
   "version": "4.0.0",
-  "description": "API with handlebars views",
+  "description": "API-REST",
   "main": "src/app.js",
   "type": "module",
   "scripts": {
