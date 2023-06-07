@@ -8,9 +8,10 @@ export default class Products {
 
   #getFromUrbano = (querySelect) => {
     return new Promise((resolve, reject) => {
+      logger.debug(querySelect);
       connectionUrbano.query(querySelect, (error, result) => {
         if (error) {
-          reject(new error(error.message));
+          reject(new Error(error.message));
         } else {
           resolve(result);
         }
@@ -18,10 +19,35 @@ export default class Products {
     });
   };
 
-  getProduct = async (codigo) =>
+  getByCode = async (code, stock) =>
     await this.#getFromUrbano(
-      `SELECT * FROM articulo WHERE codigo = '${codigo}'`
+      `
+      SELECT *
+      FROM artstk01 s
+      INNER JOIN articulo a 
+      ON s.codigo = a.codigo
+      WHERE a.codigo = '${code}' ${
+        stock && "AND (s.stockd01 - s.reserd01) > 0"
+      }`
     );
+
+  getByEan = async (ean, stock) =>
+    await this.#getFromUrbano(`
+    SELECT *
+    FROM artstk01 s
+    INNER JOIN articulo a 
+    ON s.codigo = a.codigo
+    WHERE a.codbarra = ${ean} ${stock && "AND (s.stockd01 - s.reserd01) > 0"}`);
+
+  getByDescription = async (description, stock) =>
+    await this.#getFromUrbano(`
+    SELECT *
+    FROM artstk01 s
+    INNER JOIN articulo a 
+    ON s.codigo = a.codigo
+      WHERE a.descrip LIKE '%${description}%' ${
+      stock && "AND (s.stockd01 - s.reserd01) > 0"
+    } ORDER BY a.descrip`);
 
   getDollarValue = async () => {
     const dollar = await this.#getFromUrbano(
