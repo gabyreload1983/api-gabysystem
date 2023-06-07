@@ -1,5 +1,5 @@
 import Customers from "../dao/sqlManager/customers.js";
-import Products from "../dao/sqlManager/products.js";
+import Products from "../dao/sqlManager/Products.js";
 import Orders from "./../dao/sqlManager/orders.js";
 import sendMail from "./../nodemailer/config.js";
 

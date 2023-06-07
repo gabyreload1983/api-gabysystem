@@ -10,6 +10,7 @@ import logger from "./logger/logger.js";
 import usersRouter from "./routes/users.router.js";
 import ordersRouter from "./routes/orders.router.js";
 import customersRouter from "./routes/customers.router.js";
+import productsRouter from "./routes/products.router.js";
 
 import "./dao/dbMongoConfig.js";
 import { authToken } from "./utils.js";
@@ -28,6 +29,7 @@ app.use(passport.initialize());
 app.use("/api/users", usersRouter);
 app.use("/api/orders", authToken, ordersRouter);
 app.use("/api/customers", authToken, customersRouter);
+app.use("/api/products", authToken, productsRouter);
 app.use("*", (req, res) =>
   res.status(404).send({ error: "error", message: "Page Not Found" })
 );
