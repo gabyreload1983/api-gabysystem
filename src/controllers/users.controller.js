@@ -3,7 +3,7 @@ import * as userService from "../services/users.service.js";
 import { generateToken } from "../utils.js";
 import { createHash, validatePassword } from "../utils.js";
 
-const getUsers = async (req, res) => {
+export const getUsers = async (req, res) => {
   try {
     const users = await userService.getUsers();
     res.send(users);
@@ -12,7 +12,7 @@ const getUsers = async (req, res) => {
     res.status(500).send(error);
   }
 };
-const getUserByCode = async (req, res) => {
+export const getUserByCode = async (req, res) => {
   try {
     let { code_technical } = req.params;
 
@@ -29,7 +29,7 @@ const getUserByCode = async (req, res) => {
   }
 };
 
-const createUser = async (req, res) => {
+export const createUser = async (req, res) => {
   try {
     const { first_name, last_name, email, code_technical, password } = req.body;
 
@@ -70,7 +70,7 @@ const createUser = async (req, res) => {
   }
 };
 
-const loginUser = async (req, res) => {
+export const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
 
@@ -103,4 +103,14 @@ const loginUser = async (req, res) => {
   }
 };
 
-export { getUsers, getUserByCode, createUser, loginUser };
+export const updateUser = async (req, res) => {
+  try {
+    const { uid } = req.params;
+    const { newUser } = req.body;
+
+    const response = await userService.updateUser(uid, newUser);
+  } catch (error) {
+    logger.error(error.message);
+    res.status(500).send(error);
+  }
+};

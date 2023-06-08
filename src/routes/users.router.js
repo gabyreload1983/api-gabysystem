@@ -1,23 +1,30 @@
 import { Router } from "express";
 
 const router = Router();
-import {
-  getUsers,
-  getUserByCode,
-  createUser,
-  loginUser,
-} from "../controllers/users.controller.js";
+import * as userController from "../controllers/users.controller.js";
 import { authToken, authorization } from "../utils.js";
 
-router.get("/", authToken, authorization("admin"), getUsers);
+router.get("/", authToken, authorization("admin"), userController.getUsers);
 router.get(
   "/code/:code_technical",
   authToken,
   authorization("admin"),
-  getUserByCode
+  userController.getUserByCode
 );
-router.post("/register", authToken, authorization("admin"), createUser);
+router.post(
+  "/register",
+  authToken,
+  authorization("admin"),
+  userController.createUser
+);
 
-router.post("/login", loginUser);
+router.post("/login", userController.loginUser);
+
+router.put(
+  "/:uid",
+  authToken,
+  authorization("admin"),
+  userController.updateUser
+);
 
 export default router;
