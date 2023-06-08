@@ -5,26 +5,24 @@ import * as userController from "../controllers/users.controller.js";
 import { authToken, authorization } from "../utils.js";
 
 router.get("/", authToken, authorization("admin"), userController.getUsers);
+
+router.get("/:uid", authToken, authorization("admin"), userController.getUser);
+
 router.get(
   "/code/:code_technical",
   authToken,
   authorization("admin"),
-  userController.getUserByCode
+  userController.getByCode
 );
 router.post(
   "/register",
   authToken,
   authorization("admin"),
-  userController.createUser
+  userController.register
 );
 
-router.post("/login", userController.loginUser);
+router.post("/login", userController.login);
 
-router.put(
-  "/:uid",
-  authToken,
-  authorization("admin"),
-  userController.updateUser
-);
+router.put("/:uid", authToken, authorization("admin"), userController.update);
 
 export default router;
