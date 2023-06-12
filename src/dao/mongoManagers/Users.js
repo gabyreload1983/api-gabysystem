@@ -6,16 +6,16 @@ export default class Users {
     logger.info("Working Users with DB in mongoDB");
   }
 
-  create = async (user) => await userModel.create(user);
+  getUser = async (uid) => await userModel.findOne({ _id: uid });
 
-  getAll = async () => await userModel.find();
+  getUsers = async () => await userModel.find();
 
-  getByEmail = async (email) => await userModel.findOne({ email });
-
-  getByCodeTechnical = async (code_technical) =>
+  getByCode = async (code_technical) =>
     await userModel.findOne({ code_technical });
 
-  getById = async (id) => await userModel.findOne({ _id: id });
+  register = async (user) => await userModel.create(user);
+
+  getByEmail = async (email) => await userModel.findOne({ email });
 
   update = async (uid, user) => await userModel.updateOne({ _id: uid }, user);
 
