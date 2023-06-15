@@ -1,76 +1,86 @@
 import logger from "../logger/logger.js";
-import {
-  getInProcess as getInProcessService,
-  getPendings as getPendingsService,
-  getFinalDisposition as getFinalDispositionService,
-  getInProgressByTechnical as getInProgressByTechnicalService,
-  getToDeliver as getToDeliverService,
-  getOrder as getOrderService,
-  take as takeService,
-  update as updateService,
-  close as closeService,
-  free as freeService,
-} from "../services/orders.service.js";
+import * as ordersService from "../services/orders.service.js";
+
 import { incompleteValues } from "../validators/validator.js";
 
-const getInProcess = async (req, res) => {
+export const getInProcess = async (req, res) => {
   try {
-    const orders = await getInProcessService();
+    const orders = await ordersService.getInProcess();
+    if (!orders)
+      return res
+        .status(400)
+        .send({ status: "error", message: "Error orders in process" });
 
-    res.send(orders);
+    res.send({ status: "success", message: "OK", payload: orders });
   } catch (error) {
     logger.error(error.message);
     res.status(500).send(error);
   }
 };
 
-const getToDeliver = async (req, res) => {
+export const getToDeliver = async (req, res) => {
   try {
-    const orders = await getToDeliverService();
+    const orders = await ordersService.getToDeliver();
+    if (!orders)
+      return res
+        .status(400)
+        .send({ status: "error", message: "Error orders to deliver" });
 
-    res.send(orders);
+    res.send({ status: "success", message: "OK", payload: orders });
   } catch (error) {
     logger.error(error.message);
     res.status(500).send(error);
   }
 };
 
-const getFinalDisposition = async (req, res) => {
+export const getFinalDisposition = async (req, res) => {
   try {
-    const orders = await getFinalDispositionService();
+    const orders = await ordersService.getFinalDisposition();
+    if (!orders)
+      return res
+        .status(400)
+        .send({ status: "error", message: "Error orders final disposition" });
 
-    res.send(orders);
+    res.send({ status: "success", message: "OK", payload: orders });
   } catch (error) {
     logger.error(error.message);
     res.status(500).send(error);
   }
 };
 
-const getPendings = async (req, res) => {
+export const getPendings = async (req, res) => {
   try {
     const { sector } = req.params;
-    const orders = await getPendingsService(sector);
+    const orders = await ordersService.getPendings(sector);
+    if (!orders)
+      return res
+        .status(400)
+        .send({ status: "error", message: "Error orders pending" });
 
-    res.send(orders);
+    res.send({ status: "success", message: "OK", payload: orders });
   } catch (error) {
     logger.error(error.message);
     res.status(500).send(error);
   }
 };
 
-const getInProgressByTechnical = async (req, res) => {
+export const getInProgressByTechnical = async (req, res) => {
   try {
     const { code_technical } = req.params;
-    const orders = await getInProgressByTechnicalService(code_technical);
+    const orders = await ordersService.getInProgressByTechnical(code_technical);
+    if (!orders)
+      return res
+        .status(400)
+        .send({ status: "error", message: "Error orders process tecnical" });
 
-    res.send(orders);
+    res.send({ status: "success", message: "OK", payload: orders });
   } catch (error) {
     logger.error(error.message);
     res.status(500).send(error);
   }
 };
 
-const getOrder = async (req, res) => {
+export const getOrder = async (req, res) => {
   try {
     const { nrocompro } = req.params;
     if (incompleteValues(nrocompro))
@@ -78,19 +88,20 @@ const getOrder = async (req, res) => {
         .status(400)
         .send({ status: "error", message: "Incomplete values" });
 
-    const order = await getOrderService(nrocompro);
+    const order = await ordersService.getOrder(nrocompro);
     if (!order)
       return res
         .status(400)
         .send({ status: "error", message: "No se encontro orden" });
-    res.send({ status: "success", order });
+
+    res.send({ status: "success", message: "OK", payload: order });
   } catch (error) {
     logger.error(error.message);
     res.status(500).send(error);
   }
 };
 
-const take = async (req, res) => {
+export const take = async (req, res) => {
   try {
     const { nrocompro, code_technical } = req.body;
     if (incompleteValues(nrocompro, code_technical))
@@ -98,16 +109,18 @@ const take = async (req, res) => {
         .status(400)
         .send({ status: "error", message: "Incomplete values" });
 
-    const result = await takeService(nrocompro, code_technical);
-    if (result.affectedRows)
-      res.send({ status: "success", message: "Order Taked", result });
+    const result = await ordersService.take(nrocompro, code_technical);
+    if (!result)
+      return res.status(400).send({ status: "error", message: "Error taking" });
+
+    res.send({ status: "success", message: "Order Taked", payload: result });
   } catch (error) {
     logger.error(error.message);
     res.status(500).send(error);
   }
 };
 
-const update = async (req, res) => {
+export const update = async (req, res) => {
   try {
     const { nrocompro, diagnostico, costo, code_technical } = req.body;
     if (incompleteValues(nrocompro, diagnostico, costo, code_technical))
@@ -115,21 +128,25 @@ const update = async (req, res) => {
         .status(400)
         .send({ status: "error", message: "Incomplete values" });
 
-    const result = await updateService(
+    const result = await ordersService.update(
       nrocompro,
       diagnostico,
       costo,
       code_technical
     );
+    if (!result)
+      return res
+        .status(400)
+        .send({ status: "error", message: "Error updating" });
 
-    res.send({ status: "success", message: "Order Updated", result });
+    res.send({ status: "success", message: "Order Updated", payload: result });
   } catch (error) {
     logger.error(error.message);
     res.status(500).send(error);
   }
 };
 
-const close = async (req, res) => {
+export const close = async (req, res) => {
   try {
     const {
       nrocompro,
@@ -144,7 +161,7 @@ const close = async (req, res) => {
         .status(400)
         .send({ status: "error", message: "Incomplete values" });
 
-    const result = await closeService(
+    const result = await ordersService.close(
       nrocompro,
       diagnostico,
       costo,
@@ -152,15 +169,19 @@ const close = async (req, res) => {
       diag,
       notification
     );
+    if (!result)
+      return res
+        .status(400)
+        .send({ status: "error", message: "Error closing" });
 
-    res.send({ status: "success", message: "Order Close", result });
+    res.send({ status: "success", message: "Order Close", payload: result });
   } catch (error) {
     logger.error(error.message);
     res.status(500).send(error);
   }
 };
 
-const free = async (req, res) => {
+export const free = async (req, res) => {
   try {
     const { nrocompro, code_technical } = req.body;
     if (incompleteValues(nrocompro, code_technical))
@@ -168,26 +189,22 @@ const free = async (req, res) => {
         .status(400)
         .send({ status: "error", message: "Incomplete values" });
 
-    const result = await freeService(nrocompro);
-    if (result?.status === "error")
-      return res.status(400).send({ status: "error", message: result.message });
+    const order = await ordersService.getOrder(nrocompro);
+    if (!order)
+      return res
+        .status(400)
+        .send({ status: "error", message: "No se encontro orden" });
 
-    res.send({ status: "success", message: "Order Close", result });
+    if (order.ubicacion === 22)
+      return { status: "error", message: "La orden ya fue entregada!" };
+
+    const result = await ordersService.free(nrocompro);
+    if (!result)
+      return res.status(400).send({ status: "error", message: "Error free" });
+
+    res.send({ status: "success", message: "Order free", payload: result });
   } catch (error) {
     logger.error(error.message);
     res.status(500).send(error);
   }
-};
-
-export {
-  getInProcess,
-  getToDeliver,
-  getFinalDisposition,
-  getPendings,
-  getInProgressByTechnical,
-  getOrder,
-  take,
-  update,
-  close,
-  free,
 };
