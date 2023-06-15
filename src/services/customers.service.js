@@ -1,9 +1,11 @@
-import Customers from "../dao/sqlManager/customers.js";
+import Customers from "../dao/sqlManager/Customers.js";
+import CustomersRepository from "../repository/Customers.repository.js";
 
 const customerManager = new Customers();
+const customersRepository = new CustomersRepository(customerManager);
 
 export const getByCode = async (codigo) =>
-  await customerManager.getByCode(codigo);
+  await customersRepository.getByCode(codigo);
 
 export const getCustomersByName = async (name) =>
-  await customerManager.getByName(name);
+  await customersRepository.getByName(name);
