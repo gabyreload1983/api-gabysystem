@@ -6,6 +6,7 @@ import sendMail from "./../nodemailer/config.js";
 import ProductsRepository from "./../repository/Products.repository.js";
 import CustomersRepository from "./../repository/Customers.repository.js";
 import { getHtmlCloseOrder } from "./../nodemailer/html/utilsHtml.js";
+import { formatProduct, getTotalOrder } from "../utils.js";
 
 const orderManager = new Orders();
 const orderRepository = new OrdersRepository(orderManager);
@@ -33,17 +34,11 @@ export const getOrder = async (nrocompro) => {
   order = order[0];
   const dollar = await productsRepository.getDollarValue();
 
-  order.products = order.products.map((p) => {
-    const iva = p.grabado === "1" ? 1.21 : 1.105;
-    const moneda = p.moneda === "D" ? dollar : 1;
-    p.priceWithTax = (Number(p.lista1) * Number(iva) * moneda).toFixed(2);
-    return p;
-  });
+  order.products = order.products.map((product) =>
+    formatProduct(product, dollar)
+  );
+  order.total = getTotalOrder(order);
 
-  order.total = Number(order.costo);
-  order.total = order.products.reduce((acc, val) => {
-    return (acc += Number(val.priceWithTax));
-  }, order.total);
   return order;
 };
 

@@ -21,3 +21,4 @@ services:
       - MAIL_FROM=
       - MAIL_BCC=
       - COOKIE_TOKEN=
+      - API_VERSION=

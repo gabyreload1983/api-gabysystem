@@ -9,18 +9,18 @@ export const searchBy = async (req, res) => {
         .status(400)
         .send({ status: "error", message: "You send an invalid search query" });
 
-    const payload = await productService.searchBy(
+    const products = await productService.searchBy(
       code,
       ean,
       description,
       stock
     );
-    if (!payload.products)
+    if (!products)
       return res
         .status(404)
-        .send({ status: "error", message: "No product was found" });
+        .send({ status: "error", message: "Error searching product" });
 
-    res.send({ status: "success", payload });
+    res.send({ status: "success", products });
   } catch (error) {
     logger.error(error.message);
     res.status(500).send(error);
