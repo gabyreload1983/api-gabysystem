@@ -66,6 +66,8 @@ export const close = async (
   if (notification) {
     const order = await orderRepository.getOrder(nrocompro);
     const customer = await customersRepository.getByCode(order[0].codigo);
+    if (!customer[0].mail) return result;
+
     const html = getHtmlCloseOrder(nrocompro);
     const info = await sendMail(
       customer[0].mail,
