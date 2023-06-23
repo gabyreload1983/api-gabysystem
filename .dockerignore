@@ -5,3 +5,4 @@ docker-compose.yml
 .env
 .env.production
 .env.development
+docker-compose.template.yml

@@ -16,4 +16,5 @@ export default {
   mail_password: process.env.MAIL_PASSWORD,
   mail_from: process.env.MAIL_FROM,
   mail_bcc: process.env.MAIL_BCC,
+  api_version: process.env.API_VERSION,
 };
