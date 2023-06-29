@@ -27,4 +27,10 @@ router.put(
 );
 router.put("/free", authorization("technical", "admin"), ordersController.free);
 
+router.put(
+  "/out/:nrocompro",
+  authorization("saler", "admin"),
+  ordersController.out
+);
+
 export default router;
