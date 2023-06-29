@@ -72,4 +72,9 @@ export default class Orders {
   free = async (nrocompro) =>
     await sendQueryUrbano(`UPDATE trabajos SET estado = 21, diag = 21, tecnico = '', diagnosticado = NOW() 
     WHERE nrocompro = '${nrocompro}'`);
+
+  out = async (nrocompro) =>
+    await sendQueryUrbano(
+      `UPDATE trabajos SET ubicacion = 22 WHERE nrocompro = '${nrocompro}'`
+    );
 }
