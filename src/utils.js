@@ -9,7 +9,7 @@ const __filename = fileURLToPath(import.meta.url);
 export const __dirname = dirname(__filename);
 
 export const generateToken = (user) =>
-  jwt.sign({ user }, config.private_key_jwt, { expiresIn: "7 days" });
+  jwt.sign({ user }, config.private_key_jwt, { expiresIn: "30d" });
 
 export const authToken = (req, res, next) => {
   const authHeader = req.headers.authorization;
@@ -21,7 +21,11 @@ export const authToken = (req, res, next) => {
 
   const token = authHeader.split(" ")[1];
   jwt.verify(token, config.private_key_jwt, (error, credentials) => {
-    if (error) return res.status(403).send({ error: "Not authorized" });
+    if (error)
+      return res.status(403).send({
+        status: "error",
+        message: "jwt-expired",
+      });
     req.user = credentials.user;
     next();
   });
