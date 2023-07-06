@@ -33,4 +33,10 @@ router.put(
   ordersController.out
 );
 
+router.put(
+  "/products",
+  authorization("saler", "admin"),
+  ordersController.products
+);
+
 export default router;

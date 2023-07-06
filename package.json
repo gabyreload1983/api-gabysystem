@@ -1,6 +1,6 @@
 {
   "name": "gabysystem-api",
-  "version": "4.5.2",
+  "version": "4.6.2",
   "description": "API-REST",
   "main": "src/app.js",
   "type": "module",
@@ -22,6 +22,7 @@
     "mongoose": "^7.0.3",
     "mongoose-paginate-v2": "^1.7.1",
     "mysql": "^2.18.1",
+    "nanoid": "^4.0.2",
     "nodemailer": "^6.9.1",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.1",

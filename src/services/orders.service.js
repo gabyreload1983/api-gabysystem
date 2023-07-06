@@ -7,6 +7,7 @@ import ProductsRepository from "./../repository/Products.repository.js";
 import CustomersRepository from "./../repository/Customers.repository.js";
 import { getHtmlCloseOrder } from "./../nodemailer/html/utilsHtml.js";
 import { formatProduct, getTotalOrder } from "../utils.js";
+import { nanoid } from "nanoid";
 
 const orderManager = new Orders();
 const orderRepository = new OrdersRepository(orderManager);
@@ -89,4 +90,46 @@ export const out = async (order) => {
     }
   }
   return await orderRepository.out(order.nrocompro);
+};
+
+export const products = async (order, user) => {
+  const oldOrder = await getOrder(order.nrocompro);
+
+  for (const p of order.products) {
+    if (!p.serie) p.serie = nanoid();
+  }
+
+  const addedProducts = order.products.filter((product) => {
+    return !oldOrder.products.some(
+      (p) => p.codigo === product.codigo && p.serie === product.serie
+    );
+  });
+
+  const deletedProducts = oldOrder.products.filter((product) => {
+    return !order.products.some(
+      (p) => p.codigo === product.codigo && p.serie === product.serie
+    );
+  });
+
+  if (addedProducts.length > 0) {
+    for (const product of addedProducts) {
+      product.descrip = product.descrip.slice(0, 20); //testing if in prodcution is needed
+      await productsRepository.addReservation(product.codigo);
+      await productsRepository.addProductIntoOrder(order, product);
+    }
+  }
+
+  if (deletedProducts.length > 0) {
+    for (const product of deletedProducts) {
+      await productsRepository.removeReservation(product.codigo);
+      await productsRepository.removeProductFromOrder(order, product);
+    }
+  }
+
+  const updatedOrder = await getOrder(order.nrocompro);
+  //get technical user
+  //send email with data
+  //storage transaction in mongo
+
+  return updatedOrder;
 };

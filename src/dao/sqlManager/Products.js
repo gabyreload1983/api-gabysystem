@@ -47,4 +47,29 @@ export default class Products {
     await sendQueryUrbano(
       `UPDATE artstk01 SET reserd01 = reserd01 - 1 WHERE codigo = '${codigo}'`
     );
+
+  removeProductFromOrder = async (order, product) =>
+    await sendQueryUrbano(`
+    DELETE FROM trrenglo 
+    WHERE  
+    nrocompro = '${order.nrocompro}' AND 
+    cliente = '${order.codigo}' AND 
+    codart= '${product.codigo}' AND 
+    serie = '${product.serie}' 
+    LIMIT 1`);
+
+  addReservation = async (codigo) =>
+    await sendQueryUrbano(
+      `UPDATE artstk01 SET reserd01 = reserd01 + 1 WHERE codigo = '${codigo}'`
+    );
+
+  addProductIntoOrder = async (order, product) =>
+    await sendQueryUrbano(`INSERT INTO trrenglo
+     (tipo,	sector,	estado,	diag,	serie,	ingreso,	festado,	asignado,	fdiag,	egreso,	cliente,	
+       operador,	falla,	diagnostico,	garantia,	tecnico,	codart,	descart,	nrocompro,	seguridad,	
+       vienedeop,	observacion,	costo,	orauto,	codartcambio,	descartcambio,	seriecambio,	rvcambio,	pendiente)
+       VALUES('ST', 'E', '', 'RE', '${product.serie}',  NOW(), NOW(), NOW(), NOW(), NOW(), '${order.codigo}', 
+       '${order.operador}', '', '', 0, '${order.tecnico}', '${product.codigo}', '${product.descrip}', '${order.nrocompro}', 'MOSTRADORGABY 00:01',
+       '', '',  0,  '',  '',  '',  '',  '',  1)
+       `);
 }

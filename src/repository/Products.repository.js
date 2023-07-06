@@ -3,14 +3,23 @@ export default class ProductsRepository {
     this.dao = dao;
   }
 
-  getByCode = async (code, stock) => this.dao.getByCode(code, stock);
+  getByCode = async (code, stock) => await this.dao.getByCode(code, stock);
 
-  getByEan = async (ean, stock) => this.dao.getByEan(ean, stock);
+  getByEan = async (ean, stock) => await this.dao.getByEan(ean, stock);
 
   getByDescription = async (description, stock) =>
-    this.dao.getByDescription(description, stock);
+    await this.dao.getByDescription(description, stock);
 
-  getDollarValue = async () => this.dao.getDollarValue();
+  getDollarValue = async () => await this.dao.getDollarValue();
 
-  removeReservation = async (codigo) => this.dao.removeReservation(codigo);
+  removeReservation = async (codigo) =>
+    await this.dao.removeReservation(codigo);
+
+  removeProductFromOrder = async (order, product) =>
+    await this.dao.removeProductFromOrder(order, product);
+
+  addReservation = async (codigo) => await this.dao.addReservation(codigo);
+
+  addProductIntoOrder = async (order, product) =>
+    await this.dao.addProductIntoOrder(order, product);
 }
