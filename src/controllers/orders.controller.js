@@ -245,7 +245,11 @@ export const out = async (req, res) => {
 export const products = async (req, res) => {
   try {
     const order = req.body;
-    //validate order
+    const orderExists = await ordersService.getOrder(order.nrocompro);
+    if (!orderExists)
+      return res
+        .status(404)
+        .send({ status: "error", message: "Order not found" });
 
     const result = await ordersService.products(order, req.user);
     if (!result)

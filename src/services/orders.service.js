@@ -5,9 +5,15 @@ import Orders from "../dao/sqlManager/Orders.js";
 import sendMail from "./../nodemailer/config.js";
 import ProductsRepository from "./../repository/Products.repository.js";
 import CustomersRepository from "./../repository/Customers.repository.js";
-import { getHtmlCloseOrder } from "./../nodemailer/html/utilsHtml.js";
+import {
+  getHtmlCloseOrder,
+  getHtmlProductsInOrder,
+} from "./../nodemailer/html/utilsHtml.js";
 import { formatProduct, getTotalOrder } from "../utils.js";
 import { nanoid } from "nanoid";
+import Users from "./../dao/mongoManagers/Users.js";
+import UsersRepository from "./../repository/Users.repository.js";
+import { buildOrderPdf } from "../pdfKit/pdfKit.js";
 
 const orderManager = new Orders();
 const orderRepository = new OrdersRepository(orderManager);
@@ -15,6 +21,8 @@ const productManager = new Products();
 const productsRepository = new ProductsRepository(productManager);
 const customersManager = new Customers();
 const customersRepository = new CustomersRepository(customersManager);
+const usersManager = new Users();
+const usersRepository = new UsersRepository(usersManager);
 
 export const getInProcess = async () => orderRepository.getInProcess();
 
@@ -126,10 +134,20 @@ export const products = async (order, user) => {
     }
   }
 
-  const updatedOrder = await getOrder(order.nrocompro);
-  //get technical user
-  //send email with data
+  if (deletedProducts.length === 0 && addedProducts.length === 0) return false;
+
+  const pdfPath = buildOrderPdf(order, user);
+
+  const technical = await usersRepository.getByCode(order.tecnico);
+  const result = await sendMail(
+    technical.email,
+    `ORDEN - ${order.nrocompro}`,
+    `Actualizacion Orden`,
+    getHtmlProductsInOrder(user, order),
+    pdfPath
+  );
+
   //storage transaction in mongo
 
-  return updatedOrder;
+  return result;
 };
