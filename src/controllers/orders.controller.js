@@ -251,6 +251,11 @@ export const products = async (req, res) => {
         .status(404)
         .send({ status: "error", message: "Order not found" });
 
+    if (!orderExists.products.length)
+      return res
+        .status(400)
+        .send({ status: "error", message: "Order without products" });
+
     const result = await ordersService.products(order, req.user);
     if (!result)
       return res.status(400).send({
