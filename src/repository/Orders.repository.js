@@ -68,4 +68,7 @@ export default class OrdersRepository {
   free = async (nrocompro) => this.dao.free(nrocompro);
 
   out = async (nrocompro) => this.dao.out(nrocompro);
+
+  savePdfPath = async (nrocompro, path) =>
+    this.dao.savePdfPath(nrocompro, path);
 }

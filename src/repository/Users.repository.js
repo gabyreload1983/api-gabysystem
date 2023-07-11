@@ -20,10 +20,7 @@ export default class UsersRepository {
 
   register = async (user) => await this.dao.register(new UsersDbDto(user));
 
-  getByEmail = async (email) => {
-    const user = await this.dao.getByEmail(email);
-    return new UsersLoginDto(user);
-  };
+  getByEmail = async (email) => await this.dao.getByEmail(email);
 
   login = async (user) => new UsersLoginDto(user);
 

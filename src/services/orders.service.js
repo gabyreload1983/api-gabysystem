@@ -143,6 +143,7 @@ export const products = async (order, user) => {
   if (deletedProducts.length === 0 && addedProducts.length === 0) return false;
 
   const { pdfPath, fileName } = buildOrderPdf(order, user);
+  await orderRepository.savePdfPath(order.nrocompro, fileName);
 
   const technical = await usersRepository.getByCode(order.tecnico);
   const result = await sendMail(
@@ -164,5 +165,5 @@ export const products = async (order, user) => {
   };
   await productsInOrderRepository.create(data);
 
-  return result;
+  return { result, fileName };
 };
