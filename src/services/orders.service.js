@@ -142,6 +142,8 @@ export const products = async (order, user) => {
 
   if (deletedProducts.length === 0 && addedProducts.length === 0) return false;
 
+  //validar si la orden quedo sin articulos, en ese caso, enviar email notificando orden sin productos y no generar pdf
+
   const { pdfPath, fileName } = buildOrderPdf(order, user);
   await orderRepository.savePdfPath(order.nrocompro, fileName);
 
