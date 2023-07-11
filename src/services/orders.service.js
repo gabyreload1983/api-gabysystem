@@ -14,6 +14,8 @@ import { nanoid } from "nanoid";
 import Users from "./../dao/mongoManagers/Users.js";
 import UsersRepository from "./../repository/Users.repository.js";
 import { buildOrderPdf } from "../pdfKit/pdfKit.js";
+import ProductsInOrder from "./../dao/mongoManagers/ProductsInOrder.js";
+import ProductsInOrderRepository from "../repository/ProductsInOrder.repository.js";
 
 const orderManager = new Orders();
 const orderRepository = new OrdersRepository(orderManager);
@@ -23,6 +25,10 @@ const customersManager = new Customers();
 const customersRepository = new CustomersRepository(customersManager);
 const usersManager = new Users();
 const usersRepository = new UsersRepository(usersManager);
+const productsInOrderManager = new ProductsInOrder();
+const productsInOrderRepository = new ProductsInOrderRepository(
+  productsInOrderManager
+);
 
 export const getInProcess = async () => orderRepository.getInProcess();
 
@@ -136,7 +142,7 @@ export const products = async (order, user) => {
 
   if (deletedProducts.length === 0 && addedProducts.length === 0) return false;
 
-  const pdfPath = buildOrderPdf(order, user);
+  const { pdfPath, fileName } = buildOrderPdf(order, user);
 
   const technical = await usersRepository.getByCode(order.tecnico);
   const result = await sendMail(
@@ -147,7 +153,16 @@ export const products = async (order, user) => {
     pdfPath
   );
 
-  //storage transaction in mongo
+  const data = {
+    userEmail: user.email,
+    technicalEmail: technical.email,
+    order: order.nrocompro,
+    orderProducts: order.products,
+    addedProducts,
+    deletedProducts,
+    pdfName: fileName,
+  };
+  await productsInOrderRepository.create(data);
 
   return result;
 };

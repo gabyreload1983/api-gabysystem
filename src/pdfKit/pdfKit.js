@@ -7,7 +7,8 @@ import config from "../config/config.js";
 export const buildOrderPdf = (order, user) => {
   const year = moment().format("YYYY");
   const now = moment().format("YYYYMMDD-HHmmss");
-  const pdfPath = `${__dirname}/public/pdfHistory/${order.nrocompro}-${now}.pdf`;
+  const fileName = `${order.nrocompro}-${now}.pdf`;
+  const pdfPath = `${__dirname}/public/pdfHistory/${fileName}`;
 
   const doc = new PDFDocument({ size: "A4" });
 
@@ -44,5 +45,5 @@ export const buildOrderPdf = (order, user) => {
   doc.pipe(fs.createWriteStream(pdfPath));
   doc.end();
 
-  return pdfPath;
+  return { pdfPath, fileName };
 };
