@@ -241,3 +241,30 @@ export const out = async (req, res) => {
     res.status(500).send(error);
   }
 };
+
+export const products = async (req, res) => {
+  try {
+    const order = req.body;
+    const orderExists = await ordersService.getOrder(order.nrocompro);
+    if (!orderExists)
+      return res
+        .status(404)
+        .send({ status: "error", message: "Order not found" });
+
+    const result = await ordersService.products(order, req.user);
+    if (!result)
+      return res.status(400).send({
+        status: "error",
+        message: "Error trying update products in order",
+      });
+
+    res.send({
+      status: "success",
+      message: "Products in order updates successfully",
+      payload: result,
+    });
+  } catch (error) {
+    logger.error(error.message);
+    res.status(500).send(error);
+  }
+};

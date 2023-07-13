@@ -1,3 +1,4 @@
+import moment from "moment";
 import Customers from "../dao/sqlManager/Customers.js";
 import Products from "../dao/sqlManager/Products.js";
 import OrdersRepository from "../repository/Orders.repository.js";
@@ -5,8 +6,17 @@ import Orders from "../dao/sqlManager/Orders.js";
 import sendMail from "./../nodemailer/config.js";
 import ProductsRepository from "./../repository/Products.repository.js";
 import CustomersRepository from "./../repository/Customers.repository.js";
-import { getHtmlCloseOrder } from "./../nodemailer/html/utilsHtml.js";
+import {
+  getHtmlCloseOrder,
+  getHtmlProductsInOrder,
+} from "./../nodemailer/html/utilsHtml.js";
 import { formatProduct, getTotalOrder } from "../utils.js";
+import { nanoid } from "nanoid";
+import Users from "./../dao/mongoManagers/Users.js";
+import UsersRepository from "./../repository/Users.repository.js";
+import { buildOrderPdf } from "../pdfKit/pdfKit.js";
+import ProductsInOrder from "./../dao/mongoManagers/ProductsInOrder.js";
+import ProductsInOrderRepository from "../repository/ProductsInOrder.repository.js";
 
 const orderManager = new Orders();
 const orderRepository = new OrdersRepository(orderManager);
@@ -14,6 +24,12 @@ const productManager = new Products();
 const productsRepository = new ProductsRepository(productManager);
 const customersManager = new Customers();
 const customersRepository = new CustomersRepository(customersManager);
+const usersManager = new Users();
+const usersRepository = new UsersRepository(usersManager);
+const productsInOrderManager = new ProductsInOrder();
+const productsInOrderRepository = new ProductsInOrderRepository(
+  productsInOrderManager
+);
 
 export const getInProcess = async () => orderRepository.getInProcess();
 
@@ -89,4 +105,83 @@ export const out = async (order) => {
     }
   }
   return await orderRepository.out(order.nrocompro);
+};
+
+export const products = async (order, user) => {
+  const oldOrder = await getOrder(order.nrocompro);
+
+  for (const p of order.products) {
+    if (!p.serie) p.serie = nanoid();
+  }
+
+  const addedProducts = order.products.filter((product) => {
+    return !oldOrder.products.some(
+      (p) => p.codigo === product.codigo && p.serie === product.serie
+    );
+  });
+
+  const deletedProducts = oldOrder.products.filter((product) => {
+    return !order.products.some(
+      (p) => p.codigo === product.codigo && p.serie === product.serie
+    );
+  });
+
+  if (addedProducts.length > 0) {
+    for (const product of addedProducts) {
+      product.descrip = product.descrip.slice(0, 20); //testing if in prodcution is needed
+      await productsRepository.addReservation(product.codigo);
+      await productsRepository.addProductIntoOrder(order, product);
+    }
+  }
+
+  if (deletedProducts.length > 0) {
+    for (const product of deletedProducts) {
+      await productsRepository.removeReservation(product.codigo);
+      await productsRepository.removeProductFromOrder(order, product);
+    }
+  }
+
+  if (deletedProducts.length === 0 && addedProducts.length === 0) return false;
+
+  const technical = await usersRepository.getByCode(order.tecnico);
+  let fileName = "";
+  const now = moment();
+
+  if (order.products.length === 0) {
+    await sendMail(
+      technical.email,
+      `ORDEN DE REPARACIÓN - ${order.nrocompro}`,
+      `Actualizacion Orden`,
+      getHtmlProductsInOrder(user, order)
+    );
+  }
+
+  if (order.products.length > 0) {
+    const result = buildOrderPdf(order, user, now);
+    fileName = result.fileName;
+
+    await orderRepository.savePdfPath(order.nrocompro, fileName);
+
+    await sendMail(
+      technical.email,
+      `ORDEN DE REPARACIÓN - ${order.nrocompro}`,
+      `Actualizacion Orden`,
+      getHtmlProductsInOrder(user, order),
+      result.pdfPath
+    );
+  }
+
+  const data = {
+    userEmail: user.email,
+    technicalEmail: technical.email,
+    order: order.nrocompro,
+    orderProducts: order.products,
+    addedProducts,
+    deletedProducts,
+    pdfName: fileName,
+    date: now,
+  };
+  const result = await productsInOrderRepository.create(data);
+
+  return { result, fileName };
 };

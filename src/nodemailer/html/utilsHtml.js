@@ -400,3 +400,15 @@ export const getHtmlCloseOrder = (nrocompro) => {
       </tbody>
     </table>`;
 };
+
+export const getHtmlProductsInOrder = (saler, order) => {
+  return `
+  <h3>Actualizacion de orden ${order.nrocompro}</h3>
+  <p>Cambios realizados por ${saler.first_name} ${saler.last_name}</p>
+  ${
+    order.products.length
+      ? "<p>Orden Con articulos. Se adjunta comprobante</p>"
+      : "<strong>ORDEN SIN ARTICULOS</strong>"
+  }
+  `;
+};
