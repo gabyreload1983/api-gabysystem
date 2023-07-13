@@ -22,4 +22,5 @@ export default class ProductsRepository {
 
   addProductIntoOrder = async (order, product) =>
     await this.dao.addProductIntoOrder(order, product);
+
 }
