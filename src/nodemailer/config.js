@@ -26,9 +26,11 @@ const sendMail = async (
     subject,
     text,
     html,
-    attachments: {
-      path: filePath,
-    },
+    attachments: filePath
+      ? {
+          path: filePath,
+        }
+      : [],
     bcc,
   });
 };

@@ -4,16 +4,16 @@ import PDFDocument from "pdfkit";
 import { __dirname } from "../utils.js";
 import config from "../config/config.js";
 
-export const buildOrderPdf = (order, user) => {
-  const year = moment().format("YYYY");
-  const now = moment().format("YYYYMMDD-HHmmss");
+export const buildOrderPdf = (order, user, date) => {
+  const year = moment(date).format("YYYY");
+  const now = moment(date).format("YYYYMMDD-HHmmss");
   const fileName = `${order.nrocompro}-${now}.pdf`;
   const pdfPath = `${__dirname}/public/pdfHistory/${fileName}`;
 
   const doc = new PDFDocument({ size: "A4" });
 
-  doc.image(`${__dirname}/public/images/logo-sinapsis.jpg`, 20, 30, {
-    width: 300,
+  doc.image(`${__dirname}/public/images/logo2.png`, 50, 30, {
+    width: 100,
   });
 
   doc
@@ -22,9 +22,10 @@ export const buildOrderPdf = (order, user) => {
   doc
     .fontSize(10)
     .text(`RESPONSABLE: ${user.first_name} ${user.last_name}`, 350, 70);
-  doc.fontSize(14).text(`${order.nrocompro}`, 50, 130);
-  doc.fontSize(14).text(`${order.nombre}`, 50, 150);
-  doc.fontSize(14).text(`TECNICO: ${order.tecnico}`, 50, 170);
+  doc.fontSize(10).text(`TECNICO: ${order.tecnico}`, 350, 90);
+
+  doc.fontSize(14).text(`ORDEN: ${order.nrocompro}`, 50, 140);
+  doc.fontSize(14).text(`CLIENTE: ${order.nombre}`, 50, 160);
   doc.moveTo(40, 200).lineTo(550, 200).stroke();
   doc.fontSize(14).text("ARTICULOS", 50, 230);
   let position = 240;

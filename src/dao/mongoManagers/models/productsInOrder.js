@@ -10,6 +10,7 @@ const productsInOrderSchema = new mongoose.Schema({
   addedProducts: Array,
   deletedProducts: Array,
   pdfName: String,
+  date: Date,
 });
 
 const productsInOrderModel = mongoose.model(

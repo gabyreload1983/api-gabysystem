@@ -1,3 +1,4 @@
+import moment from "moment";
 import Customers from "../dao/sqlManager/Customers.js";
 import Products from "../dao/sqlManager/Products.js";
 import OrdersRepository from "../repository/Orders.repository.js";
@@ -142,19 +143,33 @@ export const products = async (order, user) => {
 
   if (deletedProducts.length === 0 && addedProducts.length === 0) return false;
 
-  //validar si la orden quedo sin articulos, en ese caso, enviar email notificando orden sin productos y no generar pdf
-
-  const { pdfPath, fileName } = buildOrderPdf(order, user);
-  await orderRepository.savePdfPath(order.nrocompro, fileName);
-
   const technical = await usersRepository.getByCode(order.tecnico);
-  const result = await sendMail(
-    technical.email,
-    `ORDEN - ${order.nrocompro}`,
-    `Actualizacion Orden`,
-    getHtmlProductsInOrder(user, order),
-    pdfPath
-  );
+  let fileName = "";
+  const now = moment();
+
+  if (order.products.length === 0) {
+    await sendMail(
+      technical.email,
+      `ORDEN DE REPARACIÓN - ${order.nrocompro}`,
+      `Actualizacion Orden`,
+      getHtmlProductsInOrder(user, order)
+    );
+  }
+
+  if (order.products.length > 0) {
+    const result = buildOrderPdf(order, user, now);
+    fileName = result.fileName;
+
+    await orderRepository.savePdfPath(order.nrocompro, fileName);
+
+    await sendMail(
+      technical.email,
+      `ORDEN DE REPARACIÓN - ${order.nrocompro}`,
+      `Actualizacion Orden`,
+      getHtmlProductsInOrder(user, order),
+      result.pdfPath
+    );
+  }
 
   const data = {
     userEmail: user.email,
@@ -164,8 +179,9 @@ export const products = async (order, user) => {
     addedProducts,
     deletedProducts,
     pdfName: fileName,
+    date: now,
   };
-  await productsInOrderRepository.create(data);
+  const result = await productsInOrderRepository.create(data);
 
   return { result, fileName };
 };
