@@ -77,4 +77,9 @@ export default class Orders {
     await sendQueryUrbano(
       `UPDATE trabajos SET ubicacion = 22 WHERE nrocompro = '${nrocompro}'`
     );
+
+  savePdfPath = async (nrocompro, path) =>
+    await sendQueryUrbano(
+      `UPDATE trabajos SET textorespuesta = '${path}' WHERE nrocompro = '${nrocompro}'`
+    );
 }
