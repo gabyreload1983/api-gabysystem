@@ -208,3 +208,36 @@ export const free = async (req, res) => {
     res.status(500).send(error);
   }
 };
+
+export const out = async (req, res) => {
+  try {
+    const { nrocompro } = req.params;
+    const order = await ordersService.getOrder(nrocompro);
+    if (!order)
+      return res
+        .status(404)
+        .send({ status: "error", message: "Order not found" });
+
+    if (order.estado !== 23)
+      return res
+        .status(404)
+        .send({ status: "error", message: "The order is not finished" });
+    if (order.ubicacion === 22)
+      return res.status(404).send({
+        status: "error",
+        message: "The order has already been delivered",
+      });
+
+    const result = await ordersService.out(order);
+    if (!result)
+      return res.status(400).send({
+        status: "error",
+        message: "Error trying to output the order",
+      });
+
+    res.send({ status: "success", message: "Order Out", payload: result });
+  } catch (error) {
+    logger.error(error.message);
+    res.status(500).send(error);
+  }
+};

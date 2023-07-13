@@ -11,4 +11,6 @@ export default class ProductsRepository {
     this.dao.getByDescription(description, stock);
 
   getDollarValue = async () => this.dao.getDollarValue();
+
+  removeReservation = async (codigo) => this.dao.removeReservation(codigo);
 }

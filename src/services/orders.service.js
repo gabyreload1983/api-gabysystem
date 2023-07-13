@@ -81,3 +81,12 @@ export const close = async (
 };
 
 export const free = async (nrocompro) => await orderRepository.free(nrocompro);
+
+export const out = async (order) => {
+  if (order.products.length > 0) {
+    for (const product of order.products) {
+      await productsRepository.removeReservation(product.codigo);
+    }
+  }
+  return await orderRepository.out(order.nrocompro);
+};

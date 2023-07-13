@@ -5,7 +5,7 @@ import { formatProduct } from "../utils.js";
 const productManager = new Products();
 const productsRepository = new ProductsRepository(productManager);
 
-export let searchBy = async (code, ean, description, stock) => {
+export const searchBy = async (code, ean, description, stock) => {
   let products = [];
   if (code) products = await productsRepository.getByCode(code, stock);
   if (ean) products = await productsRepository.getByEan(ean, stock);
@@ -18,3 +18,6 @@ export let searchBy = async (code, ean, description, stock) => {
   }
   return products;
 };
+
+export const removeReservation = async (codigo) =>
+  await productsRepository.removeReservation(codigo);
