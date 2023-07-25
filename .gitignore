@@ -5,4 +5,5 @@ package-lock.json
 .env.production
 .env.development
 /src/logger/logs
+/src/public/pdfHistory
 docker-compose.yml
