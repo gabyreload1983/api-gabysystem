@@ -10,6 +10,8 @@ export default class ProductsRepository {
   getByDescription = async (description, stock) =>
     await this.dao.getByDescription(description, stock);
 
+  getBySerie = async (serie) => await this.dao.getBySerie(serie);
+
   getDollarValue = async () => await this.dao.getDollarValue();
 
   removeReservation = async (codigo) =>
@@ -22,5 +24,4 @@ export default class ProductsRepository {
 
   addProductIntoOrder = async (order, product) =>
     await this.dao.addProductIntoOrder(order, product);
-
 }

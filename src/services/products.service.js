@@ -19,5 +19,8 @@ export const searchBy = async (code, ean, description, stock) => {
   return products;
 };
 
+export const searchBySerie = async (serie) =>
+  await productsRepository.getBySerie(serie);
+
 export const removeReservation = async (codigo) =>
   await productsRepository.removeReservation(codigo);

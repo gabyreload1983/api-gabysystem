@@ -26,3 +26,24 @@ export const searchBy = async (req, res) => {
     res.status(500).send(error);
   }
 };
+
+export const searchBySerie = async (req, res) => {
+  try {
+    const { serialNumber } = req.params;
+    if (!serialNumber)
+      return res
+        .status(400)
+        .send({ status: "error", message: "You must send a serial number" });
+
+    const product = await productService.searchBySerie(serialNumber);
+    if (!product)
+      return res
+        .status(404)
+        .send({ status: "error", message: "Error searching product" });
+
+    res.send({ status: "success", payload: product });
+  } catch (error) {
+    logger.error(error.message);
+    res.status(500).send(error);
+  }
+};
