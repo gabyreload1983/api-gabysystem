@@ -152,7 +152,9 @@ export const products = async (order, user) => {
       technical.email,
       `ORDEN DE REPARACIÓN - ${order.nrocompro}`,
       `Actualizacion Orden`,
-      getHtmlProductsInOrder(user, order)
+      getHtmlProductsInOrder(user, order),
+      null,
+      user.email
     );
   }
 
@@ -167,7 +169,8 @@ export const products = async (order, user) => {
       `ORDEN DE REPARACIÓN - ${order.nrocompro}`,
       `Actualizacion Orden`,
       getHtmlProductsInOrder(user, order),
-      result.pdfPath
+      result.pdfPath,
+      user.email
     );
   }
 
