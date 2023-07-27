@@ -9,7 +9,7 @@ export const getUser = async (uid) => await usersRepository.getUser(uid);
 export const getUsers = async () => await usersRepository.getUsers();
 
 export const getByCode = async (code_technical) =>
-  await usersRepository.getByCode(code_technical.toUpperCase());
+  await usersRepository.getByCode(code_technical);
 
 export const register = async (user) => await usersRepository.register(user);
 
