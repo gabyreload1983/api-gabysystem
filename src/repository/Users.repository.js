@@ -13,7 +13,9 @@ export default class UsersRepository {
 
   getUsers = async () => {
     const users = await this.dao.getUsers();
-    return users.map((user) => new UsersLoginDto(user));
+    return users
+      .map((user) => new UsersLoginDto(user))
+      .filter((user) => user.role !== "admin");
   };
 
   getByCode = async (code_technical) =>
