@@ -11,12 +11,13 @@ export default class UsersRepository {
     return new UsersLoginDto(user);
   };
 
-  getUsers = async () => await this.dao.getUsers();
-
-  getByCode = async (code_technical) => {
-    const user = await this.dao.getByCode(code_technical.toUpperCase());
-    return new UsersLoginDto(user);
+  getUsers = async () => {
+    const users = await this.dao.getUsers();
+    return users.map((user) => new UsersLoginDto(user));
   };
+
+  getByCode = async (code_technical) =>
+    await this.dao.getByCode(code_technical.toUpperCase());
 
   register = async (user) => await this.dao.register(new UsersDbDto(user));
 
