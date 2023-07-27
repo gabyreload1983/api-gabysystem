@@ -7,5 +7,6 @@ package-lock.json
 /src/logger/logs
 Dockerfile
 docker-compose.yml
+docker-compose-dev.yml
 docker-compose.template.yml
 
