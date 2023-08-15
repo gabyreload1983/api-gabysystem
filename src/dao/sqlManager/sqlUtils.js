@@ -6,6 +6,7 @@ export const sendQueryUrbano = (query) => {
     logger.debug(query);
     connectionUrbano.query(query, (error, result) => {
       if (error) {
+        logger.error(error);
         reject(new Error(error.message));
       } else {
         resolve(result);
