@@ -33,11 +33,13 @@ export const getByCode = async (req, res) => {
   try {
     let { code_technical } = req.params;
 
-    const user = await userService.getByCode(code_technical);
-    if (!user)
+    const userByCode = await userService.getByCode(code_technical);
+    if (!userByCode)
       return res
         .status(404)
         .send({ status: "error", message: "User not found" });
+
+    const user = await userService.getUser(userByCode._id);
 
     res.send({ status: "success", user });
   } catch (error) {

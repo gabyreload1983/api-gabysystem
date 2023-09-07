@@ -36,6 +36,14 @@ export default class Products {
       stock && "AND (s.stockd01 - s.reserd01) > 0"
     } ORDER BY a.descrip`);
 
+  getBySerie = async (serie) =>
+    await sendQueryUrbano(`
+    SELECT * FROM articulo a
+    INNER JOIN serie2 s
+    ON a.codigo = s.codigo
+    WHERE s.serie = '${serie}'
+    LIMIT 1`);
+
   getDollarValue = async () => {
     const dollar = await sendQueryUrbano(
       `SELECT * FROM cotiza  WHERE codigo =  'BD'`

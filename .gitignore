@@ -4,5 +4,8 @@ package-lock.json
 .env
 .env.production
 .env.development
+.env.testing
 /src/logger/logs
-docker-compose.yml
+/src/public/pdfHistory
+gaybsystem-api.yml
+

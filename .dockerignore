@@ -1,8 +1,12 @@
 node_modules
 package-lock.json
-Dockerfile
-docker-compose.yml
 .env
 .env.production
 .env.development
+.env.testing
+.vscode
+/src/logger/logs
+Dockerfile
 docker-compose.template.yml
+gaybsystem-api.yml
+
