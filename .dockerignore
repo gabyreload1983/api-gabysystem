@@ -3,10 +3,10 @@ package-lock.json
 .env
 .env.production
 .env.development
+.env.testing
 .vscode
 /src/logger/logs
 Dockerfile
-docker-compose.yml
-docker-compose-dev.yml
 docker-compose.template.yml
+gaybsystem-api.yml
 
