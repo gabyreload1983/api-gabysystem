@@ -1,13 +1,13 @@
 {
   "name": "gabysystem-api",
-  "version": "4.9.8",
+  "version": "4.10.8",
   "description": "API-REST",
   "main": "src/app.js",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node src/app.js",
-    "dev": "nodemon src/app.js"
+    "dev": "node --watch src/app.js"
   },
   "author": "Gabriel Godoy",
   "license": "ISC",

@@ -14,28 +14,36 @@ router.get(
 );
 router.get("/:nrocompro", ordersController.getOrder);
 
-router.put("/take", authorization("technical", "admin"), ordersController.take);
+router.put(
+  "/take",
+  authorization("technical", "premium"),
+  ordersController.take
+);
 router.put(
   "/update",
-  authorization("technical", "admin"),
+  authorization("technical", "premium"),
   ordersController.update
 );
 router.put(
   "/close",
-  authorization("technical", "admin"),
+  authorization("technical", "premium"),
   ordersController.close
 );
-router.put("/free", authorization("technical", "admin"), ordersController.free);
+router.put(
+  "/free",
+  authorization("technical", "premium"),
+  ordersController.free
+);
 
 router.put(
   "/out/:nrocompro",
-  authorization("saler", "admin"),
+  authorization("saler", "premium"),
   ordersController.out
 );
 
 router.put(
   "/products",
-  authorization("saler", "admin"),
+  authorization("saler", "premium"),
   ordersController.products
 );
 
