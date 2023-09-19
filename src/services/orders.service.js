@@ -17,6 +17,7 @@ import UsersRepository from "./../repository/Users.repository.js";
 import { buildOrderPdf } from "../pdfKit/pdfKit.js";
 import ProductsInOrder from "./../dao/mongoManagers/ProductsInOrder.js";
 import ProductsInOrderRepository from "../repository/ProductsInOrder.repository.js";
+import StatisticsTechnicalDto from "../dao/DTOs/StatisticsTechnical.dto.js";
 
 const orderManager = new Orders();
 const orderRepository = new OrdersRepository(orderManager);
@@ -56,6 +57,26 @@ export const getOrder = async (nrocompro) => {
   order.total = getTotalOrder(order);
 
   return order;
+};
+
+export const getStatistics = async (from, to) => {
+  const technicals = await orderRepository.getTechnicals(from, to);
+  const statistics = technicals.map(
+    (technical) => new StatisticsTechnicalDto(technical.code_technical)
+  );
+
+  const orders = await orderRepository.getOrders(from, to);
+  for (const order of orders) {
+    const technical = statistics.find(
+      (tech) => tech.code_technical === order.tecnico
+    );
+    technical.total += 1;
+    if (order.diag === 22 && order.prioridad !== 3) technical.finished += 1;
+    if (order.diag === 23) technical.withoutRepair += 1;
+    if (order.prioridad === 3) technical.assembly += 1;
+  }
+
+  return statistics;
 };
 
 export const take = async (nrocompro, code_technical) =>

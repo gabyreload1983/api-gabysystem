@@ -42,6 +42,10 @@ export default class OrdersRepository {
     return await this.#addingProductsInOrders(order);
   };
 
+  getOrders = async (from, to) => await this.dao.getOrders(from, to);
+
+  getTechnicals = async (from, to) => await this.dao.getTechnicals(from, to);
+
   take = async (nrocompro, code_technical) =>
     await this.dao.take(nrocompro, code_technical);
 

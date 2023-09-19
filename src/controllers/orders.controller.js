@@ -101,6 +101,27 @@ export const getOrder = async (req, res) => {
   }
 };
 
+export const getStatistics = async (req, res) => {
+  try {
+    const { from, to } = req.params;
+    if (incompleteValues(from, to))
+      return res
+        .status(400)
+        .send({ status: "error", message: "Incomplete values" });
+
+    const statistics = await ordersService.getStatistics(from, to);
+
+    res.send({
+      status: "success",
+      message: "OK",
+      payload: statistics,
+    });
+  } catch (error) {
+    logger.error(error.message);
+    res.status(500).send(error);
+  }
+};
+
 export const take = async (req, res) => {
   try {
     const { nrocompro, code_technical } = req.body;
@@ -268,4 +289,3 @@ export const products = async (req, res) => {
     res.status(500).send(error);
   }
 };
-
