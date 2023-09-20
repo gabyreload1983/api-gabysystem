@@ -61,6 +61,7 @@ export const getOrder = async (nrocompro) => {
 
 export const getStatistics = async (from, to) => {
   const technicals = await orderRepository.getTechnicals(from, to);
+  if (technicals.length === 0) return [];
   const statistics = technicals.map(
     (technical) => new StatisticsTechnicalDto(technical.code_technical)
   );
