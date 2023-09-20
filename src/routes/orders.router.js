@@ -14,6 +14,12 @@ router.get(
 );
 router.get("/:nrocompro", ordersController.getOrder);
 
+router.get(
+  "/statitstics/:from/:to",
+  authorization("premium"),
+  ordersController.getStatistics
+);
+
 router.put(
   "/take",
   authorization("technical", "premium"),

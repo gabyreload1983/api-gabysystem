@@ -82,4 +82,14 @@ export default class Orders {
     await sendQueryUrbano(
       `UPDATE trabajos SET textorespuesta = '${path}' WHERE nrocompro = '${nrocompro}'`
     );
+
+  getOrders = async (from, to) =>
+    await sendQueryUrbano(
+      `SELECT * FROM trabajos WHERE diagnosticado BETWEEN '${from}' AND '${to}' AND estado = 23`
+    );
+
+  getTechnicals = async (from, to) =>
+    await sendQueryUrbano(
+      `SELECT DISTINCT tecnico as code_technical FROM trabajos WHERE diagnosticado BETWEEN '${from}' AND '${to}' AND tecnico != ''`
+    );
 }
