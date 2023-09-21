@@ -122,6 +122,27 @@ export const getStatistics = async (req, res) => {
   }
 };
 
+export const getOrdersByCustomer = async (req, res) => {
+  try {
+    const { code } = req.params;
+    if (incompleteValues(code))
+      return res
+        .status(400)
+        .send({ status: "error", message: "Incomplete values" });
+
+    const orders = await ordersService.getOrdersByCustomer(code);
+
+    res.send({
+      status: "success",
+      message: "OK",
+      payload: orders,
+    });
+  } catch (error) {
+    logger.error(error.message);
+    res.status(500).send(error);
+  }
+};
+
 export const take = async (req, res) => {
   try {
     const { nrocompro, code_technical } = req.body;

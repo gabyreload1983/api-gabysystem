@@ -92,4 +92,9 @@ export default class Orders {
     await sendQueryUrbano(
       `SELECT DISTINCT tecnico as code_technical FROM trabajos WHERE diagnosticado BETWEEN '${from}' AND '${to}' AND tecnico != ''`
     );
+
+  getOrdersByCustomer = async (code, limit = 50) =>
+    await sendQueryUrbano(
+      `SELECT * FROM trabajos WHERE codigo = '${code}' ORDER BY ingresado DESC LIMIT ${limit}`
+    );
 }

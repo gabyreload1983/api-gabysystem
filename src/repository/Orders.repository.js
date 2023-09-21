@@ -46,6 +46,9 @@ export default class OrdersRepository {
 
   getTechnicals = async (from, to) => await this.dao.getTechnicals(from, to);
 
+  getOrdersByCustomer = async (code) =>
+    await this.dao.getOrdersByCustomer(code);
+
   take = async (nrocompro, code_technical) =>
     await this.dao.take(nrocompro, code_technical);
 

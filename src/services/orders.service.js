@@ -80,6 +80,9 @@ export const getStatistics = async (from, to) => {
   return statistics;
 };
 
+export const getOrdersByCustomer = async (code) =>
+  await orderRepository.getOrdersByCustomer(code);
+
 export const take = async (nrocompro, code_technical) =>
   await orderRepository.take(nrocompro, code_technical);
 
