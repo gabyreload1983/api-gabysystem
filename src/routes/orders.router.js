@@ -20,7 +20,7 @@ router.get(
   ordersController.getStatistics
 );
 
-router.get("/customers/:code", ordersController.getOrdersByCustomer);
+router.get("/customer/:code", ordersController.getOrdersByCustomer);
 
 router.put(
   "/take",
