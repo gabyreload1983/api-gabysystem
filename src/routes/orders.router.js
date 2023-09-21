@@ -20,6 +20,8 @@ router.get(
   ordersController.getStatistics
 );
 
+router.get("/customer/:code", ordersController.getOrdersByCustomer);
+
 router.put(
   "/take",
   authorization("technical", "premium"),
