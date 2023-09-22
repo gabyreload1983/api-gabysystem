@@ -71,6 +71,7 @@ export const getStatistics = async (from, to) => {
     const technical = statistics.find(
       (tech) => tech.code_technical === order.tecnico
     );
+    technical.orders.push(order);
     technical.total += 1;
     if (order.diag === 22 && order.prioridad !== 3) technical.finished += 1;
     if (order.diag === 23) technical.withoutRepair += 1;
