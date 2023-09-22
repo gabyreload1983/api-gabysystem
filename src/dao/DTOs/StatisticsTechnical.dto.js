@@ -6,5 +6,6 @@ export default class StatisticsTechnicalDto {
     this.assembly = 0;
     this.tickets = 0;
     this.total = 0;
+    this.orders = [];
   }
 }
