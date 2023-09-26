@@ -67,7 +67,13 @@ export const getStatistics = async (from, to) => {
   );
 
   const orders = await orderRepository.getOrders(from, to);
+  const dollar = await productsRepository.getDollarValue();
   for (const order of orders) {
+    order.products = order.products.map((product) =>
+      formatProduct(product, dollar)
+    );
+    order.total = getTotalOrder(order);
+
     const technical = statistics.find(
       (tech) => tech.code_technical === order.tecnico
     );
