@@ -42,7 +42,10 @@ export default class OrdersRepository {
     return await this.#addingProductsInOrders(order);
   };
 
-  getOrders = async (from, to) => await this.dao.getOrders(from, to);
+  getOrders = async (from, to) => {
+    const orders = await this.dao.getOrders(from, to);
+    return await this.#addingProductsInOrders(orders);
+  };
 
   getTechnicals = async (from, to) => await this.dao.getTechnicals(from, to);
 
