@@ -51,6 +51,17 @@ export default class Products {
     return Number(dollar[0].valorlibre);
   };
 
+  getOrderList = async () =>
+    await sendQueryUrbano(`SELECT * FROM octmp WHERE procesado = 'N'`);
+
+  clearOrderList = async () =>
+    await sendQueryUrbano(`DELETE FROM octmp WHERE procesado = 'N'`);
+
+  deleteProductOrderList = async (id) =>
+    await sendQueryUrbano(
+      `DELETE FROM octmp WHERE procesado = 'N' AND codiart = '${id}'`
+    );
+
   removeReservation = async (codigo) =>
     await sendQueryUrbano(
       `UPDATE artstk01 SET reserd01 = reserd01 - 1 WHERE codigo = '${codigo}'`
