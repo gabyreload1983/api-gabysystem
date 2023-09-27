@@ -12,6 +12,13 @@ export default class ProductsRepository {
 
   getBySerie = async (serie) => await this.dao.getBySerie(serie);
 
+  getOrderList = async () => await this.dao.getOrderList();
+
+  clearOrderList = async () => await this.dao.clearOrderList();
+
+  deleteProductOrderList = async (id) =>
+    await this.dao.deleteProductOrderList(id);
+
   getDollarValue = async () => await this.dao.getDollarValue();
 
   removeReservation = async (codigo) =>
