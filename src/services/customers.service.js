@@ -13,32 +13,29 @@ export const getCustomersByName = async (name) =>
 export const getCustomers = async () =>
   await customersRepository.getCustomers();
 
-export const getSummaries = async () => {
+export const getSummaries = async (balanceFilter = 1000) => {
   const customers = await customersRepository.getCustomers();
-  return true;
+
   for (const customer of customers) {
-    if (customer.codigo === "1120") {
-      const vouchers = await customersRepository.getCustomersVouchers(
-        customer.codigo
-      );
-      for (const voucher of vouchers) {
-        console.log(voucher.importe);
-        customer.balance = 0;
-        if (
-          voucher.contado !== "S" &&
-          (voucher.tipo === "FV" ||
-            voucher.tipo === "FB" ||
-            voucher.tipo === "RP" ||
-            voucher.tipo === "ND")
-        )
-          customer.balance += Number(voucher.importe);
+    const vouchers = await customersRepository.getCustomersVouchers(
+      customer.codigo
+    );
+    customer.balance = 0;
 
-        if (voucher.tipo === "RE" || voucher.tipo === "NC")
-          customer.balance -= Number(voucher.importe);
+    for (const voucher of vouchers) {
+      if (
+        voucher.contado !== "S" &&
+        (voucher.tipo === "FV" ||
+          voucher.tipo === "RP" ||
+          voucher.tipo === "ND")
+      )
+        customer.balance += Number(voucher.importe);
 
-        console.log(customer);
-        return customer;
-      }
+      if (voucher.tipo === "RE" || voucher.tipo === "NC")
+        customer.balance -= Number(voucher.importe);
     }
   }
+  return customers
+    .filter((customer) => customer.balance > balanceFilter)
+    .sort((a, b) => b.balance - a.balance);
 };
