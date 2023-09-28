@@ -1,3 +1,4 @@
+import moment from "moment";
 import logger from "../logger/logger.js";
 import * as customerService from "../services/customers.service.js";
 
@@ -41,6 +42,28 @@ export const getCustomersByName = async (req, res) => {
       status: "success",
       message: "OK",
       payload: customers,
+    });
+  } catch (error) {
+    logger.error(error.message);
+    res.status(500).send(error);
+  }
+};
+
+export const getSummaries = async (req, res) => {
+  try {
+    const start = moment();
+    const summaries = await customerService.getSummaries();
+    if (!summaries)
+      return res.status(404).send({
+        status: "error",
+        message: "Error searching customers",
+      });
+
+    const delay = moment(start).diff(moment(), "seconds");
+    res.send({
+      status: "success",
+      message: `Se demoro ${delay} segundos`,
+      payload: summaries,
     });
   } catch (error) {
     logger.error(error.message);
