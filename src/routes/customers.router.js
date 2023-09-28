@@ -1,14 +1,17 @@
 import { Router } from "express";
 
 const router = Router();
-import {
-  getCustomerByCode,
-  getCustomersByName,
-} from "../controllers/customers.controller.js";
+import * as customersController from "../controllers/customers.controller.js";
 import { authorization } from "../utils.js";
 
-router.get("/code/:codigo", getCustomerByCode);
+router.get("/code/:codigo", customersController.getCustomerByCode);
 
-router.get("/:name", getCustomersByName);
+router.get(
+  "/summaries",
+  authorization("premium"),
+  customersController.getSummaries
+);
+
+router.get("/:name", customersController.getCustomersByName);
 
 export default router;

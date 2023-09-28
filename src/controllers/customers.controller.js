@@ -47,3 +47,23 @@ export const getCustomersByName = async (req, res) => {
     res.status(500).send(error);
   }
 };
+
+export const getSummaries = async (req, res) => {
+  try {
+    const summaries = await customerService.getSummaries();
+    if (!summaries)
+      return res.status(404).send({
+        status: "error",
+        message: "Error searching customers",
+      });
+
+    res.send({
+      status: "success",
+      message: "OK",
+      payload: summaries,
+    });
+  } catch (error) {
+    logger.error(error.message);
+    res.status(500).send(error);
+  }
+};
