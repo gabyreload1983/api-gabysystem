@@ -64,6 +64,21 @@ export const getPendings = async (req, res) => {
   }
 };
 
+export const getPendingsAll = async (req, res) => {
+  try {
+    const orders = await ordersService.getPendingsAll();
+    if (!orders)
+      return res
+        .status(400)
+        .send({ status: "error", message: "Error orders pendingAll" });
+
+    res.send({ status: "success", message: "OK", payload: orders });
+  } catch (error) {
+    logger.error(error.message);
+    res.status(500).send(error);
+  }
+};
+
 export const getInProgressByTechnical = async (req, res) => {
   try {
     const { code_technical } = req.params;
