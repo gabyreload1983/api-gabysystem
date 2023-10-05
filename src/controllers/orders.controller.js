@@ -48,6 +48,22 @@ export const getFinalDisposition = async (req, res) => {
   }
 };
 
+export const getProcessSector = async (req, res) => {
+  try {
+    const { sector } = req.params;
+    const orders = await ordersService.getProcessSector(sector);
+    if (!orders)
+      return res
+        .status(400)
+        .send({ status: "error", message: "Error orders process" });
+
+    res.send({ status: "success", message: "OK", payload: orders });
+  } catch (error) {
+    logger.error(error.message);
+    res.status(500).send(error);
+  }
+};
+
 export const getPendings = async (req, res) => {
   try {
     const { sector } = req.params;

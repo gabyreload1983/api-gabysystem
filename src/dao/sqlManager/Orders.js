@@ -27,6 +27,13 @@ export default class Orders {
     ORDER BY ingresado DESC LIMIT 100`
     );
 
+  getProcessSector = async (sector) =>
+    await sendQueryUrbano(
+      `SELECT * FROM trabajos 
+      WHERE  codiart = ".${sector}" AND estado = 22 AND codigo != "ANULADO"
+      ORDER BY prioridad DESC`
+    );
+
   getPendings = async (sector) =>
     await sendQueryUrbano(
       `SELECT * FROM trabajos 
