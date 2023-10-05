@@ -7,6 +7,7 @@ import { authorization } from "../utils.js";
 router.get("/in-process", ordersController.getInProcess);
 router.get("/to-deliver", ordersController.getToDeliver);
 router.get("/final-disposition", ordersController.getFinalDisposition);
+router.get("/pendings-all", ordersController.getPendingsAll);
 router.get("/pending/:sector", ordersController.getPendings);
 router.get(
   "/technical/:code_technical",

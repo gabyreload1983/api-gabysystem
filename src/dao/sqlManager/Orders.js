@@ -34,6 +34,13 @@ export default class Orders {
       ORDER BY prioridad DESC`
     );
 
+  getPendingsAll = async () =>
+    await sendQueryUrbano(
+      `SELECT * FROM trabajos 
+      WHERE (estado = 21 OR estado = 22) AND codigo != "ANULADO"
+      ORDER BY prioridad DESC`
+    );
+
   getInProgressByTechnical = async (code_technical) =>
     await sendQueryUrbano(
       `SELECT * FROM trabajos 

@@ -32,18 +32,21 @@ const productsInOrderRepository = new ProductsInOrderRepository(
   productsInOrderManager
 );
 
-export const getInProcess = async () => orderRepository.getInProcess();
+export const getInProcess = async () => await orderRepository.getInProcess();
 
-export const getToDeliver = async () => orderRepository.getToDeliver();
+export const getToDeliver = async () => await orderRepository.getToDeliver();
 
 export const getFinalDisposition = async () =>
-  orderRepository.getFinalDisposition();
+  await orderRepository.getFinalDisposition();
 
 export const getPendings = async (sector) =>
-  orderRepository.getPendings(sector);
+  await orderRepository.getPendings(sector);
+
+export const getPendingsAll = async () =>
+  await orderRepository.getPendingsAll();
 
 export const getInProgressByTechnical = async (code_technical) =>
-  orderRepository.getInProgressByTechnical(code_technical);
+  await orderRepository.getInProgressByTechnical(code_technical);
 
 export const getOrder = async (nrocompro) => {
   let order = await orderRepository.getOrder(nrocompro);

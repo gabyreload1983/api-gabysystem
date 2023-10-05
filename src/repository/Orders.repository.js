@@ -30,6 +30,11 @@ export default class OrdersRepository {
     return await this.#addingProductsInOrders(pendings);
   };
 
+  getPendingsAll = async () => {
+    const pendings = await this.dao.getPendingsAll();
+    return await this.#addingProductsInOrders(pendings);
+  };
+
   getInProgressByTechnical = async (code_technical) => {
     const ordersTechnical = await this.dao.getInProgressByTechnical(
       code_technical.toUpperCase()
