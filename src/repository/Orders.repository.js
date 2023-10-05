@@ -25,6 +25,11 @@ export default class OrdersRepository {
     return await this.#addingProductsInOrders(finalDisposition);
   };
 
+  getProcessSector = async (sector) => {
+    const orders = await this.dao.getProcessSector(sector);
+    return await this.#addingProductsInOrders(orders);
+  };
+
   getPendings = async (sector) => {
     const pendings = await this.dao.getPendings(sector);
     return await this.#addingProductsInOrders(pendings);

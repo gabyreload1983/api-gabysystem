@@ -39,6 +39,9 @@ export const getToDeliver = async () => await orderRepository.getToDeliver();
 export const getFinalDisposition = async () =>
   await orderRepository.getFinalDisposition();
 
+export const getProcessSector = async (sector) =>
+  await orderRepository.getProcessSector(sector);
+
 export const getPendings = async (sector) =>
   await orderRepository.getPendings(sector);
 
