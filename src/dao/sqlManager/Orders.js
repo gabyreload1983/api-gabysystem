@@ -57,7 +57,7 @@ export default class Orders {
 
   getById = async (nrocompro) =>
     await sendQueryUrbano(
-      `SELECT * FROM trabajos WHERE nrocompro = '${nrocompro}'`
+      `SELECT * FROM trabajos t INNER JOIN clientes c ON t.codigo = c.codigo WHERE nrocompro = '${nrocompro}'`
     );
 
   getProductsInOrder = async (nrocompro) =>
