@@ -57,4 +57,10 @@ router.put(
   ordersController.products
 );
 
+router.put(
+  "/update-customer",
+  authorization("premium"),
+  ordersController.updateCustomer
+);
+
 export default router;

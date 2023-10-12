@@ -91,4 +91,7 @@ export default class OrdersRepository {
 
   savePdfPath = async (nrocompro, path) =>
     this.dao.savePdfPath(nrocompro, path);
+
+  updateCustomer = async (nrocompro, customer) =>
+    this.dao.updateCustomer(nrocompro, customer);
 }

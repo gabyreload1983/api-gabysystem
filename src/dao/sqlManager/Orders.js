@@ -111,4 +111,12 @@ export default class Orders {
     await sendQueryUrbano(
       `SELECT * FROM trabajos WHERE codigo = '${code}' ORDER BY ingresado DESC LIMIT ${limit}`
     );
+
+  updateCustomer = async (nrocompro, customer) =>
+    await sendQueryUrbano(`UPDATE trabajos SET 
+      codigo = '${customer.codigo}', 
+      nombre = '${customer.nombre}', 
+      direccion = '${customer.direccion}'
+      telefono = '${customer.telefono}' 
+      WHERE nrocompro = '${nrocompro}'`);
 }

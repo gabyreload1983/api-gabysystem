@@ -229,3 +229,7 @@ export const products = async (order, user) => {
 
   return { result, fileName };
 };
+
+export const updateCustomer = async (nrocompro, customer) => {
+  return await orderRepository.updateCustomer(nrocompro, customer);
+};

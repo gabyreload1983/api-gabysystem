@@ -1,5 +1,6 @@
 import logger from "../logger/logger.js";
 import * as ordersService from "../services/orders.service.js";
+import * as customersServices from "../services/customers.service.js";
 
 import { incompleteValues } from "../validators/validator.js";
 
@@ -334,6 +335,33 @@ export const products = async (req, res) => {
     res.send({
       status: "success",
       message: "Products in order updates successfully",
+      payload: result,
+    });
+  } catch (error) {
+    logger.error(error.message);
+    res.status(500).send(error);
+  }
+};
+
+export const updateCustomer = async (req, res) => {
+  try {
+    const { nrocompro, customerId } = req.body;
+    const customer = await customersServices.getByCode(customerId);
+    if (!customer)
+      return res
+        .status(404)
+        .send({ status: "error", message: "Customer not found" });
+
+    const result = await ordersService.updateCustomer(nrocompro, customer);
+    if (!result)
+      return res.status(400).send({
+        status: "error",
+        message: "Error trying update customer in order",
+      });
+
+    res.send({
+      status: "success",
+      message: "Customer updates successfully",
       payload: result,
     });
   } catch (error) {
