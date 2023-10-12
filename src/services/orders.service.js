@@ -55,6 +55,9 @@ export const getOrder = async (nrocompro) => {
   let order = await orderRepository.getOrder(nrocompro);
   if (order.length === 0) return null;
   order = order[0];
+  const customer = await customersRepository.getByCode(order.codigo);
+  if (customer && customer.length > 0) order.telefono = customer[0].telefono;
+
   const dollar = await productsRepository.getDollarValue();
 
   order.products = order.products.map((product) =>
