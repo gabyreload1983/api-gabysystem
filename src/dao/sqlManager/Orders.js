@@ -116,7 +116,12 @@ export default class Orders {
     await sendQueryUrbano(`UPDATE trabajos SET 
       codigo = '${customer.codigo}', 
       nombre = '${customer.nombre}', 
-      direccion = '${customer.direccion}'
+      direccion = '${customer.direccion}',
       telefono = '${customer.telefono}' 
+      WHERE nrocompro = '${nrocompro}'`);
+
+  updateCustomerInProducts = async (nrocompro, customer) =>
+    await sendQueryUrbano(`UPDATE trrenglo SET 
+      cliente = '${customer.codigo}'
       WHERE nrocompro = '${nrocompro}'`);
 }

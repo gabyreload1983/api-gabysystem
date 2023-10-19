@@ -94,4 +94,7 @@ export default class OrdersRepository {
 
   updateCustomer = async (nrocompro, customer) =>
     this.dao.updateCustomer(nrocompro, customer);
+
+  updateCustomerInProducts = async (nrocompro, customer) =>
+    this.dao.updateCustomerInProducts(nrocompro, customer);
 }

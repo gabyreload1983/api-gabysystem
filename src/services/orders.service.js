@@ -231,5 +231,7 @@ export const products = async (order, user) => {
 };
 
 export const updateCustomer = async (nrocompro, customer) => {
-  return await orderRepository.updateCustomer(nrocompro, customer);
+  await orderRepository.updateCustomer(nrocompro, customer);
+  await orderRepository.updateCustomerInProducts(nrocompro, customer);
+  return true;
 };
