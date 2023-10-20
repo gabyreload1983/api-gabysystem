@@ -1,6 +1,9 @@
 import dotenv from "dotenv";
 
-dotenv.config();
+if (process.env.NODE_ENV === "production") dotenv.config();
+
+if (process.env.NODE_ENV !== "production")
+  dotenv.config({ path: `${process.env.PWD}/.env.${process.env.NODE_ENV}` });
 
 export default {
   port: process.env.PORT,
