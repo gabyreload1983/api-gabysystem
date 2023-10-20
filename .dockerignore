@@ -8,5 +8,5 @@ package-lock.json
 /src/logger/logs
 Dockerfile
 docker-compose.template.yml
-gaybsystem-api.yml
+gabysystem-api.yml
 
