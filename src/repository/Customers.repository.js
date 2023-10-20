@@ -10,4 +10,6 @@ export default class CustomersRepository {
   getCustomers = async () => this.dao.getCustomers();
 
   getCustomersVouchers = async (id) => this.dao.getCustomersVouchers(id);
+
+  getSalesConditions = async () => this.dao.getSalesConditions();
 }

@@ -18,4 +18,9 @@ export default class Customers {
 
   getCustomersVouchers = async (id) =>
     await sendQueryUrbano(`SELECT * FROM ctacli WHERE codigo = '${id}'`);
+
+  getSalesConditions = async () =>
+    await sendQueryUrbano(
+      `SELECT numero AS code, textofac AS description FROM condvtas`
+    );
 }

@@ -15,12 +15,20 @@ export const getCustomers = async () =>
 
 export const getSummaries = async (balanceFilter = 1000) => {
   const customers = await customersRepository.getCustomers();
+  const salesConditions = await customersRepository.getSalesConditions();
 
   for (const customer of customers) {
     const vouchers = await customersRepository.getCustomersVouchers(
       customer.codigo
     );
     customer.balance = 0;
+
+    const index = salesConditions.findIndex((condition) => {
+      return condition.code === Number(customer.condicion);
+    });
+    if (index !== -1) {
+      customer.condicion = salesConditions[index].description;
+    }
 
     for (const voucher of vouchers) {
       if (
