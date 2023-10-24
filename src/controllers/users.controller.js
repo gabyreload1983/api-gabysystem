@@ -13,7 +13,11 @@ export const getUser = async (req, res) => {
         .status(404)
         .send({ status: "error", message: "User not found" });
 
-    res.send({ status: "success", user });
+    res.send({
+      status: "success",
+      message: "OK",
+      payload: user,
+    });
   } catch (error) {
     logger.error(error.message);
     res.status(500).send(error);
@@ -22,7 +26,16 @@ export const getUser = async (req, res) => {
 export const getUsers = async (req, res) => {
   try {
     const users = await userService.getUsers();
-    res.send({ status: "success", users });
+    if (!users)
+      return res
+        .status(404)
+        .send({ status: "error", message: "Users not found" });
+
+    res.send({
+      status: "success",
+      message: "OK",
+      payload: users,
+    });
   } catch (error) {
     logger.error(error.message);
     res.status(500).send(error);
@@ -41,7 +54,11 @@ export const getByCode = async (req, res) => {
 
     const user = await userService.getUser(userByCode._id);
 
-    res.send({ status: "success", user });
+    res.send({
+      status: "success",
+      message: "OK",
+      payload: user,
+    });
   } catch (error) {
     logger.error(error.message);
     res.status(500).send(error);
@@ -83,7 +100,11 @@ export const register = async (req, res) => {
 
     await userService.register(newUser);
 
-    res.send({ status: "success", message: "user registered" });
+    res.send({
+      status: "success",
+      message: "user registered",
+      payload: true,
+    });
   } catch (error) {
     logger.error(error.message);
     res.status(500).send(error);
@@ -113,9 +134,8 @@ export const login = async (req, res) => {
 
     res.send({
       status: "success",
-      message: "login success",
-      accessToken,
-      user: usersLoginDto,
+      message: "user login",
+      payload: { accessToken, user: usersLoginDto },
     });
   } catch (error) {
     logger.error(error.message);
@@ -147,7 +167,11 @@ export const update = async (req, res) => {
       role,
     });
 
-    res.send({ status: "success", response });
+    res.send({
+      status: "success",
+      message: "user updated",
+      payload: response,
+    });
   } catch (error) {
     logger.error(error.message);
     res.status(500).send(error);
