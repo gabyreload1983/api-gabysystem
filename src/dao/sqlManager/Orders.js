@@ -124,4 +124,41 @@ export default class Orders {
     await sendQueryUrbano(`UPDATE trrenglo SET 
       cliente = '${customer.codigo}'
       WHERE nrocompro = '${nrocompro}'`);
+
+  getLastSaleNoteNumber = async (position) =>
+    await sendQueryUrbano(
+      `SELECT MAX(numero) AS nrocompro FROM nvhead WHERE puesto = ${position}`
+    );
+
+  createSaleNoteReservation = async (
+    saleNote,
+    saleNotePosition,
+    saleNoteNumber,
+    order,
+    product,
+    quantity = 1
+  ) =>
+    await sendQueryUrbano(`INSERT INTO nvrenglo 
+  (nrocompro, tipo, letra, puesto, numero, codigo, 
+    codiart, descart, cantidad, precio, subtotal, operador, equipo, pendiente) 
+  VALUES(
+    '${saleNote}', 'NV', 'X', ${saleNotePosition}, ${saleNoteNumber}, '${
+      order.codigo
+    }', '${product.codigo}', 
+    '${product.descrip} - ${order.nrocompro}', ${quantity}, ${
+      product.priceList1WithouTax
+    },
+    ${
+      product.priceList1WithouTax * quantity
+    }, 'GABYSYSTEM', 'MOSTRADOR',  ${quantity}
+  )`);
+
+  createSaleNote = async (nrocompro, numero, order, dollar, importe) =>
+    await sendQueryUrbano(`INSERT INTO nvhead
+  (nrocompro, tipo, letra, puesto, numero, codigo, nombre, tipoiva, cotiza, cuota,
+    importe, impocuota, saldo, operador, equipo, contado, tipofactura, marcafiscal)
+  VALUES(
+    '${nrocompro}', 'NV', 'X', 77, ${numero}, '${order.codigo}', '${order.nombre} - ${order.nrocompro}', 'X', ${dollar}, 1,
+    ${importe}, ${importe}, ${importe}, 'GABYSYSTEM', 'MOSTRADOR', 'N', 'F', 'Q'
+  )`);
 }

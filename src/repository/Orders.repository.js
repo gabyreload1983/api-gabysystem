@@ -85,16 +85,53 @@ export default class OrdersRepository {
       notification
     );
 
-  free = async (nrocompro) => this.dao.free(nrocompro);
+  free = async (nrocompro) => await this.dao.free(nrocompro);
 
-  out = async (nrocompro) => this.dao.out(nrocompro);
+  out = async (nrocompro) => await this.dao.out(nrocompro);
 
   savePdfPath = async (nrocompro, path) =>
-    this.dao.savePdfPath(nrocompro, path);
+    await this.dao.savePdfPath(nrocompro, path);
 
   updateCustomer = async (nrocompro, customer) =>
-    this.dao.updateCustomer(nrocompro, customer);
+    await this.dao.updateCustomer(nrocompro, customer);
 
   updateCustomerInProducts = async (nrocompro, customer) =>
-    this.dao.updateCustomerInProducts(nrocompro, customer);
+    await this.dao.updateCustomerInProducts(nrocompro, customer);
+
+  create = async (order) => await this.dao.create(order);
+
+  getLastSaleNoteNumber = async (position) =>
+    await this.dao.getLastSaleNoteNumber(position);
+
+  createSaleNoteReservation = async (
+    saleNote,
+    saleNotePosition,
+    saleNoteNumber,
+    order,
+    product
+  ) =>
+    await this.dao.createSaleNoteReservation(
+      saleNote,
+      saleNotePosition,
+      saleNoteNumber,
+      order,
+      product
+    );
+
+  createSaleNote = async (
+    saleNote,
+    saleNotePosition,
+    product,
+    order,
+    dollar,
+    importe
+  ) =>
+    await this.dao.createSaleNote(
+      saleNote,
+      saleNotePosition,
+      product,
+      order,
+      dollar,
+      importe
+    );
 }

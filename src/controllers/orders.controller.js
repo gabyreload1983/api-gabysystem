@@ -183,7 +183,13 @@ export const take = async (req, res) => {
         .status(400)
         .send({ status: "error", message: "Incomplete values" });
 
-    const result = await ordersService.take(nrocompro, code_technical);
+    const order = await ordersService.getOrder(nrocompro);
+    if (!order)
+      return res
+        .status(400)
+        .send({ status: "error", message: "No se encontro orden" });
+
+    const result = await ordersService.take(order, code_technical);
     if (!result)
       return res.status(400).send({ status: "error", message: "Error taking" });
 
@@ -316,7 +322,7 @@ export const out = async (req, res) => {
   }
 };
 
-export const products = async (req, res) => {
+export const handleProductsInOrder = async (req, res) => {
   try {
     const order = req.body;
     const orderExists = await ordersService.getOrder(order.nrocompro);
@@ -325,7 +331,7 @@ export const products = async (req, res) => {
         .status(404)
         .send({ status: "error", message: "Order not found" });
 
-    const result = await ordersService.products(order, req.user);
+    const result = await ordersService.handleProductsInOrder(order, req.user);
     if (!result)
       return res.status(400).send({
         status: "error",

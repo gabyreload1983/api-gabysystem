@@ -10,7 +10,7 @@ import {
   getHtmlCloseOrder,
   getHtmlProductsInOrder,
 } from "./../nodemailer/html/utilsHtml.js";
-import { formatProduct, getTotalOrder } from "../utils.js";
+import { formatProduct, getSubTotalOrder, getTotalOrder } from "../utils.js";
 import { nanoid } from "nanoid";
 import Users from "./../dao/mongoManagers/Users.js";
 import UsersRepository from "./../repository/Users.repository.js";
@@ -18,7 +18,11 @@ import { buildOrderPdf } from "../pdfKit/pdfKit.js";
 import ProductsInOrder from "./../dao/mongoManagers/ProductsInOrder.js";
 import ProductsInOrderRepository from "../repository/ProductsInOrder.repository.js";
 import StatisticsTechnicalDto from "../dao/DTOs/StatisticsTechnical.dto.js";
+import OrdersMongo from "../dao/mongoManagers/Orders.js";
+import OrdersMongoRepository from "../repository/OrdersMongo.repository.js";
 
+const orderMongoManager = new OrdersMongo();
+const orderRepositoryMongo = new OrdersMongoRepository(orderMongoManager);
 const orderManager = new Orders();
 const orderRepository = new OrdersRepository(orderManager);
 const productManager = new Products();
@@ -99,8 +103,49 @@ export const getStatistics = async (from, to) => {
 export const getOrdersByCustomer = async (code) =>
   await orderRepository.getOrdersByCustomer(code);
 
-export const take = async (nrocompro, code_technical) =>
-  await orderRepository.take(nrocompro, code_technical);
+export const take = async (order, code_technical) => {
+  const result = await orderRepository.take(order.nrocompro, code_technical);
+  if (!result) return false;
+
+  const results = await orderRepository.getOrder(order.nrocompro);
+  const orderUpdate = results[0];
+  const orderMongo = await orderRepositoryMongo.getByNrocompro(order.nrocompro);
+
+  if (orderMongo?.saleNoteNumber) return result;
+
+  // create NV
+  const saleNotePosition = 77;
+  const lastSaleNoteNumber = await orderRepository.getLastSaleNoteNumber(
+    saleNotePosition
+  );
+
+  if (!lastSaleNoteNumber) return false;
+  let saleNoteNumber = 1;
+  if (lastSaleNoteNumber[0].nrocompro !== null) {
+    saleNoteNumber = lastSaleNoteNumber[0].nrocompro + 1;
+  }
+  const saleNote =
+    `NVX00${saleNotePosition}` +
+    `00000000`.slice(saleNoteNumber.toString().length) +
+    saleNoteNumber;
+
+  const dollar = await productsRepository.getDollarValue();
+  await orderRepository.createSaleNote(
+    saleNote,
+    saleNoteNumber,
+    orderUpdate,
+    dollar,
+    getSubTotalOrder(orderUpdate)
+  );
+
+  //save order in mongo
+  return await orderRepositoryMongo.create(
+    orderUpdate,
+    saleNote,
+    saleNotePosition,
+    saleNoteNumber
+  );
+};
 
 export const update = async (nrocompro, diagnostico, costo, code_technical) =>
   await orderRepository.update(nrocompro, diagnostico, costo, code_technical);
@@ -148,7 +193,7 @@ export const out = async (order) => {
   return await orderRepository.out(order.nrocompro);
 };
 
-export const products = async (order, user) => {
+export const handleProductsInOrder = async (order, user) => {
   const oldOrder = await getOrder(order.nrocompro);
 
   for (const p of order.products) {
@@ -167,9 +212,23 @@ export const products = async (order, user) => {
     );
   });
 
+  const orderMongo = await orderRepositoryMongo.getByNrocompro(order.nrocompro);
+  if (!orderMongo) return false;
+  const dollar = await productsRepository.getDollarValue();
+
   if (addedProducts.length > 0) {
     for (const product of addedProducts) {
       product.descrip = product.descrip.slice(0, 20); //testing if in prodcution is needed
+
+      // validate if exist a reservatrion for this product and update quantity
+
+      await orderRepository.createSaleNoteReservation(
+        orderMongo.saleNote,
+        orderMongo.saleNotePosition,
+        orderMongo.saleNoteNumber,
+        order,
+        product
+      );
       await productsRepository.addReservation(product.codigo);
       await productsRepository.addProductIntoOrder(order, product);
     }
@@ -177,10 +236,16 @@ export const products = async (order, user) => {
 
   if (deletedProducts.length > 0) {
     for (const product of deletedProducts) {
+      // validate if exist a reservation for this product and update quantity
+
       await productsRepository.removeReservation(product.codigo);
       await productsRepository.removeProductFromOrder(order, product);
     }
   }
+
+  // update orderMongo
+  const updateOrder = await getOrder(order.nrocompro);
+  await orderRepositoryMongo.update(orderMongo._id, updateOrder);
 
   if (deletedProducts.length === 0 && addedProducts.length === 0) return false;
 
