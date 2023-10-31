@@ -103,19 +103,26 @@ export default class OrdersRepository {
   getLastSaleNoteNumber = async (position) =>
     await this.dao.getLastSaleNoteNumber(position);
 
+  getSaleNoteItems = async (nrocompro) => {
+    console.log("repository", nrocompro);
+    return await this.dao.getSaleNoteItems(nrocompro);
+  };
+
   createSaleNoteReservation = async (
     saleNote,
     saleNotePosition,
     saleNoteNumber,
     order,
-    product
+    product,
+    itemNumber
   ) =>
     await this.dao.createSaleNoteReservation(
       saleNote,
       saleNotePosition,
       saleNoteNumber,
       order,
-      product
+      product,
+      itemNumber
     );
 
   createSaleNote = async (

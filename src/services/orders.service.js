@@ -120,10 +120,10 @@ export const take = async (order, code_technical) => {
   );
 
   if (!lastSaleNoteNumber) return false;
-  let saleNoteNumber = 1;
-  if (lastSaleNoteNumber[0].nrocompro !== null) {
-    saleNoteNumber = lastSaleNoteNumber[0].nrocompro + 1;
-  }
+  const saleNoteNumber =
+    lastSaleNoteNumber[0].nrocompro !== null
+      ? lastSaleNoteNumber[0].nrocompro + 1
+      : 1;
   const saleNote =
     `NVX00${saleNotePosition}` +
     `00000000`.slice(saleNoteNumber.toString().length) +
@@ -215,20 +215,28 @@ export const handleProductsInOrder = async (order, user) => {
   const orderMongo = await orderRepositoryMongo.getByNrocompro(order.nrocompro);
   if (!orderMongo) return false;
   const dollar = await productsRepository.getDollarValue();
+  const saleNoteItems = await orderRepository.getSaleNoteItems(
+    orderMongo.saleNote
+  );
+
+  console.log("orderMongo", orderMongo);
+  console.log("saleNoteItems", saleNoteItems);
+  let itemNumber = saleNoteItems.length + 1;
 
   if (addedProducts.length > 0) {
     for (const product of addedProducts) {
       product.descrip = product.descrip.slice(0, 20); //testing if in prodcution is needed
-
-      // validate if exist a reservatrion for this product and update quantity
 
       await orderRepository.createSaleNoteReservation(
         orderMongo.saleNote,
         orderMongo.saleNotePosition,
         orderMongo.saleNoteNumber,
         order,
-        product
+        product,
+        itemNumber
       );
+      itemNumber++;
+
       await productsRepository.addReservation(product.codigo);
       await productsRepository.addProductIntoOrder(order, product);
     }

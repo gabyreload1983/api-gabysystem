@@ -130,28 +130,12 @@ export default class Orders {
       `SELECT MAX(numero) AS nrocompro FROM nvhead WHERE puesto = ${position}`
     );
 
-  createSaleNoteReservation = async (
-    saleNote,
-    saleNotePosition,
-    saleNoteNumber,
-    order,
-    product,
-    quantity = 1
-  ) =>
-    await sendQueryUrbano(`INSERT INTO nvrenglo 
-  (nrocompro, tipo, letra, puesto, numero, codigo, 
-    codiart, descart, cantidad, precio, subtotal, operador, equipo, pendiente) 
-  VALUES(
-    '${saleNote}', 'NV', 'X', ${saleNotePosition}, ${saleNoteNumber}, '${
-      order.codigo
-    }', '${product.codigo}', 
-    '${product.descrip} - ${order.nrocompro}', ${quantity}, ${
-      product.priceList1WithouTax
-    },
-    ${
-      product.priceList1WithouTax * quantity
-    }, 'GABYSYSTEM', 'MOSTRADOR',  ${quantity}
-  )`);
+  getSaleNoteItems = async (nrocompro) => {
+    console.log("manager", nrocompro);
+    return await sendQueryUrbano(
+      `SELECT * FROM nvrenglo WHERE nrocompro = '${nrocompro}'`
+    );
+  };
 
   createSaleNote = async (nrocompro, numero, order, dollar, importe) =>
     await sendQueryUrbano(`INSERT INTO nvhead
@@ -161,4 +145,34 @@ export default class Orders {
     '${nrocompro}', 'NV', 'X', 77, ${numero}, '${order.codigo}', '${order.nombre} - ${order.nrocompro}', 'X', ${dollar}, 1,
     ${importe}, ${importe}, ${importe}, 'GABYSYSTEM', 'MOSTRADOR', 'N', 'F', 'Q'
   )`);
+
+  createSaleNoteReservation = async (
+    saleNote,
+    saleNotePosition,
+    saleNoteNumber,
+    order,
+    product,
+    itemNumber,
+    quantity = 1
+  ) =>
+    await sendQueryUrbano(`INSERT INTO nvrenglo 
+  (nrocompro, tipo, letra, puesto, numero, codigo, renglon,
+    codiart, descart, cantidad, precio, subtotal, operador, equipo, pendiente) 
+  VALUES(
+    '${saleNote}', 'NV', 'X', ${saleNotePosition}, ${saleNoteNumber}, '${
+      order.codigo
+    }', ${itemNumber},
+    '${product.codigo}', 
+    '${product.descrip} - ${order.nrocompro}', ${quantity}, ${
+      product.priceList1WithouTax
+    },
+    ${
+      product.priceList1WithouTax * quantity
+    }, 'GABYSYSTEM', 'MOSTRADOR',  ${quantity}
+  )`);
+
+  removeSaleNoteReservation = async (saleNote, product, itemNumber) =>
+    await sendQueryUrbano(
+      `DELETE FROM nvrenglo WHERE nrocompro = '${saleNote}' AND codiart = '${product.codigo}' AND renglon = ${itemNumber}`
+    );
 }
