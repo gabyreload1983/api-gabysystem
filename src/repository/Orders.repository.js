@@ -100,12 +100,16 @@ export default class OrdersRepository {
 
   create = async (order) => await this.dao.create(order);
 
-  getLastSaleNoteNumber = async (position) =>
-    await this.dao.getLastSaleNoteNumber(position);
+  getLastSaleNoteNumber = async (position) => {
+    const lastSaleNoteNumber = await this.dao.getLastSaleNoteNumber(position);
+    return lastSaleNoteNumber[0].nrocompro === null
+      ? 0
+      : lastSaleNoteNumber[0].nrocompro;
+  };
 
-  getSaleNoteItems = async (nrocompro) => {
-    console.log("repository", nrocompro);
-    return await this.dao.getSaleNoteItems(nrocompro);
+  getLastItem = async (nrocompro) => {
+    const result = await this.dao.getLastItem(nrocompro);
+    return result[0].lastItem === null ? 0 : result[0].lastItem;
   };
 
   createSaleNoteReservation = async (
@@ -125,20 +129,11 @@ export default class OrdersRepository {
       itemNumber
     );
 
-  createSaleNote = async (
-    saleNote,
-    saleNotePosition,
-    product,
-    order,
-    dollar,
-    importe
-  ) =>
+  createSaleNote = async (saleNote, saleNotePosition, saleNoteNumber, order) =>
     await this.dao.createSaleNote(
       saleNote,
       saleNotePosition,
-      product,
-      order,
-      dollar,
-      importe
+      saleNoteNumber,
+      order
     );
 }

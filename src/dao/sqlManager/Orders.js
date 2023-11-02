@@ -130,20 +130,19 @@ export default class Orders {
       `SELECT MAX(numero) AS nrocompro FROM nvhead WHERE puesto = ${position}`
     );
 
-  getSaleNoteItems = async (nrocompro) => {
-    console.log("manager", nrocompro);
+  getLastItem = async (nrocompro) => {
     return await sendQueryUrbano(
-      `SELECT * FROM nvrenglo WHERE nrocompro = '${nrocompro}'`
+      `SELECT MAX(renglon) as lastItem FROM nvrenglo WHERE nrocompro = '${nrocompro}'`
     );
   };
 
-  createSaleNote = async (nrocompro, numero, order, dollar, importe) =>
+  createSaleNote = async (nrocompro, puesto, numero, order) =>
     await sendQueryUrbano(`INSERT INTO nvhead
   (nrocompro, tipo, letra, puesto, numero, codigo, nombre, tipoiva, cotiza, cuota,
     importe, impocuota, saldo, operador, equipo, contado, tipofactura, marcafiscal)
   VALUES(
-    '${nrocompro}', 'NV', 'X', 77, ${numero}, '${order.codigo}', '${order.nombre} - ${order.nrocompro}', 'X', ${dollar}, 1,
-    ${importe}, ${importe}, ${importe}, 'GABYSYSTEM', 'MOSTRADOR', 'N', 'F', 'Q'
+    '${nrocompro}', 'NV', 'X', ${puesto}, ${numero}, '${order.codigo}', '${order.nrocompro}', 'X', 77, 1,
+    7777, 7777, 7777, 'GABYSYSTEM', 'MOSTRADOR', 'N', 'F', 'Q'
   )`);
 
   createSaleNoteReservation = async (
@@ -163,9 +162,7 @@ export default class Orders {
       order.codigo
     }', ${itemNumber},
     '${product.codigo}', 
-    '${product.descrip} - ${order.nrocompro}', ${quantity}, ${
-      product.priceList1WithouTax
-    },
+    '${order.nrocompro}', ${quantity}, ${product.priceList1WithouTax},
     ${
       product.priceList1WithouTax * quantity
     }, 'GABYSYSTEM', 'MOSTRADOR',  ${quantity}
