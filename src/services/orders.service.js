@@ -126,10 +126,10 @@ export const take = async (order, code_technical) => {
   const saleNote = getSaleNoteString(saleNoteNumber, config.sale_note_position);
 
   await orderRepository.createSaleNote(
+    orderUpdate,
     saleNote,
     config.sale_note_position,
-    saleNoteNumber,
-    orderUpdate
+    saleNoteNumber
   );
 
   //save order in mongo

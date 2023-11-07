@@ -136,7 +136,7 @@ export default class Orders {
     );
   };
 
-  createSaleNote = async (nrocompro, puesto, numero, order) =>
+  createSaleNote = async (order, nrocompro, puesto, numero) =>
     await sendQueryUrbano(`INSERT INTO nvhead
   (nrocompro, tipo, letra, puesto, numero, codigo, nombre, tipoiva, cotiza, cuota,
     importe, impocuota, saldo, operador, equipo, contado, tipofactura, marcafiscal)

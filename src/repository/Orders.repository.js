@@ -129,11 +129,11 @@ export default class OrdersRepository {
       itemNumber
     );
 
-  createSaleNote = async (saleNote, saleNotePosition, saleNoteNumber, order) =>
+  createSaleNote = async (order, saleNote, saleNotePosition, saleNoteNumber) =>
     await this.dao.createSaleNote(
+      order,
       saleNote,
       saleNotePosition,
-      saleNoteNumber,
-      order
+      saleNoteNumber
     );
 }
