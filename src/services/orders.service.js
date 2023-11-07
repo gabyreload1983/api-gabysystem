@@ -131,7 +131,8 @@ export const close = async (
     diag
   );
   const orderUpdate = await getOrder(nrocompro);
-  await createOrdenMongo(orderUpdate);
+  const orderMongo = await createOrdenMongo(orderUpdate);
+  await orderRepositoryMongo.update(orderMongo._id, orderUpdate);
 
   if (notification) {
     const customer = await customersRepository.getByCode(orderUpdate.codigo);
@@ -157,7 +158,17 @@ export const out = async (order) => {
       await productsRepository.removeReservation(product.codigo);
     }
   }
-  return await orderRepository.out(order.nrocompro);
+  const result = await orderRepository.out(order.nrocompro);
+
+  const orderMongo = await orderRepositoryMongo.getByNrocompro(order.nrocompro);
+  if (orderMongo) {
+    console.log("ordermongo");
+    await orderRepository.cancelSaleNoteReservation(orderMongo.saleNote);
+
+    const orderUpdate = await getOrder(order.nrocompro);
+    await orderRepositoryMongo.update(orderMongo._id, orderUpdate);
+  }
+  return result;
 };
 
 export const handleProductsInOrder = async (order, user) => {

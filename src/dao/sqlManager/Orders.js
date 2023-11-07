@@ -166,4 +166,10 @@ export default class Orders {
     await sendQueryUrbano(
       `DELETE FROM nvrenglo WHERE nrocompro = '${saleNote}' AND codiart = '${product.codigo}' AND lote = '${product.serie}'`
     );
+
+  cancelSaleNoteReservation = async (saleNote) =>
+    await sendQueryUrbano(
+      `UPDATE nvrenglo SET cantidad = 0, pendiente = 0
+       WHERE nrocompro = '${saleNote}'`
+    );
 }

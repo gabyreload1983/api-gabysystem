@@ -125,4 +125,7 @@ export default class OrdersRepository {
 
   removeSaleNoteReservation = async (saleNote, product) =>
     await this.dao.removeSaleNoteReservation(saleNote, product);
+
+  cancelSaleNoteReservation = async (saleNote) =>
+    await this.dao.cancelSaleNoteReservation(saleNote);
 }
