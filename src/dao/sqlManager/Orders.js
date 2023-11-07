@@ -146,30 +146,24 @@ export default class Orders {
   )`);
 
   createSaleNoteReservation = async (
-    saleNote,
-    saleNotePosition,
-    saleNoteNumber,
-    order,
+    orderMongo,
     product,
     itemNumber,
-    quantity = 1
+    quantity = 1,
+    precio = 777
   ) =>
     await sendQueryUrbano(`INSERT INTO nvrenglo 
   (nrocompro, tipo, letra, puesto, numero, codigo, renglon,
-    codiart, descart, cantidad, precio, subtotal, operador, equipo, pendiente) 
+    codiart, descart, cantidad, precio, subtotal, operador, equipo, lote, pendiente) 
   VALUES(
-    '${saleNote}', 'NV', 'X', ${saleNotePosition}, ${saleNoteNumber}, '${
-      order.codigo
-    }', ${itemNumber},
+    '${orderMongo.saleNote}', 'NV', 'X', ${orderMongo.saleNotePosition}, ${orderMongo.saleNoteNumber}, '${orderMongo.nrocompro}', ${itemNumber},
     '${product.codigo}', 
-    '${order.nrocompro}', ${quantity}, ${product.priceList1WithouTax},
-    ${
-      product.priceList1WithouTax * quantity
-    }, 'GABYSYSTEM', 'MOSTRADOR',  ${quantity}
+    '${orderMongo.nrocompro}', ${quantity}, ${precio},
+    ${precio}, 'GABYSYSTEM', 'MOSTRADOR', '${product.serie}', ${quantity}
   )`);
 
-  removeSaleNoteReservation = async (saleNote, product, itemNumber) =>
+  removeSaleNoteReservation = async (saleNote, product) =>
     await sendQueryUrbano(
-      `DELETE FROM nvrenglo WHERE nrocompro = '${saleNote}' AND codiart = '${product.codigo}' AND renglon = ${itemNumber}`
+      `DELETE FROM nvrenglo WHERE nrocompro = '${saleNote}' AND codiart = '${product.codigo}' AND lote = '${product.serie}'`
     );
 }

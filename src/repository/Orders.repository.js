@@ -112,22 +112,8 @@ export default class OrdersRepository {
     return result[0].lastItem === null ? 0 : result[0].lastItem;
   };
 
-  createSaleNoteReservation = async (
-    saleNote,
-    saleNotePosition,
-    saleNoteNumber,
-    order,
-    product,
-    itemNumber
-  ) =>
-    await this.dao.createSaleNoteReservation(
-      saleNote,
-      saleNotePosition,
-      saleNoteNumber,
-      order,
-      product,
-      itemNumber
-    );
+  createSaleNoteReservation = async (orderMongo, product, itemNumber) =>
+    await this.dao.createSaleNoteReservation(orderMongo, product, itemNumber);
 
   createSaleNote = async (order, saleNote, saleNotePosition, saleNoteNumber) =>
     await this.dao.createSaleNote(
@@ -136,4 +122,7 @@ export default class OrdersRepository {
       saleNotePosition,
       saleNoteNumber
     );
+
+  removeSaleNoteReservation = async (saleNote, product) =>
+    await this.dao.removeSaleNoteReservation(saleNote, product);
 }
