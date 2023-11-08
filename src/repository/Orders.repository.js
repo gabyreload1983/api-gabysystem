@@ -85,16 +85,45 @@ export default class OrdersRepository {
       notification
     );
 
-  free = async (nrocompro) => this.dao.free(nrocompro);
+  free = async (nrocompro) => await this.dao.free(nrocompro);
 
-  out = async (nrocompro) => this.dao.out(nrocompro);
+  out = async (nrocompro) => await this.dao.out(nrocompro);
 
   savePdfPath = async (nrocompro, path) =>
-    this.dao.savePdfPath(nrocompro, path);
+    await this.dao.savePdfPath(nrocompro, path);
 
   updateCustomer = async (nrocompro, customer) =>
-    this.dao.updateCustomer(nrocompro, customer);
+    await this.dao.updateCustomer(nrocompro, customer);
 
   updateCustomerInProducts = async (nrocompro, customer) =>
-    this.dao.updateCustomerInProducts(nrocompro, customer);
+    await this.dao.updateCustomerInProducts(nrocompro, customer);
+
+  getLastSaleNoteNumber = async (position) => {
+    const lastSaleNoteNumber = await this.dao.getLastSaleNoteNumber(position);
+    return lastSaleNoteNumber[0].nrocompro === null
+      ? 0
+      : lastSaleNoteNumber[0].nrocompro;
+  };
+
+  getLastItem = async (nrocompro) => {
+    const result = await this.dao.getLastItem(nrocompro);
+    return result[0].lastItem === null ? 0 : result[0].lastItem;
+  };
+
+  createSaleNoteReservation = async (orderMongo, product, itemNumber) =>
+    await this.dao.createSaleNoteReservation(orderMongo, product, itemNumber);
+
+  createSaleNote = async (order, saleNote, saleNotePosition, saleNoteNumber) =>
+    await this.dao.createSaleNote(
+      order,
+      saleNote,
+      saleNotePosition,
+      saleNoteNumber
+    );
+
+  removeSaleNoteReservation = async (saleNote, product) =>
+    await this.dao.removeSaleNoteReservation(saleNote, product);
+
+  cancelSaleNoteReservation = async (saleNote) =>
+    await this.dao.cancelSaleNoteReservation(saleNote);
 }

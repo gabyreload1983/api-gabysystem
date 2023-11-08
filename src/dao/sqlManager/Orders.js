@@ -124,4 +124,52 @@ export default class Orders {
     await sendQueryUrbano(`UPDATE trrenglo SET 
       cliente = '${customer.codigo}'
       WHERE nrocompro = '${nrocompro}'`);
+
+  getLastSaleNoteNumber = async (position) =>
+    await sendQueryUrbano(
+      `SELECT MAX(numero) AS nrocompro FROM nvhead WHERE puesto = ${position}`
+    );
+
+  getLastItem = async (nrocompro) => {
+    return await sendQueryUrbano(
+      `SELECT MAX(renglon) as lastItem FROM nvrenglo WHERE nrocompro = '${nrocompro}'`
+    );
+  };
+
+  createSaleNote = async (order, nrocompro, puesto, numero) =>
+    await sendQueryUrbano(`INSERT INTO nvhead
+  (nrocompro, tipo, letra, puesto, numero, codigo, nombre, tipoiva, cotiza, cuota,
+    importe, impocuota, saldo, operador, equipo, contado, tipofactura, marcafiscal)
+  VALUES(
+    '${nrocompro}', 'NV', 'X', ${puesto}, ${numero}, '${order.codigo}', '${order.nrocompro}', 'X', 77, 1,
+    7777, 7777, 7777, 'GABYSYSTEM', 'MOSTRADOR', 'N', 'F', 'Q'
+  )`);
+
+  createSaleNoteReservation = async (
+    orderMongo,
+    product,
+    itemNumber,
+    quantity = 1,
+    precio = 777
+  ) =>
+    await sendQueryUrbano(`INSERT INTO nvrenglo 
+  (nrocompro, tipo, letra, puesto, numero, codigo, renglon,
+    codiart, descart, cantidad, precio, subtotal, operador, equipo, lote, pendiente) 
+  VALUES(
+    '${orderMongo.saleNote}', 'NV', 'X', ${orderMongo.saleNotePosition}, ${orderMongo.saleNoteNumber}, '${orderMongo.nrocompro}', ${itemNumber},
+    '${product.codigo}', 
+    '${orderMongo.nrocompro}', ${quantity}, ${precio},
+    ${precio}, 'GABYSYSTEM', 'MOSTRADOR', '${product.serie}', ${quantity}
+  )`);
+
+  removeSaleNoteReservation = async (saleNote, product) =>
+    await sendQueryUrbano(
+      `DELETE FROM nvrenglo WHERE nrocompro = '${saleNote}' AND codiart = '${product.codigo}' AND lote = '${product.serie}'`
+    );
+
+  cancelSaleNoteReservation = async (saleNote) =>
+    await sendQueryUrbano(
+      `UPDATE nvrenglo SET cantidad = 0, pendiente = 0
+       WHERE nrocompro = '${saleNote}'`
+    );
 }

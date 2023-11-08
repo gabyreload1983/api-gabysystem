@@ -54,7 +54,7 @@ router.put(
 router.put(
   "/products",
   authorization("saler", "premium"),
-  ordersController.products
+  ordersController.handleProductsInOrder
 );
 
 router.put(

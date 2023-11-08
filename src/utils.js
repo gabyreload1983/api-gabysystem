@@ -60,3 +60,11 @@ export const getTotalOrder = (order) =>
   order.products.reduce((acc, val) => {
     return (acc += Number(val.priceList1WithTax));
   }, Number(order.costo));
+
+export const getSaleNoteString = (saleNoteNumber, saleNotePosition) => {
+  return (
+    `NVX00${saleNotePosition}` +
+    `00000000`.slice(saleNoteNumber.toString().length) +
+    saleNoteNumber
+  );
+};
