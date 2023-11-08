@@ -52,7 +52,6 @@ export const authorization = (...roles) => {
 export const formatProduct = (product, dollar) => {
   const iva = product.grabado === "1" ? 1.21 : 1.105;
   const exchange = product.moneda === "D" ? dollar : 1;
-  product.priceList1WithouTax = Number(product.lista1) * exchange;
   product.priceList1WithTax = Number(product.lista1) * Number(iva) * exchange;
   return product;
 };
