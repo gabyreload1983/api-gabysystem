@@ -98,8 +98,6 @@ export default class OrdersRepository {
   updateCustomerInProducts = async (nrocompro, customer) =>
     await this.dao.updateCustomerInProducts(nrocompro, customer);
 
-  create = async (order) => await this.dao.create(order);
-
   getLastSaleNoteNumber = async (position) => {
     const lastSaleNoteNumber = await this.dao.getLastSaleNoteNumber(position);
     return lastSaleNoteNumber[0].nrocompro === null
