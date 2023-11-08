@@ -162,7 +162,6 @@ export const out = async (order) => {
 
   const orderMongo = await orderRepositoryMongo.getByNrocompro(order.nrocompro);
   if (orderMongo) {
-    console.log("ordermongo");
     await orderRepository.cancelSaleNoteReservation(orderMongo.saleNote);
 
     const orderUpdate = await getOrder(order.nrocompro);
