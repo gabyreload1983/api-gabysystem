@@ -2,7 +2,7 @@ version: "3.9"
 services:
   gabysystem-api:
     image: gabyreload1983/gabysystem-api:vx.x.x
-    container_name: gabysystem-api-vx.x.x
+    container_name: gabysystem-api
     ports:
       - "3400:3000"
     restart: always
@@ -22,3 +22,4 @@ services:
       - MAIL_BCC=
       - COOKIE_TOKEN=
       - API_VERSION=
+      - SALE_NOTE_POSITION=

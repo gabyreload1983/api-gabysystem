@@ -138,10 +138,10 @@ export default class Orders {
 
   createSaleNote = async (order, nrocompro, puesto, numero) =>
     await sendQueryUrbano(`INSERT INTO nvhead
-  (nrocompro, tipo, letra, puesto, numero, codigo, nombre, tipoiva, cotiza, cuota,
+  (nrocompro, tipo, letra, puesto, numero, fecha, codigo, nombre, tipoiva, cotiza, cuota,
     importe, impocuota, saldo, operador, equipo, contado, tipofactura, marcafiscal)
   VALUES(
-    '${nrocompro}', 'NV', 'X', ${puesto}, ${numero}, '${order.codigo}', '${order.nrocompro}', 'X', 77, 1,
+    '${nrocompro}', 'NV', 'X', ${puesto}, ${numero}, NOW(), '${order.codigo}', '${order.nrocompro}', 'X', 77, 1,
     7777, 7777, 7777, 'GABYSYSTEM', 'MOSTRADOR', 'N', 'F', 'Q'
   )`);
 
