@@ -143,6 +143,15 @@ export const login = async (req, res) => {
   }
 };
 
+export const getUserFromJwt = async (req, res) => {
+  try {
+    res.send({ status: "success", payload: req.user });
+  } catch (error) {
+    logger.error(error.message);
+    res.status(500).send(error);
+  }
+};
+
 export const update = async (req, res) => {
   try {
     const { uid } = req.params;
