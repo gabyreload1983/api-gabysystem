@@ -5,6 +5,7 @@ import * as userController from "../controllers/users.controller.js";
 import { authToken, authorization } from "../utils.js";
 
 router.get("/", authToken, authorization("admin"), userController.getUsers);
+router.get("/jwt", authToken, userController.getUserFromJwt);
 
 router.get("/:uid", authToken, authorization("admin"), userController.getUser);
 
