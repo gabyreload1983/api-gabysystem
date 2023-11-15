@@ -385,7 +385,9 @@ export const updateCustomer = async (req, res) => {
 
 export const create = async (req, res) => {
   try {
-    const result = await ordersService.create();
+    const { order } = req.body;
+    order.saler = req.user.code_technical;
+    const result = await ordersService.create(order);
     if (!result)
       return res
         .status(404)

@@ -177,15 +177,15 @@ export default class Orders {
     await sendQueryUrbano(`
     SELECT nrocompro FROM trabajos WHERE nrocompro LIKE '%ORX00${position}%' ORDER BY nrocompro DESC LIMIT 1`);
 
-  create = async (nrocompro) =>
+  create = async (newOrder) =>
     await sendQueryUrbano(
       `INSERT INTO trabajos 
-    (nrocompro, codigo, nombre, direccion, telefono, tiposerv, codiart, descart, esquema, garantia, garantiap, serie, 
-      operador, equipo, ingresado, falla, accesorios, detalles, estado, seteado, diag, ubicacion, diagnostico, 
-      prioridad, tecnico, costo, pendiente) 
+    (nrocompro, codigo, nombre, direccion, telefono, tiposerv, codiart, descart, esquema, garantia, 
+      garantiap, serie, operador, equipo, ingresado, falla, accesorios, detalles, estado, 
+      seteado, diag, ubicacion, diagnostico,prioridad, tecnico, costo, opcional, pendiente) 
     VALUES 
-    (${nrocompro}'855914','SINAPSIS VENTAS','','123456789','2','.PC','descripcion articulo','N','0','0','',
-    'MAUT','MOSTR',NOW(),'detalle falla','sin','detalles...',21,NOW(),21,21,'dianostico tecnico',
-    0,'tecnico...',1,1)`
+    ('${newOrder.nrocompro}','${newOrder.codigo}','${newOrder.nombre}','','${newOrder.telefono}','2','${newOrder.codiart}','${newOrder.descart}','N','0',
+    '0','${newOrder.serie}','${newOrder.operador}','GABYSYSTEM',NOW(),'${newOrder.falla}','${newOrder.accesorios}','Ingresado desde GABYSYSTEM',21,
+    NOW(),21,21,'',${newOrder.prioridad},'',1,'GABYSYSTEM',1)`
     );
 }

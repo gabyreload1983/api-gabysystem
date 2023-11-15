@@ -68,3 +68,11 @@ export const getSaleNoteString = (saleNoteNumber, saleNotePosition) => {
     saleNoteNumber
   );
 };
+
+export const getNextNrocompro = (lastNrocompro) => {
+  const number = parseInt(lastNrocompro.replace("ORX0011", ""), 10);
+  const nextNumber = +number + 1;
+  const zeros = "00000000".slice(number.toString().length);
+  const nextNrocompro = `ORX0011${zeros}${nextNumber}`;
+  return nextNrocompro;
+};
