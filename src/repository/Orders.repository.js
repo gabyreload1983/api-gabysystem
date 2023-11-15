@@ -126,4 +126,9 @@ export default class OrdersRepository {
 
   cancelSaleNoteReservation = async (saleNote) =>
     await this.dao.cancelSaleNoteReservation(saleNote);
+
+  getLastOrderNumber = async (position) =>
+    await this.dao.getLastOrderNumber(position);
+
+  create = async (nrocompro) => await this.dao.create(nrocompro);
 }

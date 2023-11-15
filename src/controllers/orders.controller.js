@@ -382,3 +382,22 @@ export const updateCustomer = async (req, res) => {
     res.status(500).send(error);
   }
 };
+
+export const create = async (req, res) => {
+  try {
+    const result = await ordersService.create();
+    if (!result)
+      return res
+        .status(404)
+        .send({ status: "error", message: "Order created" });
+
+    res.send({
+      status: "success",
+      message: "Order created successfully",
+      payload: result,
+    });
+  } catch (error) {
+    logger.error(error.message);
+    res.status(500).send(error);
+  }
+};

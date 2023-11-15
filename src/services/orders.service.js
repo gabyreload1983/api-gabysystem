@@ -314,3 +314,13 @@ export const createOrdenMongo = async (order) => {
   }
   return orderMongo;
 };
+
+export const getLastOrderNumber = async (position) =>
+  await orderRepository.getLastOrderNumber(position);
+
+export const create = async () => {
+  const nrocompro = await orderRepository.getLastOrderNumber(11);
+
+  return nrocompro;
+  // await orderRepository.create(nrocompro);
+};

@@ -172,4 +172,20 @@ export default class Orders {
       `UPDATE nvrenglo SET cantidad = 0, pendiente = 0
        WHERE nrocompro = '${saleNote}'`
     );
+
+  getLastOrderNumber = async (position) =>
+    await sendQueryUrbano(`
+    SELECT nrocompro FROM trabajos WHERE nrocompro LIKE '%ORX00${position}%' ORDER BY nrocompro DESC LIMIT 1`);
+
+  create = async (nrocompro) =>
+    await sendQueryUrbano(
+      `INSERT INTO trabajos 
+    (nrocompro, codigo, nombre, direccion, telefono, tiposerv, codiart, descart, esquema, garantia, garantiap, serie, 
+      operador, equipo, ingresado, falla, accesorios, detalles, estado, seteado, diag, ubicacion, diagnostico, 
+      prioridad, tecnico, costo, pendiente) 
+    VALUES 
+    (${nrocompro}'855914','SINAPSIS VENTAS','','123456789','2','.PC','descripcion articulo','N','0','0','',
+    'MAUT','MOSTR',NOW(),'detalle falla','sin','detalles...',21,NOW(),21,21,'dianostico tecnico',
+    0,'tecnico...',1,1)`
+    );
 }
