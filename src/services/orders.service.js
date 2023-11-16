@@ -320,15 +320,15 @@ export const createOrdenMongo = async (order) => {
   return orderMongo;
 };
 
-export const getLastOrderNumber = async (position) =>
-  await orderRepository.getLastOrderNumber(position);
-
 export const create = async (order) => {
-  const lastNrocompro = await orderRepository.getLastOrderNumber(11);
+  const lastNrocompro = await orderRepository.getLastOrderNumber(
+    config.order_position
+  );
   if (!lastNrocompro) return false;
   const nextNrocompro = getNextNrocompro(lastNrocompro);
 
   const newOrder = { ...order, nrocompro: nextNrocompro };
+
   const response = await orderRepository.create(newOrder);
 
   if (response) {
@@ -336,6 +336,7 @@ export const create = async (order) => {
     const lastSaleNoteNumber = await orderRepository.getLastSaleNoteNumber(
       config.sale_note_position
     );
+
     const saleNoteNumber = lastSaleNoteNumber + 1;
     const saleNote = getSaleNoteString(
       saleNoteNumber,

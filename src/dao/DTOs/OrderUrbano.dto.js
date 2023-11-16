@@ -1,4 +1,4 @@
-export default class OrdersNewDto {
+export default class OrderUrbanoDto {
   constructor(order) {
     this.nrocompro = order.nrocompro;
     this.codigo = order.code;

@@ -386,8 +386,15 @@ export const updateCustomer = async (req, res) => {
 export const create = async (req, res) => {
   try {
     const { order } = req.body;
+    if (!order) {
+      return res
+        .status(400)
+        .send({ status: "error", message: "Incomplete values" });
+    }
+
     order.saler = req.user.code_technical;
     const result = await ordersService.create(order);
+
     if (!result)
       return res
         .status(404)

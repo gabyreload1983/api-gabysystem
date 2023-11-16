@@ -70,9 +70,12 @@ export const getSaleNoteString = (saleNoteNumber, saleNotePosition) => {
 };
 
 export const getNextNrocompro = (lastNrocompro) => {
-  const number = parseInt(lastNrocompro.replace("ORX0011", ""), 10);
+  const number = parseInt(
+    lastNrocompro.replace(`ORX00${config.order_position}`, ""),
+    10
+  );
   const nextNumber = +number + 1;
   const zeros = "00000000".slice(number.toString().length);
-  const nextNrocompro = `ORX0011${zeros}${nextNumber}`;
+  const nextNrocompro = `ORX00${config.order_position}${zeros}${nextNumber}`;
   return nextNrocompro;
 };
