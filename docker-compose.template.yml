@@ -23,3 +23,4 @@ services:
       - COOKIE_TOKEN=
       - API_VERSION=
       - SALE_NOTE_POSITION=
+      - ORDER_POSITION=

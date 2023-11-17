@@ -1,3 +1,5 @@
+import OrderUrbanoDto from "../dao/DTOs/OrderUrbano.dto.js";
+
 export default class OrdersRepository {
   constructor(dao) {
     this.dao = dao;
@@ -126,4 +128,13 @@ export default class OrdersRepository {
 
   cancelSaleNoteReservation = async (saleNote) =>
     await this.dao.cancelSaleNoteReservation(saleNote);
+
+  getLastOrderNumber = async (position) => {
+    const result = await this.dao.getLastOrderNumber(position);
+    if (result && result.length > 0) return result[0].nrocompro;
+    return false;
+  };
+
+  create = async (newOrder) =>
+    await this.dao.create(new OrderUrbanoDto(newOrder));
 }

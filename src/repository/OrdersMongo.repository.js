@@ -1,5 +1,5 @@
-import OrdersDto from "../dao/DTOs/Orders.dto.js";
-import OrdersUpdateDto from "../dao/DTOs/OrdersUpdate.dto.js";
+import OrderMongoDto from "../dao/DTOs/OrderMongo.dto.js";
+import OrdersMongoUpdateDto from "../dao/DTOs/OrdersMongoUpdate.dto.js";
 
 export default class OrdersMongoRepository {
   constructor(dao) {
@@ -18,11 +18,11 @@ export default class OrdersMongoRepository {
 
   create = async (order, saleNote, saleNotePosition, saleNoteNumber) =>
     await this.dao.create(
-      new OrdersDto(order, saleNote, saleNotePosition, saleNoteNumber)
+      new OrderMongoDto(order, saleNote, saleNotePosition, saleNoteNumber)
     );
 
   update = async (oid, order) =>
-    await this.dao.update(oid, new OrdersUpdateDto(order));
+    await this.dao.update(oid, new OrdersMongoUpdateDto(order));
 
   delete = async (oid) => await this.dao.delete(oid);
 }

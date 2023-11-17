@@ -24,6 +24,8 @@ router.get(
 
 router.get("/customer/:code", ordersController.getOrdersByCustomer);
 
+router.post("/", ordersController.create);
+
 router.put(
   "/take",
   authorization("technical", "premium"),

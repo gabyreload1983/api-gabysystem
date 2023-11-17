@@ -1,13 +1,8 @@
-export default class OrdersDto {
-  constructor(order, saleNote, saleNotePosition, saleNoteNumber) {
-    this.nrocompro = order.nrocompro;
-    this.saleNote = saleNote;
-    this.saleNotePosition = saleNotePosition;
-    this.saleNoteNumber = saleNoteNumber;
+export default class OrdersMongoUpdateDto {
+  constructor(order) {
     this.state = order.estado;
     this.diagnosis = order.diag;
     this.ubication = order.ubicacion;
-    this.dateIn = order.ingresado;
     this.tier = order.prioridad;
     this.description = order.descart;
     this.accessories = order.accesorios;
@@ -16,7 +11,7 @@ export default class OrdersDto {
     this.failure = order.falla;
     this.diagnosisTechnical = order.diagnostico;
     this.price = Number(order.costo);
-    this.total = Number(order.costo);
+    this.total = Number(order.total);
     this.dateOut = order.diagnosticado;
     this.orderProducts = order.products;
   }

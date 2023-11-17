@@ -172,4 +172,20 @@ export default class Orders {
       `UPDATE nvrenglo SET cantidad = 0, pendiente = 0
        WHERE nrocompro = '${saleNote}'`
     );
+
+  getLastOrderNumber = async (position) =>
+    await sendQueryUrbano(`
+    SELECT nrocompro FROM trabajos WHERE nrocompro LIKE '%ORX00${position}%' ORDER BY nrocompro DESC LIMIT 1`);
+
+  create = async (newOrder) =>
+    await sendQueryUrbano(
+      `INSERT INTO trabajos 
+    (nrocompro, codigo, nombre, direccion, telefono, tiposerv, codiart, descart, esquema, garantia, 
+      garantiap, serie, operador, equipo, ingresado, falla, accesorios, detalles, estado, 
+      seteado, diag, ubicacion, diagnostico,prioridad, tecnico, costo, opcional, pendiente) 
+    VALUES 
+    ('${newOrder.nrocompro}','${newOrder.codigo}','${newOrder.nombre}','','${newOrder.telefono}','2','${newOrder.codiart}','${newOrder.descart}','N','0',
+    '0','${newOrder.serie}','${newOrder.operador}','GABYSYSTEM',NOW(),'${newOrder.falla}','${newOrder.accesorios}','Ingresado desde GABYSYSTEM',21,
+    NOW(),21,21,'',${newOrder.prioridad},'',1,'GABYSYSTEM',1)`
+    );
 }

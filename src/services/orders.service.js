@@ -10,7 +10,12 @@ import {
   getHtmlCloseOrder,
   getHtmlProductsInOrder,
 } from "./../nodemailer/html/utilsHtml.js";
-import { getSaleNoteString, formatProduct, getTotalOrder } from "../utils.js";
+import {
+  getSaleNoteString,
+  formatProduct,
+  getTotalOrder,
+  getNextNrocompro,
+} from "../utils.js";
 import { nanoid } from "nanoid";
 import Users from "./../dao/mongoManagers/Users.js";
 import UsersRepository from "./../repository/Users.repository.js";
@@ -313,4 +318,44 @@ export const createOrdenMongo = async (order) => {
     }
   }
   return orderMongo;
+};
+
+export const create = async (order) => {
+  const lastNrocompro = await orderRepository.getLastOrderNumber(
+    config.order_position
+  );
+  if (!lastNrocompro) return false;
+  const nextNrocompro = getNextNrocompro(lastNrocompro);
+
+  const newOrder = { ...order, nrocompro: nextNrocompro };
+
+  const response = await orderRepository.create(newOrder);
+
+  if (response) {
+    const order = await getOrder(nextNrocompro);
+    const lastSaleNoteNumber = await orderRepository.getLastSaleNoteNumber(
+      config.sale_note_position
+    );
+
+    const saleNoteNumber = lastSaleNoteNumber + 1;
+    const saleNote = getSaleNoteString(
+      saleNoteNumber,
+      config.sale_note_position
+    );
+
+    await orderRepository.createSaleNote(
+      order,
+      saleNote,
+      config.sale_note_position,
+      saleNoteNumber
+    );
+
+    //save order in mongo
+    return await orderRepositoryMongo.create(
+      order,
+      saleNote,
+      config.sale_note_position,
+      saleNoteNumber
+    );
+  }
 };

@@ -25,4 +25,5 @@ export default {
   mail_bcc: process.env.MAIL_BCC,
   api_version: process.env.API_VERSION,
   sale_note_position: process.env.SALE_NOTE_POSITION,
+  order_position: process.env.ORDER_POSITION,
 };
