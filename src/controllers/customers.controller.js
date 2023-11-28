@@ -2,6 +2,21 @@ import moment from "moment";
 import logger from "../logger/logger.js";
 import * as customerService from "../services/customers.service.js";
 
+export const getCustomers = async (req, res) => {
+  try {
+    const customers = await customerService.getCustomers();
+
+    res.send({
+      status: "success",
+      message: "OK",
+      payload: customers,
+    });
+  } catch (error) {
+    logger.error(error.message);
+    res.status(500).send(error);
+  }
+};
+
 export const getCustomerByCode = async (req, res) => {
   try {
     const { codigo } = req.params;
