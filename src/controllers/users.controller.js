@@ -65,6 +65,28 @@ export const getByCode = async (req, res) => {
   }
 };
 
+export const updateImageUrl = async (req, res) => {
+  try {
+    const { imageUrl } = req.body;
+
+    if (!imageUrl)
+      return res
+        .status(400)
+        .send({ status: "error", message: "Must to be send an URL" });
+
+    // update image user
+
+    res.send({
+      status: "success",
+      message: "Image user updated successfully",
+      payload: imageUrl,
+    });
+  } catch (error) {
+    logger.error(error.message);
+    res.status(500).send(error);
+  }
+};
+
 export const register = async (req, res) => {
   try {
     const { first_name, last_name, email, code_technical, password, role } =

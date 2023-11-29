@@ -15,6 +15,9 @@ router.get(
   authorization("admin"),
   userController.getByCode
 );
+
+router.post("/image-url", authToken, userController.updateImageUrl);
+
 router.post(
   "/register",
   authToken,
