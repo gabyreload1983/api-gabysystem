@@ -16,8 +16,6 @@ router.get(
   userController.getByCode
 );
 
-router.post("/image-url", authToken, userController.updateImageUrl);
-
 router.post(
   "/register",
   authToken,
@@ -27,6 +25,6 @@ router.post(
 
 router.post("/login", userController.login);
 
-router.put("/:uid", authToken, authorization("admin"), userController.update);
+router.put("/:uid", authToken, userController.update);
 
 export default router;

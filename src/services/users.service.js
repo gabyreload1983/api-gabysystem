@@ -18,5 +18,8 @@ export const getByEmail = async (email) =>
 
 export const login = async (user) => await usersRepository.login(user);
 
-export const update = async (uid, user) =>
-  await usersRepository.update(uid, user);
+export const update = async (user, userUpdate) => {
+  if (userUpdate.role === "admin") userUpdate.role === user.role;
+  userUpdate = { ...user, ...userUpdate };
+  return await usersRepository.update(user._id, userUpdate);
+};

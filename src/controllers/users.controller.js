@@ -65,28 +65,6 @@ export const getByCode = async (req, res) => {
   }
 };
 
-export const updateImageUrl = async (req, res) => {
-  try {
-    const { imageUrl } = req.body;
-
-    if (!imageUrl)
-      return res
-        .status(400)
-        .send({ status: "error", message: "Must to be send an URL" });
-
-    // update image user
-
-    res.send({
-      status: "success",
-      message: "Image user updated successfully",
-      payload: imageUrl,
-    });
-  } catch (error) {
-    logger.error(error.message);
-    res.status(500).send(error);
-  }
-};
-
 export const register = async (req, res) => {
   try {
     const { first_name, last_name, email, code_technical, password, role } =
@@ -177,12 +155,6 @@ export const getUserFromJwt = async (req, res) => {
 export const update = async (req, res) => {
   try {
     const { uid } = req.params;
-    const { first_name, last_name, email, code_technical, role } = req.body;
-
-    if (!first_name || !last_name || !email || !code_technical || !role)
-      return res
-        .status(400)
-        .send({ status: "error", message: "Incomplete values!" });
 
     const user = await userService.getUser(uid);
     if (!user)
@@ -190,18 +162,20 @@ export const update = async (req, res) => {
         .status(404)
         .send({ status: "error", message: "User not found" });
 
-    const response = await userService.update(uid, {
-      first_name,
-      last_name,
-      email,
-      code_technical,
-      role,
-    });
+    const { userUpdate } = req.body;
+
+    const response = await userService.update(user, userUpdate);
+    if (!response)
+      return res
+        .status(400)
+        .send({ status: "error", message: "Error updating user" });
+
+    const userUpdated = await userService.getUser(uid);
 
     res.send({
       status: "success",
-      message: "user updated",
-      payload: response,
+      message: "User updated successfully",
+      payload: userUpdated,
     });
   } catch (error) {
     logger.error(error.message);
