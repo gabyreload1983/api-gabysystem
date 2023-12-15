@@ -15,6 +15,7 @@ router.get(
   authorization("admin"),
   userController.getByCode
 );
+
 router.post(
   "/register",
   authToken,
@@ -24,6 +25,6 @@ router.post(
 
 router.post("/login", userController.login);
 
-router.put("/:uid", authToken, authorization("admin"), userController.update);
+router.put("/:uid", authToken, userController.update);
 
 export default router;

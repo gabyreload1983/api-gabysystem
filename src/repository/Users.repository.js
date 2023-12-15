@@ -1,5 +1,6 @@
 import UsersLoginDto from "../dao/DTOs/UsersLogin.dto.js";
-import UsersDbDto from "../dao/DTOs/UsersDb.dto.js";
+import UsersCreateDto from "../dao/DTOs/UsersCreate.dto.js";
+import UserUpdateDto from "../dao/DTOs/UserUpdate.dto.js";
 
 export default class UsersRepository {
   constructor(dao) {
@@ -21,14 +22,14 @@ export default class UsersRepository {
   getByCode = async (code_technical) =>
     await this.dao.getByCode(code_technical.toUpperCase());
 
-  register = async (user) => await this.dao.register(new UsersDbDto(user));
+  register = async (user) => await this.dao.register(new UsersCreateDto(user));
 
   getByEmail = async (email) => await this.dao.getByEmail(email);
 
   login = async (user) => new UsersLoginDto(user);
 
-  update = async (uid, user) =>
-    await this.dao.update(uid, new UsersLoginDto(user));
+  update = async (uid, userUpdate) =>
+    await this.dao.update(uid, new UserUpdateDto(userUpdate));
 
   delete = async (uid) => await this.dao.delete(uid);
 }
