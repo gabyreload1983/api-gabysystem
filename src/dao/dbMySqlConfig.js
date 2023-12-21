@@ -1,11 +1,10 @@
 import mysql from "mysql";
-import config from "../config/config.js";
 
 export const connectionUrbano = mysql.createPool({
   connectionLimit: 100,
-  host: config.sql_host,
-  user: config.sql_user,
-  password: config.sql_password,
-  database: config.sql_database,
+  host: process.env.SQL_HOST,
+  user: process.env.SQL_USER,
+  password: process.env.SQL_PASSWORD,
+  database: process.env.SQL_DATABASE,
   debug: false,
 });

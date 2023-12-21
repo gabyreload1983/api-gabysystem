@@ -1,6 +1,5 @@
 import { createLogger, format, transports } from "winston";
 const { combine, timestamp, printf, colorize } = format;
-import config from "../config/config.js";
 import { __dirname } from "../utils.js";
 
 const customLevelOptions = {
@@ -26,7 +25,7 @@ const customFormat = printf(({ level, message, timestamp }) => {
   return `${timestamp} ${level.toLocaleUpperCase()}: ${message}`;
 });
 
-const ENVIRONMENT = config.env;
+const ENVIRONMENT = process.env.NODE_ENV;
 const loggerPath = `${__dirname}/logger/logs`;
 
 let logger;

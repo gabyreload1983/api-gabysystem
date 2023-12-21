@@ -3,7 +3,6 @@ import cors from "cors";
 import passport from "passport";
 import cookieParser from "cookie-parser";
 
-import config from "./config/config.js";
 import initializePassport from "./config/passport.config.js";
 import logger from "./logger/logger.js";
 
@@ -38,5 +37,7 @@ app.use("*", (req, res) =>
   res.status(404).send({ error: "error", message: "Page Not Found" })
 );
 
-const port = config.port;
-app.listen(port, () => logger.info(`Listening on port ${port}`));
+const PORT = process.env.PORT;
+app.listen(PORT, () => logger.info(`Listening on port ${PORT}`));
+
+console.log(process.env.NODE_ENV);

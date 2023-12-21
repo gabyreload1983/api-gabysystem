@@ -1,5 +1,3 @@
-import config from "../../config/config.js";
-
 export default class UsersLoginDto {
   constructor(user) {
     this._id = user._id;
@@ -8,7 +6,7 @@ export default class UsersLoginDto {
     this.email = user.email;
     this.code_technical = user.code_technical;
     this.role = user.role;
-    this.api_version = config.api_version;
+    this.api_version = process.env.API_VERSION;
     this.imageUrl = user.imageUrl;
   }
 }

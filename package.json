@@ -1,13 +1,13 @@
 {
   "name": "gabysystem-api",
-  "version": "5.5.1",
+  "version": "5.6.1",
   "description": "API-REST",
   "main": "src/app.js",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node src/app.js",
-    "dev": "NODE_ENV=development node --watch src/app.js"
+    "start": "NODE_ENV=production node --env-file=.env.production src/app.js",
+    "dev": "NODE_ENV=development node --env-file=.env.development --watch src/app.js"
   },
   "author": "Gabriel Godoy",
   "license": "ISC",
@@ -15,7 +15,6 @@
     "bcrypt": "^5.1.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
-    "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "express-handlebars": "^7.0.5",
     "jsonwebtoken": "^9.0.0",

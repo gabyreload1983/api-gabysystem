@@ -1,7 +1,6 @@
 import passport from "passport";
 import jwt from "passport-jwt";
 import userModel from "../dao/mongoManagers/models/users.js";
-import config from "../config/config.js";
 
 const JWTStrategy = jwt.Strategy;
 const ExtractJWT = jwt.ExtractJwt;
@@ -12,7 +11,7 @@ const initializePassport = () => {
     new JWTStrategy(
       {
         jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]),
-        secretOrKey: config.private_key_jwt,
+        secretOrKey: process.env.PRIVATE_KEY_JWT,
       },
       async (jwt_payload, done) => {
         try {

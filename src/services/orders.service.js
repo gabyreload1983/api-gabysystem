@@ -25,7 +25,6 @@ import ProductsInOrderRepository from "../repository/ProductsInOrder.repository.
 import StatisticsTechnicalDto from "../dao/DTOs/StatisticsTechnical.dto.js";
 import OrdersMongo from "../dao/mongoManagers/Orders.js";
 import OrdersMongoRepository from "../repository/OrdersMongo.repository.js";
-import config from "../config/config.js";
 
 const orderMongoManager = new OrdersMongo();
 const orderRepositoryMongo = new OrdersMongoRepository(orderMongoManager);
@@ -284,16 +283,18 @@ export const createOrdenMongo = async (order) => {
   if (orderMongo) return orderMongo;
 
   // create NV
+  const SALE_NOTE_POSITION = process.env.SALE_NOTE_POSITION;
+
   const lastSaleNoteNumber = await orderRepository.getLastSaleNoteNumber(
-    config.sale_note_position
+    SALE_NOTE_POSITION
   );
   const saleNoteNumber = lastSaleNoteNumber + 1;
-  const saleNote = getSaleNoteString(saleNoteNumber, config.sale_note_position);
+  const saleNote = getSaleNoteString(saleNoteNumber, SALE_NOTE_POSITION);
 
   await orderRepository.createSaleNote(
     order,
     saleNote,
-    config.sale_note_position,
+    SALE_NOTE_POSITION,
     saleNoteNumber
   );
 
@@ -301,7 +302,7 @@ export const createOrdenMongo = async (order) => {
   orderMongo = await orderRepositoryMongo.create(
     order,
     saleNote,
-    config.sale_note_position,
+    SALE_NOTE_POSITION,
     saleNoteNumber
   );
 
@@ -321,8 +322,9 @@ export const createOrdenMongo = async (order) => {
 };
 
 export const create = async (order) => {
+  const SALE_NOTE_POSITION = process.env.SALE_NOTE_POSITION;
   const lastNrocompro = await orderRepository.getLastOrderNumber(
-    config.order_position
+    process.env.ORDER_POSITION
   );
   if (!lastNrocompro) return false;
   const nextNrocompro = getNextNrocompro(lastNrocompro);
@@ -334,19 +336,16 @@ export const create = async (order) => {
   if (response) {
     const order = await getOrder(nextNrocompro);
     const lastSaleNoteNumber = await orderRepository.getLastSaleNoteNumber(
-      config.sale_note_position
+      SALE_NOTE_POSITION
     );
 
     const saleNoteNumber = lastSaleNoteNumber + 1;
-    const saleNote = getSaleNoteString(
-      saleNoteNumber,
-      config.sale_note_position
-    );
+    const saleNote = getSaleNoteString(saleNoteNumber, SALE_NOTE_POSITION);
 
     await orderRepository.createSaleNote(
       order,
       saleNote,
-      config.sale_note_position,
+      SALE_NOTE_POSITION,
       saleNoteNumber
     );
 
@@ -354,7 +353,7 @@ export const create = async (order) => {
     return await orderRepositoryMongo.create(
       order,
       saleNote,
-      config.sale_note_position,
+      SALE_NOTE_POSITION,
       saleNoteNumber
     );
   }
