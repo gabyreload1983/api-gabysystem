@@ -2,14 +2,15 @@ import { fileURLToPath } from "url";
 import { dirname } from "path";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import config from "./config/config.js";
 import logger from "./logger/logger.js";
+
+const PRIVATE_KEY_JWT = process.env.PRIVATE_KEY_JWT;
 
 const __filename = fileURLToPath(import.meta.url);
 export const __dirname = dirname(__filename);
 
 export const generateToken = (user) =>
-  jwt.sign({ user }, config.private_key_jwt, { expiresIn: "30d" });
+  jwt.sign({ user }, PRIVATE_KEY_JWT, { expiresIn: "30d" });
 
 export const authToken = (req, res, next) => {
   const authHeader = req.headers.authorization;
@@ -20,7 +21,7 @@ export const authToken = (req, res, next) => {
   }
 
   const token = authHeader.split(" ")[1];
-  jwt.verify(token, config.private_key_jwt, (error, credentials) => {
+  jwt.verify(token, PRIVATE_KEY_JWT, (error, credentials) => {
     if (error)
       return res.status(403).send({
         status: "error",
@@ -70,12 +71,13 @@ export const getSaleNoteString = (saleNoteNumber, saleNotePosition) => {
 };
 
 export const getNextNrocompro = (lastNrocompro) => {
+  const ORDER_POSITION = process.env.ORDER_POSITION;
   const number = parseInt(
-    lastNrocompro.replace(`ORX00${config.order_position}`, ""),
+    lastNrocompro.replace(`ORX00${ORDER_POSITION}`, ""),
     10
   );
   const nextNumber = +number + 1;
   const zeros = "00000000".slice(number.toString().length);
-  const nextNrocompro = `ORX00${config.order_position}${zeros}${nextNumber}`;
+  const nextNrocompro = `ORX00${ORDER_POSITION}${zeros}${nextNumber}`;
   return nextNrocompro;
 };

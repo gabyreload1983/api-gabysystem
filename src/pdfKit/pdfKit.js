@@ -2,7 +2,6 @@ import fs from "fs";
 import moment from "moment";
 import PDFDocument from "pdfkit";
 import { __dirname } from "../utils.js";
-import config from "../config/config.js";
 
 export const buildOrderPdf = (order, user, date) => {
   const year = moment(date).format("YYYY");
@@ -40,7 +39,7 @@ export const buildOrderPdf = (order, user, date) => {
   }
   doc
     .fontSize(12)
-    .text(`${year} - GabySystem - V${config.api_version}`, 210, 730);
+    .text(`${year} - GabySystem - V${process.env.API_VERSION}`, 210, 730);
   doc.fontSize(12).text(`(Developed) => Gabriel Godoy  `, 200, 750);
 
   doc.pipe(fs.createWriteStream(pdfPath));

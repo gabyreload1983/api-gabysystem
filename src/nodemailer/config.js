@@ -1,6 +1,5 @@
 "use strict";
 import nodemailer from "nodemailer";
-import config from "../config/config.js";
 
 const sendMail = async (
   to,
@@ -11,17 +10,17 @@ const sendMail = async (
   bcc = null
 ) => {
   let transporter = nodemailer.createTransport({
-    host: config.mail_host,
+    host: process.env.MAIL_HOST,
     port: 465,
     secure: true,
     auth: {
-      user: config.mail_user,
-      pass: config.mail_password,
+      user: process.env.MAIL_USER,
+      pass: process.env.MAIL_PASSWORD,
     },
   });
 
   return transporter.sendMail({
-    from: config.mail_from,
+    from: process.env.MAIL_FROM,
     to: to,
     subject,
     text,

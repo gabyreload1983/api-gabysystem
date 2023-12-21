@@ -1,8 +1,7 @@
 import mongoose from "mongoose";
-import config from "../config/config.js";
 import logger from "../logger/logger.js";
 
-const URI = config.mongoUrl;
+const URI = process.env.MONGO_URL;
 
 try {
   await mongoose.connect(URI);
