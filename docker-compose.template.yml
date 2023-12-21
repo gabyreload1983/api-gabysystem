@@ -1,19 +1,39 @@
 version: "3.9"
 services:
-  gabysystem-api:
-    image: gabyreload1983/gabysystem-api:vx.x.x
-    container_name: gabysystem-api
+  mongo-gabysystem:
+    image: mongo
+    container_name: mongo-gabysystem
+    restart: always
     ports:
-      - "3400:3000"
+      - "xxxxx:xxxxx"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=
+      - MONGO_INITDB_ROOT_PASSWORD=
+
+  api-gabysystem:
+    image:
+    container_name: api-gabysystem
+    ports:
+      - "xxxx:xxxx"
     restart: always
     environment:
       - NODE_ENV=
       - PORT=
       - MONGO_URL=
       - SQL_HOST=
+      - ADMIN_FIRST_NAME=
+      - ADMIN_LAST_NAME=
+      - ADMIN_EMAIL=
+      - ADMIN_PASSWORD=
+      - ADMIN_CODE_TECHNICAL=
+      - ADMIN_ROLE=
       - SQL_USER=
       - SQL_PASSWORD=
       - SQL_DATABASE=
+      - SQL_TICKETS_HOST=
+      - SQL_TICKETS_USER=
+      - SQL_TICKETS_PASSWORD=
+      - SQL_TICKETS_DATABASE=
       - PRIVATE_KEY_JWT=
       - MAIL_HOST=
       - MAIL_USER=
