@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "NODE_ENV=production node --env-file=.env.production src/app.js",
+    "start": "NODE_ENV=production node src/app.js",
     "dev": "NODE_ENV=development node --env-file=.env.development --watch src/app.js"
   },
   "author": "Gabriel Godoy",
