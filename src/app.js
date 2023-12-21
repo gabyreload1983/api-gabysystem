@@ -13,6 +13,8 @@ import customersRouter from "./routes/customers.router.js";
 import productsRouter from "./routes/products.router.js";
 
 import "./dao/dbMongoConfig.js";
+import "./config/init.js";
+
 import { __dirname, authToken } from "./utils.js";
 
 const app = express();

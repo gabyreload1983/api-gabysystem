@@ -9,4 +9,5 @@ package-lock.json
 /src/public/pdfHistory
 gabysystem-api.yml
 gabysystem-api-prod.yml
+api-gabysystem.yml
 
