@@ -23,3 +23,5 @@ export const update = async (user, userUpdate) => {
   userUpdate = { ...user, ...userUpdate };
   return await usersRepository.update(user._id, userUpdate);
 };
+
+export const remove = async (id) => await usersRepository.delete(id);
