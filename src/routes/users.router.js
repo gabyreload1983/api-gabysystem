@@ -27,4 +27,11 @@ router.post("/login", userController.login);
 
 router.put("/:uid", authToken, userController.update);
 
+router.delete(
+  "/:email",
+  authToken,
+  authorization("admin"),
+  userController.remove
+);
+
 export default router;

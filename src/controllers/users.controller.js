@@ -182,3 +182,30 @@ export const update = async (req, res) => {
     res.status(500).send(error);
   }
 };
+
+export const remove = async (req, res) => {
+  try {
+    const { email } = req.params;
+
+    const user = await userService.getByEmail(email);
+    if (!user)
+      return res
+        .status(404)
+        .send({ status: "error", message: "User not found" });
+
+    const response = await userService.remove(user._id);
+    if (!response)
+      return res
+        .status(400)
+        .send({ status: "error", message: "Error deleting user" });
+
+    res.send({
+      status: "success",
+      message: "User delete successfully",
+      payload: response,
+    });
+  } catch (error) {
+    logger.error(error.message);
+    res.status(500).send(error);
+  }
+};
