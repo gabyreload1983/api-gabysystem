@@ -7,7 +7,7 @@ import sendMail from "./../nodemailer/config.js";
 import ProductsRepository from "./../repository/Products.repository.js";
 import CustomersRepository from "./../repository/Customers.repository.js";
 import {
-  getHtmlCloseOrder,
+  getHtmlEmailNotification,
   getHtmlProductsInOrder,
 } from "./../nodemailer/html/utilsHtml.js";
 import {
@@ -113,6 +113,19 @@ export const take = async (order, code_technical) => {
   if (!result) return false;
   const orderUpdate = await getOrder(order.nrocompro);
 
+  const customer = await customersRepository.getByCode(order.codigo);
+  if (customer[0].mail) {
+    const info = await sendMail(
+      customer[0].mail,
+      "Sinapsis - ORDEN REPARACION",
+      "Notificacion Servicio Tecnico",
+      getHtmlEmailNotification(
+        `La misma fue tomada por un técnico. Cuando este finalizada, recibiras una notificación.`,
+        order.nrocompro
+      )
+    );
+  }
+
   return await createOrdenMongo(orderUpdate);
 };
 
@@ -142,12 +155,14 @@ export const close = async (
     const customer = await customersRepository.getByCode(orderUpdate.codigo);
     if (!customer[0].mail) return result;
 
-    const html = getHtmlCloseOrder(nrocompro);
     const info = await sendMail(
       customer[0].mail,
-      "ORDEN REPARACION",
+      "Sinapsis - ORDEN REPARACION",
       "Notificacion Servicio Tecnico",
-      html
+      getHtmlEmailNotification(
+        `La misma se encuentra finalizada y lista para retirar.`,
+        nrocompro
+      )
     );
     result.email = info;
   }
@@ -156,7 +171,7 @@ export const close = async (
 
 export const free = async (nrocompro) => await orderRepository.free(nrocompro);
 
-export const out = async (order) => {
+export const out = async (order, notification, user) => {
   if (order.products.length > 0) {
     for (const product of order.products) {
       await productsRepository.removeReservation(product.codigo);
@@ -170,6 +185,25 @@ export const out = async (order) => {
 
     const orderUpdate = await getOrder(order.nrocompro);
     await orderRepositoryMongo.update(orderMongo._id, orderUpdate);
+  }
+
+  if (notification) {
+    const customer = await customersRepository.getByCode(order.codigo);
+    if (customer[0].mail) {
+      const info = await sendMail(
+        customer[0].mail,
+        "Sinapsis - ORDEN REPARACION",
+        "Notificacion Servicio Tecnico",
+        getHtmlEmailNotification(
+          `La misma fue retirada hoy.
+          <br />
+          Gracias por confiar en nosotros.`,
+          order.nrocompro
+        ),
+        null,
+        user.email
+      );
+    }
   }
   return result;
 };

@@ -292,6 +292,9 @@ export const free = async (req, res) => {
 export const out = async (req, res) => {
   try {
     const { nrocompro } = req.params;
+    const { notification } = req.body;
+    const { user } = req;
+
     const order = await ordersService.getOrder(nrocompro);
     if (!order)
       return res
@@ -308,7 +311,7 @@ export const out = async (req, res) => {
         message: "The order has already been delivered",
       });
 
-    const result = await ordersService.out(order);
+    const result = await ordersService.out(order, notification, user);
     if (!result)
       return res.status(400).send({
         status: "error",
