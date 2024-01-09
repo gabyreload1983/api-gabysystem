@@ -13,6 +13,7 @@ import productsRouter from "./routes/products.router.js";
 
 import "./dao/dbMongoConfig.js";
 import "./config/init.js";
+import "./jobs/cronJob.js";
 
 import { __dirname, authToken } from "./utils.js";
 
