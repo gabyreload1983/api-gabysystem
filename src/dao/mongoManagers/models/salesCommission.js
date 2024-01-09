@@ -20,6 +20,7 @@ const salesCommissionSchema = new mongoose.Schema(
     },
     purchaseOrder: {
       type: String,
+      default: "",
     },
     subTotal: {
       type: Number,
@@ -31,12 +32,15 @@ const salesCommissionSchema = new mongoose.Schema(
     },
     deliveryCost: {
       type: Number,
+      default: 0,
     },
     delivery: {
       type: String,
+      default: "",
     },
     deliveryState: {
       type: String,
+      default: "pending",
     },
     cost: {
       type: Number,
@@ -46,11 +50,16 @@ const salesCommissionSchema = new mongoose.Schema(
     },
     stateInvoice: {
       type: String,
+      default: "pending",
     },
     paymentDate: {
-      type: String,
+      type: Date,
+      default: "",
     },
     saler: {
+      type: String,
+    },
+    cameFrom: {
       type: String,
     },
   },

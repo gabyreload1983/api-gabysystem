@@ -9,5 +9,6 @@ export default class SalesCommissionCreateDto {
     this.cost = invoice._costo;
     this.profit = invoice._renta;
     this.saler = invoice.operador;
+    this.cameFrom = invoice.vienede.slice(0, 16);
   }
 }
