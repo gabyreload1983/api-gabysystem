@@ -6,3 +6,5 @@ export const create = async (invoice) => {
   const response = await salesCommission.create(invoice);
   return response;
 };
+
+export const getAll = async () => await salesCommission.getAll();

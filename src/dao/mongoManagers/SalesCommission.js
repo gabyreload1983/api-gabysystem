@@ -3,6 +3,8 @@ import salesCommissionModel from "./models/salesCommission.js";
 export default class SalesCommission {
   constructor() {}
 
+  getAll = async () => await salesCommissionModel.find();
+
   create = async (invoice) => await salesCommissionModel.create(invoice);
 
   findById = async (_id) => await salesCommissionModel.findById({ _id });

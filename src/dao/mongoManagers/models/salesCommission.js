@@ -18,6 +18,9 @@ const salesCommissionSchema = new mongoose.Schema(
       unique: true,
       required: true,
     },
+    type: {
+      type: String,
+    },
     purchaseOrder: {
       type: String,
       default: "",

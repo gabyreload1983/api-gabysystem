@@ -4,6 +4,7 @@ export default class SalesCommissionCreateDto {
     this.customerCode = invoice.codigo;
     this.customer = invoice.razon;
     this.invoiceId = invoice.nrocompro;
+    this.type = invoice.tipo;
     this.subTotal = invoice._subtotal;
     this.tax = invoice._iva;
     this.cost = invoice._costo;

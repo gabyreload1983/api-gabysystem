@@ -15,7 +15,8 @@ export default class Invoices {
     SUM(cc.costo * cc.cantidad)  AS _costo,
     SUM(cc.precio * cc.cantidad - cc.costo * cc.cantidad)  AS _renta,
     cc.operador,
-    cc.vienede
+    cc.vienede,
+    cc.tipo
     FROM ccrenglo cc
     INNER JOIN clientes cl
     ON cc.codigo = cl.codigo
