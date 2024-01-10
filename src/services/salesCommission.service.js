@@ -8,3 +8,6 @@ export const create = async (invoice) => {
 };
 
 export const getAll = async () => await salesCommission.getAll();
+
+export const getByInvoice = async (id) =>
+  await salesCommission.findByInvoiceId(id);

@@ -15,3 +15,23 @@ export const getSales = async (req, res) => {
     res.status(500).send(error);
   }
 };
+
+export const getSale = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const sale = await salesCommissionsService.getByInvoice(id);
+    if (!sale)
+      return res
+        .status(404)
+        .send({ status: "error", message: "Invoices not found" });
+
+    res.send({
+      status: "success",
+      message: `OK`,
+      payload: sale,
+    });
+  } catch (error) {
+    logger.error(error.message);
+    res.status(500).send(error);
+  }
+};
