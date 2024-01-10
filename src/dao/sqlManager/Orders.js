@@ -1,10 +1,7 @@
-import logger from "../../logger/logger.js";
 import { sendQueryUrbano } from "./sqlUtils.js";
 
 export default class Orders {
-  constructor() {
-    logger.info("Working Orders with DB in MySQL");
-  }
+  constructor() {}
 
   getInProcess = async () =>
     await sendQueryUrbano(
