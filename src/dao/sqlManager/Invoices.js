@@ -3,7 +3,7 @@ import { sendQueryUrbano } from "./sqlUtils.js";
 export default class Invoices {
   constructor() {}
 
-  getInvoicesCommission = async (date) =>
+  getInvoicesCommission = async (from, to) =>
     await sendQueryUrbano(`
     SELECT 
     cc.fecha,
@@ -21,6 +21,6 @@ export default class Invoices {
     INNER JOIN clientes cl
     ON cc.codigo = cl.codigo
     WHERE 
-    cl.condicion = 20 AND  fecha > '${date}' AND (cc.letra = 'A' OR cc.letra = 'B')
+    cl.condicion = 20 AND  fecha > '${from}' AND  fecha < '${to}' AND (cc.letra = 'A' OR cc.letra = 'B')
     GROUP BY cc.nrocompro`);
 }

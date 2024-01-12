@@ -1,19 +1,15 @@
 import { CronJob } from "cron";
 import * as salesCommissionService from "../services/salesCommission.service.js";
-import * as invoicesService from "../services/invoices.service.js";
 
 import logger from "../logger/logger.js";
-import SalesCommissionCreateDto from "../dao/DTOs/SalesCommissionCreate.dto.js";
 import moment from "moment";
 
 const getSalesCommissions = async () => {
   try {
-    const now = moment().format("YYYY-MM-DD 00:00:00");
+    const from = moment().format("YYYY-MM-DD 00:00:00");
+    const to = moment().format("YYYY-MM-DD 23:59:59");
 
-    let invoices = await invoicesService.getInvoicesCommission(now);
-    if (!invoices.length) return;
-    invoices = invoices.map((invoice) => new SalesCommissionCreateDto(invoice));
-    for (let invoice of invoices) await salesCommissionService.create(invoice);
+    await salesCommissionService.applyInvoices(from, to);
   } catch (error) {
     logger.error(error.message);
   }
