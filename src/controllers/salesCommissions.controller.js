@@ -61,3 +61,29 @@ export const applyInvoices = async (req, res) => {
     res.status(500).send(error);
   }
 };
+
+export const updateSale = async (req, res) => {
+  try {
+    const { sale } = req.body;
+    if (!sale)
+      return res
+        .status(400)
+        .send({ status: "error", message: "Must send sale object" });
+
+    const response = await salesCommissionService.updateSale(sale);
+    if (!response)
+      return res.status(404).send({
+        status: "error",
+        message: `Sale not found`,
+      });
+
+    res.send({
+      status: "success",
+      message: `Sale update successfully`,
+      payload: response,
+    });
+  } catch (error) {
+    logger.error(error.message);
+    res.status(500).send(error);
+  }
+};

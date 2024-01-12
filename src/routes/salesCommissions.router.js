@@ -17,4 +17,10 @@ router.post(
   salesCommissionsController.applyInvoices
 );
 
+router.patch(
+  "/",
+  authorization("premium"),
+  salesCommissionsController.updateSale
+);
+
 export default router;

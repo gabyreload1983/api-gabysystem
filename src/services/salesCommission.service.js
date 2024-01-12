@@ -1,4 +1,5 @@
 import SalesCommissionCreateDto from "../dao/DTOs/SalesCommissionCreate.dto.js";
+import SalesCommissionUpdateDto from "../dao/DTOs/SalesCommissionUpdate.dto.js";
 import SalesCommission from "../dao/mongoManagers/SalesCommission.js";
 import Invoices from "../dao/sqlManager/Invoices.js";
 
@@ -29,3 +30,6 @@ export const applyInvoices = async (from, to) => {
 
   return true;
 };
+
+export const updateSale = async (sale) =>
+  await salesCommission.update(sale._id, new SalesCommissionUpdateDto(sale));
