@@ -11,4 +11,10 @@ router.get(
   salesCommissionsController.getSale
 );
 
+router.post(
+  "/apply-invoices",
+  authorization("premium"),
+  salesCommissionsController.applyInvoices
+);
+
 export default router;
