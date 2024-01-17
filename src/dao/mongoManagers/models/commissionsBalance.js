@@ -12,15 +12,20 @@ const commissionsBalanceSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    value: {
-      type: String,
+    subTotal: {
+      type: Number,
+      required: true,
+    },
+    rent: {
+      type: Number,
       required: true,
     },
     observation: {
       type: String,
     },
-    numberId: {
+    invoiceId: {
       type: String,
+      unique: true,
     },
   },
   { timestamps: true }
