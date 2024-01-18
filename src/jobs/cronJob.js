@@ -9,7 +9,7 @@ const getSalesCommissions = async () => {
     const from = moment().format("YYYY-MM-DD 00:00:00");
     const to = moment().format("YYYY-MM-DD 23:59:59");
 
-    await salesCommissionService.applyInvoices(from, to);
+    await salesCommissionService.refresh(from, to);
   } catch (error) {
     logger.error(error.message);
   }

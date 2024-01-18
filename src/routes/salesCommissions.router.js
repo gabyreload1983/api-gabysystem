@@ -12,9 +12,9 @@ router.get(
 );
 
 router.post(
-  "/apply-invoices",
+  "/refresh",
   authorization("premium"),
-  salesCommissionsController.applyInvoices
+  salesCommissionsController.refresh
 );
 
 router.patch(

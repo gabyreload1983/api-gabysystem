@@ -36,7 +36,7 @@ export const getSale = async (req, res) => {
   }
 };
 
-export const applyInvoices = async (req, res) => {
+export const refresh = async (req, res) => {
   try {
     const { from, to } = req.body;
     if (!from || !to)
@@ -44,7 +44,7 @@ export const applyInvoices = async (req, res) => {
         .status(400)
         .send({ status: "error", message: "Must send from an to dates" });
 
-    const response = await salesCommissionService.applyInvoices(from, to);
+    const response = await salesCommissionService.refresh(from, to);
     if (!response)
       return res.status(404).send({
         status: "error",
