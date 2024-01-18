@@ -1,11 +1,11 @@
 import logger from "../logger/logger.js";
-import * as commissionsService from "../services/commissions.service.js";
+import * as alexisAccountService from "../services/alexisAccount.service.js";
 
 export const getAll = async (req, res) => {
   try {
     const { from, to } = req.query;
 
-    const balance = await commissionsService.getAll(from, to);
+    const balance = await alexisAccountService.getAll(from, to);
     res.send({
       status: "success",
       message: `OK`,
@@ -19,9 +19,8 @@ export const getAll = async (req, res) => {
 
 export const create = async (req, res) => {
   try {
-    const { sale } = req.body;
-
-    const response = await commissionsService.create(sale);
+    const { item } = req.body;
+    const response = await alexisAccountService.create(item);
     if (!response)
       return res.status(400).send({
         status: "error",
