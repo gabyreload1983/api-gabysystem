@@ -5,23 +5,13 @@ export default class AlexisAccount {
 
   getAll = async () => await alexisAccountModel.find();
 
-  getAllFromTo = async (from, to) => {
-    try {
-      const result = await alexisAccountModel.find({
-        date: {
-          $gte: from,
-          $lte: to,
-        },
-      });
-
-      console.log("result", result); // Verificar los resultados en la consola
-
-      return result;
-    } catch (error) {
-      console.error("Error en la consulta:", error);
-      throw error;
-    }
-  };
+  getAllFromTo = async (from, to) =>
+    await alexisAccountModel.find({
+      date: {
+        $gte: from,
+        $lte: to,
+      },
+    });
 
   create = async (item) => await alexisAccountModel.create(item);
 

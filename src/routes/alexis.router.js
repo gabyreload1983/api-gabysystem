@@ -1,24 +1,44 @@
 import { Router } from "express";
+import * as alexisAccountController from "../controllers/alexisAccount.controller.js";
 import * as salesCommissionsController from "../controllers/salesCommissions.controller.js";
 import { authorization } from "../utils.js";
 
 const router = Router();
 
-router.get("/", authorization("premium"), salesCommissionsController.getSales);
+// ACCOUNT ROUTE
 router.get(
-  "/:id",
+  "/account",
+  authorization("premium"),
+  alexisAccountController.getAll
+);
+
+router.post(
+  "/account",
+  authorization("premium"),
+  alexisAccountController.create
+);
+
+// SALES ROUTE
+
+router.get(
+  "/sales",
+  authorization("premium"),
+  salesCommissionsController.getSales
+);
+router.get(
+  "/sales/:id",
   authorization("premium"),
   salesCommissionsController.getSale
 );
 
 router.post(
-  "/refresh",
+  "/sales/refresh",
   authorization("premium"),
   salesCommissionsController.refresh
 );
 
 router.patch(
-  "/",
+  "/sales",
   authorization("premium"),
   salesCommissionsController.updateSale
 );
