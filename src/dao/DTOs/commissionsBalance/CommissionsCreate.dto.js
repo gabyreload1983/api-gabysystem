@@ -1,4 +1,4 @@
-export default class CommissionsBalanceCreateDto {
+export default class CommissionsCreateDto {
   constructor(item) {
     this.date = item.date;
     this.type = item.type;

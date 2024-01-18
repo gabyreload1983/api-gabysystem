@@ -1,11 +1,11 @@
 import logger from "../logger/logger.js";
-import * as commissionsBalanceService from "../services/commissionsBalance.service.js";
+import * as commissionsService from "../services/commissions.service.js";
 
 export const getAll = async (req, res) => {
   try {
     const { from, to } = req.query;
 
-    const balance = await commissionsBalanceService.getAll(from, to);
+    const balance = await commissionsService.getAll(from, to);
     res.send({
       status: "success",
       message: `OK`,
@@ -20,9 +20,8 @@ export const getAll = async (req, res) => {
 export const create = async (req, res) => {
   try {
     const { sale } = req.body;
-    console.log(sale);
 
-    const response = await commissionsBalanceService.create(sale);
+    const response = await commissionsService.create(sale);
     if (!response)
       return res.status(400).send({
         status: "error",

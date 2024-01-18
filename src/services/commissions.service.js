@@ -1,7 +1,7 @@
-import CommissionsBalance from "../dao/mongoManagers/CommissionsBalance.js";
-import CommissionsBalanceCreateDto from "../dao/DTOs/commissionsBalance/CommissionsBalanceCreate.dto.js";
+import Commissions from "../dao/mongoManagers/Commissions.js";
+import CommissionsCreateDto from "../dao/DTOs/commissionsBalance/CommissionsCreate.dto.js";
 
-const commissionsBalance = new CommissionsBalance();
+const commissionsBalance = new Commissions();
 
 export const getAll = async (from, to) => {
   if (from && to) return await commissionsBalance.getAllFromTo(from, to);
@@ -18,7 +18,7 @@ export const create = async (sale) => {
   }
   const exists = await commissionsBalance.findByInvoiceId(sale.invoiceId);
   if (exists) return false;
-  return await commissionsBalance.create(new CommissionsBalanceCreateDto(sale));
+  return await commissionsBalance.create(new CommissionsCreateDto(sale));
 };
 
 export const findById = async (_id) =>

@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 
-const commissionsBalanceCollection = "commissionsBalance";
+const commissionsCollection = "commissions";
 
-const commissionsBalanceSchema = new mongoose.Schema(
+const commissionsSchema = new mongoose.Schema(
   {
     date: {
       type: Date,
@@ -31,9 +31,9 @@ const commissionsBalanceSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const commissionsBalanceModel = mongoose.model(
-  commissionsBalanceCollection,
-  commissionsBalanceSchema
+const commissionsModel = mongoose.model(
+  commissionsCollection,
+  commissionsSchema
 );
 
-export default commissionsBalanceModel;
+export default commissionsModel;
