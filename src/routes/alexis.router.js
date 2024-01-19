@@ -18,6 +18,14 @@ router.post(
   alexisAccountController.create
 );
 
+//  PAYMENT
+
+router.post(
+  "/payment",
+  authorization("premium"),
+  alexisAccountController.create
+);
+
 // SALES ROUTE
 
 router.get(
