@@ -12,6 +12,12 @@ router.get(
   alexisAccountController.getAll
 );
 
+router.get(
+  "/account/:id",
+  authorization("premium"),
+  alexisAccountController.findById
+);
+
 router.post(
   "/account",
   authorization("premium"),

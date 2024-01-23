@@ -17,6 +17,22 @@ export const getAll = async (req, res) => {
   }
 };
 
+export const findById = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const item = await alexisAccountService.findByInternalId(id);
+    res.send({
+      status: "success",
+      message: `OK`,
+      payload: item,
+    });
+  } catch (error) {
+    logger.error(error.message);
+    res.status(500).send(error);
+  }
+};
+
 export const create = async (req, res) => {
   try {
     const { item } = req.body;

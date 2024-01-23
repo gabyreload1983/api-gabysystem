@@ -38,8 +38,8 @@ export const create = async (item) => {
 
 export const findById = async (_id) => await alexisAccount.findById({ _id });
 
-export const findByInvoiceId = async (numberId) =>
-  await alexisAccount.findByInternalId({ numberId });
+export const findByInternalId = async (internalId) =>
+  await alexisAccount.findByInternalId(internalId);
 
 export const update = async (_id, item) =>
   await alexisAccount.update({ _id }, item);
