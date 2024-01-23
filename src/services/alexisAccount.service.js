@@ -16,11 +16,16 @@ export const create = async (item) => {
     const exists = await alexisAccount.findByInternalId(item.internalId);
     if (exists) return false;
 
-    const PORCENTAGE = 0.4;
+    const RENT_PORCENTAGE = 0.4;
+    const TOTAL_INVOICE = item.subTotal + item.tax;
+    const CHECH_TAX_PORCENTAGE = 1.2 / 100;
+    const CHECK_TAX = TOTAL_INVOICE * CHECH_TAX_PORCENTAGE;
+    const PROFIT = item.profit - CHECK_TAX;
+
     if (item.deliveryCost === 0) {
-      item.value = item.profit * PORCENTAGE;
+      item.value = PROFIT * RENT_PORCENTAGE;
     } else {
-      item.value = item.profit * PORCENTAGE - item.deliveryCost / 2;
+      item.value = PROFIT * RENT_PORCENTAGE - item.deliveryCost / 2;
     }
 
     return await alexisAccount.create(new AlexisAccountCreateDto(item));
