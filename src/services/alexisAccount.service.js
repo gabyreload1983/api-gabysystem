@@ -42,4 +42,6 @@ export const findByInternalId = async (internalId) =>
   await alexisAccount.findByInternalId(internalId);
 
 export const update = async (_id, item) =>
-  await alexisAccount.update({ _id }, item);
+  await alexisAccount.update(_id, item);
+
+export const remove = async (id) => await alexisAccount.remove(id);

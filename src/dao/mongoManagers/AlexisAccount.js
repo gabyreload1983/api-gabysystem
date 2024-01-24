@@ -23,5 +23,5 @@ export default class AlexisAccount {
   update = async (_id, item) =>
     await alexisAccountModel.updateOne({ _id }, item);
 
-  delete = async (_id) => await alexisAccountModel.deleteOne({ _id });
+  remove = async (_id) => await alexisAccountModel.deleteOne({ _id });
 }

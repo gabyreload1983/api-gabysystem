@@ -24,6 +24,12 @@ router.post(
   alexisAccountController.create
 );
 
+router.delete(
+  "/account/:id",
+  authorization("premium"),
+  alexisAccountController.remove
+);
+
 //  PAYMENT
 
 router.post(
