@@ -15,7 +15,7 @@ const getSalesCommissions = async () => {
   }
 };
 
-const jobReadingSalesCommission = new CronJob(
+const job = new CronJob(
   "0 * * * * *", // cronTime s m h dom mon dow
   getSalesCommissions, // onTick
   null, // onComplete
