@@ -7,5 +7,6 @@ export default class SalesCommissionUpdateDto {
     this.profit = invoice.renta;
     this.stateInvoice = invoice.stateInvoice;
     this.paymentDate = invoice.paymentDate;
+    this.isProfitApply = invoice.isProfitApply || false;
   }
 }

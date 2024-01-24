@@ -18,12 +18,6 @@ router.get(
   alexisAccountController.findById
 );
 
-router.post(
-  "/account",
-  authorization("premium"),
-  alexisAccountController.create
-);
-
 router.delete(
   "/account/:id",
   authorization("premium"),

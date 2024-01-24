@@ -14,6 +14,9 @@ export const create = async (invoice) => {
 
 export const getAll = async () => await salesCommission.getAll();
 
+export const getFilter = async (filter) =>
+  await salesCommission.getFilter(filter);
+
 export const getByInvoice = async (id) =>
   await salesCommission.findByInvoiceId(id);
 

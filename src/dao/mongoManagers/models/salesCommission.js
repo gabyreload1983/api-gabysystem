@@ -65,6 +65,10 @@ const salesCommissionSchema = new mongoose.Schema(
     cameFrom: {
       type: String,
     },
+    isProfitApply: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );

@@ -5,6 +5,8 @@ export default class SalesCommission {
 
   getAll = async () => await salesCommissionModel.find();
 
+  getFilter = async (filter) => await salesCommissionModel.find(filter);
+
   create = async (invoice) => await salesCommissionModel.create(invoice);
 
   findById = async (_id) => await salesCommissionModel.findById({ _id });
