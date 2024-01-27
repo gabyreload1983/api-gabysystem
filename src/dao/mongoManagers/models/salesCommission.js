@@ -51,7 +51,7 @@ const salesCommissionSchema = new mongoose.Schema(
     profit: {
       type: Number,
     },
-    stateInvoice: {
+    invoiceState: {
       type: String,
       default: "pending",
     },
