@@ -2,6 +2,7 @@ import SalesCommissionCreateDto from "../dao/DTOs/SalesCommissionCreate.dto.js";
 import SalesCommissionUpdateDto from "../dao/DTOs/SalesCommissionUpdate.dto.js";
 import SalesCommission from "../dao/mongoManagers/SalesCommission.js";
 import * as invoicesService from "../services/invoices.service.js";
+import * as alexisAccountService from "../services/alexisAccount.service.js";
 
 const salesCommission = new SalesCommission();
 
@@ -33,5 +34,15 @@ export const refresh = async (from, to) => {
   return true;
 };
 
-export const updateSale = async (sale) =>
-  await salesCommission.update(sale._id, new SalesCommissionUpdateDto(sale));
+export const updateSale = async (sale) => {
+  if (sale.invoiceState === "pay" && sale.deliveryState) {
+    const response = await alexisAccountService.create(sale);
+    if (response) {
+      sale.isProfitApply = true;
+    }
+  }
+  return await salesCommission.update(
+    sale._id,
+    new SalesCommissionUpdateDto(sale)
+  );
+};
