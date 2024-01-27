@@ -42,8 +42,8 @@ const salesCommissionSchema = new mongoose.Schema(
       default: "",
     },
     deliveryState: {
-      type: String,
-      default: "pending",
+      type: Boolean,
+      default: false,
     },
     cost: {
       type: Number,
