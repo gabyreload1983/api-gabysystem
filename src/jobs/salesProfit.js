@@ -8,8 +8,8 @@ const applySalesProfitToAccount = async () => {
   try {
     const sales = await salesCommissionService.getFilter({
       isProfitApply: false,
-      deliveryState: "entregado",
-      stateInvoice: "pago",
+      deliveryState: "delivered",
+      stateInvoice: "pay",
     });
     for (const sale of sales) {
       const response = await alexisAccountService.create(sale);
