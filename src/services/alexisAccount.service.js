@@ -1,8 +1,11 @@
 import AlexisAccount from "../dao/mongoManagers/AlexisAccount.js";
+import SalesCommission from "../dao/mongoManagers/SalesCommission.js";
 import AlexisAccountCreateDto from "../dao/DTOs/alexis/AlexisAccountCreate.dto.js";
 import { nanoid } from "nanoid";
+import SalesCommissionUpdateDto from "../dao/DTOs/SalesCommissionUpdate.dto.js";
 
 const alexisAccount = new AlexisAccount();
+const salesCommission = new SalesCommission();
 
 export const getAll = async (from, to) => {
   if (from && to) return await alexisAccount.getAllFromTo(from, to);
@@ -36,7 +39,7 @@ export const create = async (item) => {
   }
 };
 
-export const findById = async (_id) => await alexisAccount.findById({ _id });
+export const findById = async (_id) => await alexisAccount.findById(_id);
 
 export const findByInternalId = async (internalId) =>
   await alexisAccount.findByInternalId(internalId);
@@ -44,4 +47,20 @@ export const findByInternalId = async (internalId) =>
 export const update = async (_id, item) =>
   await alexisAccount.update(_id, item);
 
-export const remove = async (id) => await alexisAccount.remove(id);
+export const remove = async (id) => {
+  const item = await findById(id);
+
+  const response = await alexisAccount.remove(id);
+
+  const invoice = await salesCommission.findByInvoiceId(item.internalId);
+
+  invoice.isProfitApply = false;
+  invoice.invoiceState = "pending";
+  invoice.paymentDate = null;
+  await salesCommission.update(
+    invoice._id,
+    new SalesCommissionUpdateDto(invoice)
+  );
+
+  return response;
+};
