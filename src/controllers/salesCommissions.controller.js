@@ -3,7 +3,8 @@ import * as salesCommissionService from "../services/salesCommission.service.js"
 
 export const getSales = async (req, res) => {
   try {
-    const sales = await salesCommissionService.getAll();
+    const { from, to } = req.query;
+    const sales = await salesCommissionService.getAll(from, to);
 
     res.send({
       status: "success",

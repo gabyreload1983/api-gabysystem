@@ -3,7 +3,13 @@ import salesCommissionModel from "./models/salesCommission.js";
 export default class SalesCommission {
   constructor() {}
 
-  getAll = async () => await salesCommissionModel.find();
+  getAll = async (from, to) =>
+    await salesCommissionModel.find({
+      date: {
+        $gte: from,
+        $lte: to,
+      },
+    });
 
   getFilter = async (filter) => await salesCommissionModel.find(filter);
 

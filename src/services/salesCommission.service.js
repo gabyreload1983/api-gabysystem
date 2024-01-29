@@ -3,6 +3,7 @@ import SalesCommissionUpdateDto from "../dao/DTOs/SalesCommissionUpdate.dto.js";
 import SalesCommission from "../dao/mongoManagers/SalesCommission.js";
 import * as invoicesService from "../services/invoices.service.js";
 import * as alexisAccountService from "../services/alexisAccount.service.js";
+import moment from "moment";
 
 const salesCommission = new SalesCommission();
 
@@ -13,7 +14,10 @@ export const create = async (invoice) => {
   return response;
 };
 
-export const getAll = async () => await salesCommission.getAll();
+export const getAll = async (
+  from = moment().format("YYYY-01-01"),
+  to = moment().format("YYYY-12-31")
+) => await salesCommission.getAll(from, to);
 
 export const getFilter = async (filter) =>
   await salesCommission.getFilter(filter);
