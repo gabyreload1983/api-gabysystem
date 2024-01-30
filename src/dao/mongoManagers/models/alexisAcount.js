@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const alexisAccountCollection = "alexis-account";
+const alexisAccountCollection = "alexis_account";
 
 const alexisAccountSchema = new mongoose.Schema(
   {

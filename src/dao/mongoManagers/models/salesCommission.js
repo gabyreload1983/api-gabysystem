@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const salesCommissionCollection = "salesCommission";
+const salesCommissionCollection = "sales_commission";
 
 const salesCommissionSchema = new mongoose.Schema(
   {
