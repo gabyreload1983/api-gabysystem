@@ -4,7 +4,7 @@ export default class SalesCommissionUpdateDto {
     this.deliveryCost = invoice.deliveryCost;
     this.delivery = invoice.delivery;
     this.deliveryState = invoice.deliveryState;
-    this.profit = invoice.renta;
+    this.profit = invoice.profit;
     this.invoiceState = invoice.invoiceState;
     this.paymentDate = invoice.paymentDate;
     this.isProfitApply = invoice.isProfitApply;
