@@ -8,5 +8,6 @@ export default class SalesCommissionUpdateDto {
     this.invoiceState = invoice.invoiceState;
     this.paymentDate = invoice.paymentDate;
     this.isProfitApply = invoice.isProfitApply;
+    this.isValid = invoice.isValid;
   }
 }

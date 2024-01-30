@@ -39,11 +39,18 @@ export const refresh = async (from, to) => {
 };
 
 export const updateSale = async (sale) => {
-  if (sale.invoiceState === "pay" && sale.deliveryState) {
+  if (sale.invoiceState === "pay" && sale.deliveryState && sale.isValid) {
     const response = await alexisAccountService.create(sale);
     if (response) {
       sale.isProfitApply = true;
     }
+  }
+
+  if (!sale.isValid) {
+    const saleFound = await alexisAccountService.findByInternalId(
+      sale.invoiceId
+    );
+    if (saleFound) await alexisAccountService.remove(saleFound._id);
   }
   return await salesCommission.update(
     sale._id,

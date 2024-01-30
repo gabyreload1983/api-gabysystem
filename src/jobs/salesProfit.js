@@ -7,6 +7,7 @@ import logger from "../logger/logger.js";
 const applySalesProfitToAccount = async () => {
   try {
     const sales = await salesCommissionService.getFilter({
+      isValid: true,
       isProfitApply: false,
       deliveryState: true,
       invoiceState: "pay",

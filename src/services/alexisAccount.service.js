@@ -17,7 +17,7 @@ export const create = async (item) => {
   if (item.type === "FV") {
     item.internalId = item.invoiceId;
     const exists = await alexisAccount.findByInternalId(item.internalId);
-    if (exists) return false;
+    if (exists || !item.isValid) return false;
 
     const RENT_PORCENTAGE = 0.4;
     const TOTAL_INVOICE = item.subTotal + item.tax;

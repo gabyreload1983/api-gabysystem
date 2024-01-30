@@ -69,6 +69,10 @@ const salesCommissionSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    isValid: {
+      type: Boolean,
+      default: true,
+    },
   },
   { timestamps: true }
 );
