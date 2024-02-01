@@ -3,9 +3,9 @@ import * as alexisAccountService from "../services/alexisAccount.service.js";
 
 export const getAll = async (req, res) => {
   try {
-    const { from, to } = req.query;
+    const { year } = req.query;
 
-    const balance = await alexisAccountService.getAll(from, to);
+    const balance = await alexisAccountService.getAll(year);
     res.send({
       status: "success",
       message: `OK`,

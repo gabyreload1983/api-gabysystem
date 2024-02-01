@@ -23,6 +23,10 @@ const alexisAccountSchema = new mongoose.Schema(
     observation: {
       type: String,
     },
+    yearApply: {
+      type: Number,
+      required: true,
+    },
   },
   { timestamps: true }
 );

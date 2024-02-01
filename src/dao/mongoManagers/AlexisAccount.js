@@ -5,12 +5,9 @@ export default class AlexisAccount {
 
   getAll = async () => await alexisAccountModel.find();
 
-  getAllFromTo = async (from, to) =>
+  getAllFrom = async (year) =>
     await alexisAccountModel.find({
-      date: {
-        $gte: from,
-        $lte: to,
-      },
+      yearApply: year,
     });
 
   create = async (item) => await alexisAccountModel.create(item);

@@ -5,5 +5,6 @@ export default class AlexisAccountCreateDto {
     this.type = item.type;
     this.value = item.value;
     this.observation = item.observation;
+    this.yearApply = item.yearApply;
   }
 }

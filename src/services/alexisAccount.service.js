@@ -7,8 +7,8 @@ import SalesCommissionUpdateDto from "../dao/DTOs/SalesCommissionUpdate.dto.js";
 const alexisAccount = new AlexisAccount();
 const salesCommission = new SalesCommission();
 
-export const getAll = async (from, to) => {
-  if (from && to) return await alexisAccount.getAllFromTo(from, to);
+export const getAll = async (year) => {
+  if (year) return await alexisAccount.getAllFrom(year);
 
   return await alexisAccount.getAll();
 };
@@ -16,6 +16,7 @@ export const getAll = async (from, to) => {
 export const create = async (item) => {
   if (item.type === "FV") {
     item.internalId = item.invoiceId;
+    item.yearApply = item.date.slice(0, 4);
     const exists = await alexisAccount.findByInternalId(item.internalId);
     if (exists || !item.isValid) return false;
 
