@@ -55,13 +55,15 @@ export const remove = async (id) => {
 
   const invoice = await salesCommission.findByInvoiceId(item.internalId);
 
-  invoice.isProfitApply = false;
-  invoice.invoiceState = "pending";
-  invoice.paymentDate = null;
-  await salesCommission.update(
-    invoice._id,
-    new SalesCommissionUpdateDto(invoice)
-  );
+  if (item.type === "FV") {
+    invoice.isProfitApply = false;
+    invoice.invoiceState = "pending";
+    invoice.paymentDate = null;
+    await salesCommission.update(
+      invoice._id,
+      new SalesCommissionUpdateDto(invoice)
+    );
+  }
 
   return response;
 };
