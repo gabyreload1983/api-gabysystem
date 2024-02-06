@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const productsInOrderCollection = "productsinorder";
+const productsInOrderCollection = "products_in_order";
 
 const productsInOrderSchema = new mongoose.Schema({
   userEmail: String,

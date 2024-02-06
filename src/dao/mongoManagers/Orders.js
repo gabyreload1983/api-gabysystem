@@ -1,10 +1,7 @@
-import logger from "../../logger/logger.js";
 import orderModel from "./models/orders.js";
 
 export default class Orders {
-  constructor() {
-    logger.info("Working Orders with DB in mongoDB");
-  }
+  constructor() {}
 
   getOrder = async (oid) => await orderModel.findOne({ _id: oid });
 

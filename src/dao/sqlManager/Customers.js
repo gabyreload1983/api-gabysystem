@@ -1,10 +1,7 @@
-import logger from "../../logger/logger.js";
 import { sendQueryUrbano } from "./sqlUtils.js";
 
 export default class Customers {
-  constructor() {
-    logger.info("Working Customers with DB in MySQL");
-  }
+  constructor() {}
 
   getByCode = async (codigo) =>
     await sendQueryUrbano(`SELECT * FROM clientes WHERE codigo = '${codigo}'`);

@@ -1,10 +1,7 @@
-import logger from "../../logger/logger.js";
 import { sendQueryUrbano } from "./sqlUtils.js";
 
 export default class Products {
-  constructor() {
-    logger.info("Working Products with DB in MySQL");
-  }
+  constructor() {}
 
   getByCode = async (code, stock) =>
     await sendQueryUrbano(
