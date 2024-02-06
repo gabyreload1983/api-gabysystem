@@ -3,6 +3,7 @@ import SalesCommission from "../dao/mongoManagers/SalesCommission.js";
 import AlexisAccountCreateDto from "../dao/DTOs/alexis/AlexisAccountCreate.dto.js";
 import { nanoid } from "nanoid";
 import SalesCommissionUpdateDto from "../dao/DTOs/SalesCommissionUpdate.dto.js";
+import moment from "moment";
 
 const alexisAccount = new AlexisAccount();
 const salesCommission = new SalesCommission();
@@ -16,7 +17,7 @@ export const getAll = async (year) => {
 export const create = async (item) => {
   if (item.type === "FV") {
     item.internalId = item.invoiceId;
-    item.yearApply = item.date.slice(0, 4);
+    item.yearApply = moment(item.date).format("YYYY");
     const exists = await alexisAccount.findByInternalId(item.internalId);
     if (exists || !item.isValid) return false;
 
