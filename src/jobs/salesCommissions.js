@@ -6,7 +6,7 @@ import moment from "moment";
 
 const getSalesCommissions = async () => {
   try {
-    const from = moment().format("YYYY-MM-DD 00:00:00");
+    const from = moment().format("YYYY-MM-01 00:00:00");
     const to = moment().format("YYYY-MM-DD 23:59:59");
 
     await salesCommissionService.refresh(from, to);

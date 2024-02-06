@@ -39,7 +39,12 @@ export const refresh = async (from, to) => {
 };
 
 export const updateSale = async (sale) => {
-  if (sale.invoiceState === "pay" && sale.deliveryState && sale.isValid) {
+  if (
+    sale.invoiceState === "pay" &&
+    sale.deliveryState &&
+    sale.isValid &&
+    !sale.isProfitApply
+  ) {
     const response = await alexisAccountService.create(sale);
     if (response) {
       sale.isProfitApply = true;

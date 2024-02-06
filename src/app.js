@@ -15,7 +15,6 @@ import alexisRouter from "./routes/alexis.router.js";
 import "./dao/dbMongoConfig.js";
 import "./config/init.js";
 import "./jobs/salesCommissions.js";
-import "./jobs/salesProfit.js";
 import "./jobs/salesToFree.js";
 
 import { __dirname, authToken } from "./utils.js";
