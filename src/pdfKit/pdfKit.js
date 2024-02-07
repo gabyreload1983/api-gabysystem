@@ -47,3 +47,21 @@ export const buildOrderPdf = (order, user, date) => {
 
   return { pdfPath, fileName };
 };
+
+export const buildInvoicePdf = (invoice) => {
+  const fileName = `${invoice.invoiceId}.pdf`;
+  const pdfPath = `${__dirname}/public/pdfInvoices/${fileName}`;
+
+  const doc = new PDFDocument({ size: "A4" });
+
+  doc.image(`${__dirname}/public/images/logo-sinapsis.jpg`, 5, 5, {
+    width: 300,
+  });
+
+  doc.moveTo(40, 180).lineTo(550, 200).stroke();
+
+  doc.pipe(fs.createWriteStream(pdfPath));
+  doc.end();
+
+  return pdfPath;
+};

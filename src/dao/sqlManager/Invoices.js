@@ -23,4 +23,13 @@ export default class Invoices {
     WHERE 
     cl.condicion = 20 AND  fecha > '${from}' AND  fecha < '${to}' AND (cc.letra = 'A' OR cc.letra = 'B')
     GROUP BY cc.nrocompro`);
+
+  getInvoices = async (from, to) =>
+    await sendQueryUrbano(`
+    SELECT *
+    FROM ctacli ct
+    INNER JOIN ccrenglo cc
+    ON ct.nrocompro = cc.nrocompro
+    WHERE ct.fecha > '${from}' AND  ct.fecha < '${to}' AND ct.saldo != 0 AND (ct.letra = 'A' OR ct.letra = 'B')
+    `);
 }
