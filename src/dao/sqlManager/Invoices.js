@@ -26,8 +26,10 @@ export default class Invoices {
 
   getInvoices = async (from, to) =>
     await sendQueryUrbano(`
-    SELECT *
-    FROM ctacli ct
+    SELECT *, cl.provincia AS state
+    FROM clientes cl
+    INNER JOIN  ctacli ct
+    ON cl.codigo = ct.codigo
     INNER JOIN ccrenglo cc
     ON ct.nrocompro = cc.nrocompro
     WHERE ct.fecha > '${from}' AND  ct.fecha < '${to}' AND ct.saldo != 0 AND (ct.letra = 'A' OR ct.letra = 'B')

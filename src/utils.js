@@ -81,3 +81,9 @@ export const getNextNrocompro = (lastNrocompro) => {
   const nextNrocompro = `ORX00${ORDER_POSITION}${zeros}${nextNumber}`;
   return nextNrocompro;
 };
+
+export const getIvaCondition = (type) => {
+  if (type === "E") return "EXENTO";
+  if (type === "I") return "RESPONSABLE INSCRIPTO";
+  return "";
+};

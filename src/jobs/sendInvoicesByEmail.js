@@ -11,9 +11,10 @@ const sendInvoicesByEmail = async () => {
     const to = moment().format("YYYY-MM-DD 23:59:59");
 
     const invoices = await invoicesService.getInvoices(from, to);
+    console.log(invoices.length);
     console.log(invoices[0]);
     if (invoices && invoices.length) {
-      const pdfPath = buildInvoicePdf(invoices[0]);
+      const pdfPath = buildInvoicePdf(invoices[20]);
       console.log(pdfPath);
     }
   } catch (error) {
@@ -21,10 +22,12 @@ const sendInvoicesByEmail = async () => {
   }
 };
 
-const job = new CronJob(
-  "29 * * * * *", // cronTime s m h dom mon dow
-  sendInvoicesByEmail, // onTick
-  null, // onComplete
-  true, // start
-  "America/Argentina/Buenos_Aires" // timeZone
-);
+sendInvoicesByEmail();
+
+// const job = new CronJob(
+//   "29 * * * * *", // cronTime s m h dom mon dow
+//   sendInvoicesByEmail, // onTick
+//   null, // onComplete
+//   true, // start
+//   "America/Argentina/Buenos_Aires" // timeZone
+// );
