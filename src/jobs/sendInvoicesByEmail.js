@@ -11,11 +11,9 @@ const sendInvoicesByEmail = async () => {
     const to = moment().format("YYYY-MM-DD 23:59:59");
 
     const invoices = await invoicesService.getInvoices(from, to);
-    console.log(invoices.length);
-    console.log(invoices[0]);
+    console.log(invoices[8]);
     if (invoices && invoices.length) {
-      const pdfPath = buildInvoicePdf(invoices[20]);
-      console.log(pdfPath);
+      const pdfPath = buildInvoicePdf(invoices[8]);
     }
   } catch (error) {
     logger.error(error.message);

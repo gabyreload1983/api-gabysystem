@@ -87,3 +87,9 @@ export const getIvaCondition = (type) => {
   if (type === "I") return "RESPONSABLE INSCRIPTO";
   return "";
 };
+
+export const getIvaPercentage = (iva) => {
+  if (iva === "1") return 21;
+  if (iva === "3") return 10.5;
+  return "";
+};

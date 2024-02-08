@@ -1,7 +1,7 @@
 import fs from "fs";
 import moment from "moment";
 import PDFDocument from "pdfkit";
-import { __dirname, getIvaCondition } from "../utils.js";
+import { __dirname, getIvaCondition, getIvaPercentage } from "../utils.js";
 
 export const buildOrderPdf = (order, user, date) => {
   const year = moment(date).format("YYYY");
@@ -66,14 +66,9 @@ export const buildInvoicePdf = (invoice) => {
   });
 
   // LINES
-  doc.moveTo(40, 170).lineTo(550, 170).stroke();
-  doc.moveTo(297.5, 160).lineTo(297.5, 75).stroke();
-  doc.moveTo(40, 250).lineTo(550, 250).stroke();
-  doc.moveTo(40, 270).lineTo(550, 270).stroke();
-  doc.moveTo(40, 690).lineTo(550, 690).stroke();
-  doc.moveTo(40, 780).lineTo(550, 780).stroke();
 
   // HEADER
+  doc.fontSize(20).text(`${invoice.items[0].letra}`, 290, 40);
   doc.fontSize(8).text(`${ADDRESS}`, 40, 110);
   doc.fontSize(8).text(`${PHONE}`, 40, 120);
   doc.fontSize(8).text(`${EMAIL}`, 40, 130);
@@ -94,6 +89,9 @@ export const buildInvoicePdf = (invoice) => {
   doc.fontSize(10).text(`Ing Brutos: ${INGRESOS_BRUTOS}`, 395, 127);
   doc.fontSize(10).text(`Inicio de Act.: ${START_OF_ACTIVITY}`, 395, 139);
 
+  doc.moveTo(40, 170).lineTo(550, 170).stroke();
+  doc.moveTo(297.5, 160).lineTo(297.5, 75).stroke();
+
   // CUSTOMER
   doc
     .fontSize(10)
@@ -112,12 +110,69 @@ export const buildInvoicePdf = (invoice) => {
   doc.fontSize(10).text(`${invoice.items[0].cuit}`, 50, 235);
 
   // ITEMS HEADERS
+
+  doc.moveTo(40, 250).lineTo(550, 250).stroke();
+
   doc.fontSize(10).text(`Codigo`, 50, 260);
   doc.fontSize(10).text(`Cant`, 90, 260);
   doc.fontSize(10).text(`Descripcion`, 130, 260);
   doc.fontSize(10).text(`IVA`, 380, 260);
   doc.fontSize(10).text(`Precio Unit.`, 420, 260);
   doc.fontSize(10).text(`Subtotal`, 480, 260);
+
+  doc.moveTo(40, 270).lineTo(550, 270).stroke();
+
+  //ITEMS
+  let itemPosition = 280;
+  for (let item of invoice.items) {
+    doc.fontSize(8).text(`${item.codiart}`, 50, itemPosition);
+    doc
+      .fontSize(8)
+      .text(`${Number(item.cantidad).toFixed()}`, 100, itemPosition);
+    doc.fontSize(8).text(`${item.descart}`, 130, itemPosition);
+    doc
+      .fontSize(8)
+      .text(`${getIvaPercentage(item.grabado)}`, 380, itemPosition);
+    doc
+      .fontSize(8)
+      .text(`${Number(item.precio).toFixed(2)}.`, 420, itemPosition);
+    doc
+      .fontSize(8)
+      .text(`${Number(item.subtotal).toFixed(2)}`, 480, itemPosition);
+
+    itemPosition += 20;
+  }
+
+  // FOOTER
+  const SUBTOTAL = (
+    Number(invoice.items[0].importe) -
+    (Number(invoice.items[0].iva1) + Number(invoice.items[0].iva2))
+  ).toFixed(2);
+  const IVA = (
+    Number(invoice.items[0].iva1) + Number(invoice.items[0].iva2)
+  ).toFixed(2);
+  const TOTAL = Number(invoice.items[0].importe).toFixed(2);
+
+  doc.moveTo(40, 690).lineTo(550, 690).stroke();
+  doc.fontSize(10).text(`SUBTOTAL: `, 350, 700);
+  doc.fontSize(10).text(`$ ${SUBTOTAL}`, 450, 700);
+  doc.fontSize(10).text(`IVA:`, 350, 720);
+  doc.fontSize(10).text(`$ ${IVA}`, 450, 720);
+  doc.fontSize(11).text(`TOTAL:`, 350, 740);
+  doc.fontSize(11).text(`$ ${TOTAL}`, 450, 740);
+
+  doc.moveTo(40, 780).lineTo(550, 780).stroke();
+
+  doc.fontSize(7).text(`${invoice.items[0].cae}`, 50, 760);
+  doc
+    .fontSize(8)
+    .text(
+      `Nº CAE: ${invoice.items[0].cae} Vencimiento: ${moment(
+        invoice.items[0].fvcae
+      ).format("DD-MM-YYYY")}`,
+      330,
+      760
+    );
 
   doc.pipe(fs.createWriteStream(pdfPath));
   doc.end();
