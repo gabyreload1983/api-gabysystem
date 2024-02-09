@@ -123,11 +123,11 @@ export const buildInvoicePdf = async (invoice) => {
 
   doc.moveTo(40, 250).lineTo(550, 250).stroke();
 
-  doc.fontSize(10).text(`Codigo`, 50, 260);
-  doc.fontSize(10).text(`Cant`, 90, 260);
+  doc.fontSize(10).text(`Cant`, 50, 260);
+  doc.fontSize(10).text(`Codigo`, 90, 260);
   doc.fontSize(10).text(`Descripcion`, 130, 260);
-  doc.fontSize(10).text(`IVA`, 380, 260);
-  doc.fontSize(10).text(`Precio Unit.`, 420, 260);
+  doc.fontSize(10).text(`IVA`, 360, 260);
+  doc.fontSize(10).text(`Precio Unit.`, 400, 260);
   doc.fontSize(10).text(`Subtotal`, 480, 260);
 
   doc.moveTo(40, 270).lineTo(550, 270).stroke();
@@ -135,17 +135,17 @@ export const buildInvoicePdf = async (invoice) => {
   //ITEMS
   let itemPosition = 280;
   for (let item of invoice.items) {
-    doc.fontSize(8).text(`${item.codiart}`, 50, itemPosition);
     doc
       .fontSize(8)
-      .text(`${Number(item.cantidad).toFixed()}`, 100, itemPosition);
+      .text(`${Number(item.cantidad).toFixed()}`, 50, itemPosition);
+    doc.fontSize(8).text(`${item.codiart}`, 90, itemPosition);
     doc.fontSize(8).text(`${item.descart}`, 130, itemPosition);
     doc
       .fontSize(8)
-      .text(`${getIvaPercentage(item.grabado)}`, 380, itemPosition);
+      .text(`${getIvaPercentage(item.grabado)}`, 360, itemPosition);
     doc
       .fontSize(8)
-      .text(`${Number(item.precio).toFixed(2)}`, 420, itemPosition);
+      .text(`${Number(item.precio).toFixed(2)}`, 400, itemPosition);
     doc
       .fontSize(8)
       .text(`${Number(item.subtotal).toFixed(2)}`, 480, itemPosition);
@@ -223,8 +223,8 @@ export const buildInvoicePdf = async (invoice) => {
     doc.fontSize(10).text(`$ ${IVA}`, 450, 720);
   }
 
-  doc.fontSize(11).text(`TOTAL:`, 350, 740);
-  doc.fontSize(11).text(`$ ${TOTAL}`, 450, 740);
+  doc.fontSize(12).text(`TOTAL:`, 350, 750);
+  doc.fontSize(12).text(`$ ${TOTAL}`, 450, 750);
 
   doc.moveTo(40, 780).lineTo(550, 780).stroke();
 

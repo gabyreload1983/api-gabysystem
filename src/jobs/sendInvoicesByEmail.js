@@ -9,8 +9,8 @@ import { getHtmlInvoicesPending } from "../nodemailer/html/utilsHtml.js";
 
 const sendInvoicesByEmail = async () => {
   try {
-    const from = moment().format("YYYY-MM-01 00:00:00");
-    const to = moment().format("YYYY-MM-01 23:59:59");
+    const from = moment().format("YYYY-MM-DD 00:00:00");
+    const to = moment().format("YYYY-MM-DD 23:59:59");
 
     const invoices = await invoicesService.getInvoicesPending(from, to);
 
@@ -70,7 +70,7 @@ const sendInvoicesByEmail = async () => {
 };
 
 const job = new CronJob(
-  "* 30 20 * * *", // cronTime s m h dom mon dow
+  "0 30 20 * * *", // cronTime s m h dom mon dow
   sendInvoicesByEmail, // onTick
   null, // onComplete
   true, // start
