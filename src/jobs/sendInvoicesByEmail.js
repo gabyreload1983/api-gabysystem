@@ -14,34 +14,65 @@ const sendInvoicesByEmail = async () => {
 
     const invoices = await invoicesService.getInvoicesPending(from, to);
 
-    if (invoices && invoices.length) {
-      for (let invoice of invoices) {
-        if (invoice.items[0].mail) {
-          const pdfPath = await buildInvoicePdf(invoice);
-          console.log(pdfPath);
-          await sendMail(
-            "gabyreload@gmail.com",
-            `FACTURA ${invoice.invoiceId}`,
-            "TEXT...",
-            getHtmlInvoicesPending(invoice),
-            pdfPath,
-            process.env.MAIL_BCC
-          );
-          break;
-        }
+    if (invoices && invoices?.length) {
+      const invoicesWithMail = invoices.filter(
+        (invoice) => invoice.items[0].mail
+      );
+      const invoicesWithOutMail = invoices.filter(
+        (invoice) => !invoice.items[0].mail
+      );
+
+      for (let invoice of invoicesWithMail) {
+        const pdfPath = await buildInvoicePdf(invoice);
+        await sendMail(
+          invoice.items[0].mail,
+          `FACTURA ${invoice.invoiceId}`,
+          "FACTURA ${invoice.invoiceId}",
+          getHtmlInvoicesPending(invoice),
+          [{ path: pdfPath }],
+          null,
+          "comprobantes"
+        );
       }
+
+      if (invoicesWithOutMail.length) {
+        const pdfArray = [];
+        for (let invoice of invoicesWithOutMail) {
+          const pdfPath = await buildInvoicePdf(invoice);
+          pdfArray.push({ path: pdfPath });
+        }
+
+        await sendMail(
+          process.env.MAIL_FROM_COMPROBANTES,
+          "INFO FACTURAS SIN MAIL",
+          "INFO FACTURAS SIN MAIL",
+          `<p>Se adjuntan ${invoicesWithOutMail.length} facturas sin mail y con saldo.`,
+          pdfArray
+        );
+      }
+
+      await sendMail(
+        process.env.MAIL_FROM_COMPROBANTES,
+        "INFO FACTURAS PDF",
+        "INFO FACTURAS PDF",
+        `<p>Se enviaron ${invoicesWithMail.length} facturas en PDF por mail.`
+      );
     }
   } catch (error) {
     logger.error(error.message);
+    await sendMail(
+      process.env.MAIL_FROM_COMPROBANTES,
+      "ERROR INFO FACTURAS",
+      "ERROR INFO FACTURAS",
+      `<p>Error: ${error.message}`
+    );
   }
 };
 
-sendInvoicesByEmail();
-
-// const job = new CronJob(
-//   "29 * * * * *", // cronTime s m h dom mon dow
-//   sendInvoicesByEmail, // onTick
-//   null, // onComplete
-//   true, // start
-//   "America/Argentina/Buenos_Aires" // timeZone
-// );
+const job = new CronJob(
+  "* 30 20 * * *", // cronTime s m h dom mon dow
+  sendInvoicesByEmail, // onTick
+  null, // onComplete
+  true, // start
+  "America/Argentina/Buenos_Aires" // timeZone
+);

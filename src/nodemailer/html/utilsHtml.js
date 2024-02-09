@@ -424,7 +424,7 @@ export const getHtmlInvoicesPending = (invoices) => {
   return `
   <p>Nos comunicamos de Sinapsis SRL</p>
   <p>Es un placer saludarlo.</p>
-  <p>Adjuntamos factura correspondiente.</p> 
+  <p>Adjuntamos la factura ${invoices.invoiceId} correspondiente.</p> 
   <p>En caso de necesidad, les pedimos amablemente reenviarla al departamento correspondiente para agilizar su procesamiento.</p>
   <p>Agradecemos confirmar la recepción de este mensaje para asegurar una comunicación efectiva.</p>
   
