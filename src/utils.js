@@ -93,3 +93,20 @@ export const getIvaPercentage = (iva) => {
   if (iva === "3") return 10.5;
   return "";
 };
+
+export const getCodeInvoice = (type) => {
+  if (type === "A") return "001";
+  if (type === "B") return "006";
+};
+
+export const getSalerName = (name) => {
+  const SALERS = [
+    { code: "clau", name: "claudio" },
+    { code: "mau", name: "mauro" },
+    { code: "mati", name: "matias" },
+    { code: "leo", name: "leonardo" },
+    { code: "gaby", name: "gabriel" },
+  ];
+  const index = SALERS.findIndex((saler) => saler.code === name.toLowerCase());
+  return SALERS[index].name;
+};

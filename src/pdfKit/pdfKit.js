@@ -1,7 +1,14 @@
 import fs from "fs";
 import moment from "moment";
 import PDFDocument from "pdfkit";
-import { __dirname, getIvaCondition, getIvaPercentage } from "../utils.js";
+import bwipjs from "bwip-js";
+import {
+  __dirname,
+  getCodeInvoice,
+  getIvaCondition,
+  getIvaPercentage,
+  getSalerName,
+} from "../utils.js";
 
 export const buildOrderPdf = (order, user, date) => {
   const year = moment(date).format("YYYY");
@@ -48,7 +55,7 @@ export const buildOrderPdf = (order, user, date) => {
   return { pdfPath, fileName };
 };
 
-export const buildInvoicePdf = (invoice) => {
+export const buildInvoicePdf = async (invoice) => {
   const fileName = `${invoice.invoiceId}.pdf`;
   const pdfPath = `${__dirname}/public/pdfInvoices/${fileName}`;
   const ADDRESS = "Av San Martin 2144 - CP2200 San Lorenzo - Santa Fe";
@@ -69,6 +76,9 @@ export const buildInvoicePdf = (invoice) => {
 
   // HEADER
   doc.fontSize(20).text(`${invoice.items[0].letra}`, 290, 40);
+  doc
+    .fontSize(10)
+    .text(`Cod: ${getCodeInvoice(invoice.items[0].letra)}`, 275, 61);
   doc.fontSize(8).text(`${ADDRESS}`, 40, 110);
   doc.fontSize(8).text(`${PHONE}`, 40, 120);
   doc.fontSize(8).text(`${EMAIL}`, 40, 130);
@@ -144,35 +154,63 @@ export const buildInvoicePdf = (invoice) => {
   }
 
   // FOOTER
-  const SUBTOTAL = (
-    Number(invoice.items[0].importe) -
-    (Number(invoice.items[0].iva1) + Number(invoice.items[0].iva2))
-  ).toFixed(2);
-  const IVA = (
-    Number(invoice.items[0].iva1) + Number(invoice.items[0].iva2)
-  ).toFixed(2);
-  const TOTAL = Number(invoice.items[0].importe).toFixed(2);
 
-  doc.moveTo(40, 690).lineTo(550, 690).stroke();
-  doc.fontSize(10).text(`SUBTOTAL: `, 350, 700);
-  doc.fontSize(10).text(`$ ${SUBTOTAL}`, 450, 700);
-  doc.fontSize(10).text(`IVA:`, 350, 720);
-  doc.fontSize(10).text(`$ ${IVA}`, 450, 720);
-  doc.fontSize(11).text(`TOTAL:`, 350, 740);
-  doc.fontSize(11).text(`$ ${TOTAL}`, 450, 740);
+  doc
+    .fontSize(10)
+    .text(
+      `Vendedor: ${getSalerName(invoice.items[0].operador).toUpperCase()}`,
+      50,
+      710
+    );
 
-  doc.moveTo(40, 780).lineTo(550, 780).stroke();
+  const barcodeValue = invoice.items[0].cae;
 
-  doc.fontSize(7).text(`${invoice.items[0].cae}`, 50, 760);
+  const barcodeOpts = {
+    bcid: "code39",
+    text: barcodeValue,
+    height: 9,
+    includetext: true,
+    textxalign: "left",
+    textyoffset: 2,
+  };
+
+  const png = await bwipjs.toBuffer(barcodeOpts);
+
+  doc.image(png, 50, 730, {
+    width: 150,
+  });
+
   doc
     .fontSize(8)
     .text(
       `Nº CAE: ${invoice.items[0].cae} Vencimiento: ${moment(
         invoice.items[0].fvcae
       ).format("DD-MM-YYYY")}`,
-      330,
+      50,
       760
     );
+
+  const TOTAL = Number(invoice.items[0].importe).toFixed(2);
+
+  doc.moveTo(40, 690).lineTo(550, 690).stroke();
+  if (invoice.items[0].letra === "A") {
+    const SUBTOTAL = (
+      Number(invoice.items[0].importe) -
+      (Number(invoice.items[0].iva1) + Number(invoice.items[0].iva2))
+    ).toFixed(2);
+    const IVA = (
+      Number(invoice.items[0].iva1) + Number(invoice.items[0].iva2)
+    ).toFixed(2);
+    doc.fontSize(10).text(`SUBTOTAL: `, 350, 700);
+    doc.fontSize(10).text(`$ ${SUBTOTAL}`, 450, 700);
+    doc.fontSize(10).text(`IVA:`, 350, 720);
+    doc.fontSize(10).text(`$ ${IVA}`, 450, 720);
+  }
+
+  doc.fontSize(11).text(`TOTAL:`, 350, 740);
+  doc.fontSize(11).text(`$ ${TOTAL}`, 450, 740);
+
+  doc.moveTo(40, 780).lineTo(550, 780).stroke();
 
   doc.pipe(fs.createWriteStream(pdfPath));
   doc.end();
