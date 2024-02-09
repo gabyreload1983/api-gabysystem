@@ -153,6 +153,22 @@ export const buildInvoicePdf = async (invoice) => {
     itemPosition += 20;
   }
 
+  // QR
+
+  const barcodeValueQr =
+    "https://serviciosweb.afip.gob.ar/genericos/comprobantes/cae.aspx";
+
+  const barcodeOptsQr = {
+    bcid: "qrcode",
+    text: barcodeValueQr,
+  };
+
+  const pngQr = await bwipjs.toBuffer(barcodeOptsQr);
+
+  doc.image(pngQr, 480, 610, {
+    width: 70,
+  });
+
   // FOOTER
 
   doc
@@ -163,20 +179,20 @@ export const buildInvoicePdf = async (invoice) => {
       710
     );
 
-  const barcodeValue = invoice.items[0].cae;
+  const barcodeValueCae = invoice.items[0].cae;
 
-  const barcodeOpts = {
+  const barcodeOptsCae = {
     bcid: "code39",
-    text: barcodeValue,
+    text: barcodeValueCae,
     height: 9,
     includetext: true,
     textxalign: "left",
     textyoffset: 2,
   };
 
-  const png = await bwipjs.toBuffer(barcodeOpts);
+  const pngCae = await bwipjs.toBuffer(barcodeOptsCae);
 
-  doc.image(png, 50, 730, {
+  doc.image(pngCae, 50, 730, {
     width: 150,
   });
 
