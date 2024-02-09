@@ -24,7 +24,7 @@ export default class Invoices {
     cl.condicion = 20 AND  fecha > '${from}' AND  fecha < '${to}' AND (cc.letra = 'A' OR cc.letra = 'B')
     GROUP BY cc.nrocompro`);
 
-  getInvoices = async (from, to) =>
+  getInvoicesPending = async (from, to) =>
     await sendQueryUrbano(`
     SELECT *, cl.provincia AS state
     FROM clientes cl
@@ -32,6 +32,6 @@ export default class Invoices {
     ON cl.codigo = ct.codigo
     INNER JOIN ccrenglo cc
     ON ct.nrocompro = cc.nrocompro
-    WHERE ct.fecha > '${from}' AND  ct.fecha < '${to}' AND ct.saldo != 0 AND (ct.letra = 'A' OR ct.letra = 'B')
+    WHERE ct.fecha > '${from}' AND  ct.fecha < '${to}' AND ct.saldo != 0 AND ct.tipo = 'FV' AND (ct.letra = 'A' OR ct.letra = 'B')
     `);
 }

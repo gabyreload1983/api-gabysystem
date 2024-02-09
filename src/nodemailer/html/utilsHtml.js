@@ -419,3 +419,30 @@ export const getHtmlProductsInOrder = (saler, order) => {
   ${emailSign}
   `;
 };
+
+export const getHtmlInvoicesPending = (invoices) => {
+  return `
+  <p>Nos comunicamos de Sinapsis SRL</p>
+  <p>Es un placer saludarlo.</p>
+  <p>Adjuntamos factura correspondiente.</p> 
+  <p>En caso de necesidad, les pedimos amablemente reenviarla al departamento correspondiente para agilizar su procesamiento.</p>
+  <p>Agradecemos confirmar la recepción de este mensaje para asegurar una comunicación efectiva.</p>
+  
+  <p>Para cualquier consulta o detalle adicional, nuestro equipo de ventas está a su disposición. </p>
+  
+  <p>Saludos cordiales</p>
+  <br/>
+  <p>Para mas información, registrate en nuestra pagina.</p>
+  <a href="https://sinapsis.com.ar/#linkTo-login" target="_blank">Registrate o inicia sesion acá</a>
+  <br/>
+  <br/>
+  <a href="https://www.youtube.com/watch?v=y0W0LmN3RYs" target="_blank">Tutorial para registrarte en nuestra pagina.</a>
+  <br/>
+  <br/>
+  <p>Tambien podes consultarnos por whatsapp</p>
+  <a href="https://wa.me/3476309819?text=Hola Sinaspis. " target="_blank">Hace click aca para abrir whatsapp</a>
+  <br/>
+  <br/>
+  <br/>
+  ${emailSign}`;
+};

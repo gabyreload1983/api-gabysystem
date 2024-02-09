@@ -145,7 +145,7 @@ export const buildInvoicePdf = async (invoice) => {
       .text(`${getIvaPercentage(item.grabado)}`, 380, itemPosition);
     doc
       .fontSize(8)
-      .text(`${Number(item.precio).toFixed(2)}.`, 420, itemPosition);
+      .text(`${Number(item.precio).toFixed(2)}`, 420, itemPosition);
     doc
       .fontSize(8)
       .text(`${Number(item.subtotal).toFixed(2)}`, 480, itemPosition);

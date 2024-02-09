@@ -5,8 +5,8 @@ const invoicesService = new Invoices();
 export const getInvoicesCommission = async (from, to) =>
   await invoicesService.getInvoicesCommission(from, to);
 
-export const getInvoices = async (from, to) => {
-  const invoicesDetail = await invoicesService.getInvoices(from, to);
+export const getInvoicesPending = async (from, to) => {
+  const invoicesDetail = await invoicesService.getInvoicesPending(from, to);
   const invoices = [];
   for (let item of invoicesDetail) {
     const index = invoices.findIndex(
