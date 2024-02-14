@@ -26,12 +26,18 @@ export default class Invoices {
 
   getInvoicesPending = async (from, to) =>
     await sendQueryUrbano(`
-    SELECT *, cl.provincia AS state
+    SELECT 
+    *, 
+    cl.provincia AS state,
+    cl.nombre AS name,
+    ct.numero AS invoiceNumber
     FROM clientes cl
     INNER JOIN  ctacli ct
     ON cl.codigo = ct.codigo
     INNER JOIN ccrenglo cc
     ON ct.nrocompro = cc.nrocompro
+    INNER JOIN condvtas cv
+    ON cl.condicion = cv.numero
     WHERE ct.fecha > '${from}' AND  ct.fecha < '${to}' AND ct.saldo != 0 AND ct.tipo = 'FV' AND (ct.letra = 'A' OR ct.letra = 'B')
     `);
 }

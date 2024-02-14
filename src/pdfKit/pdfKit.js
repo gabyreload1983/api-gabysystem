@@ -75,6 +75,7 @@ export const buildInvoicePdf = async (invoice) => {
   // LINES
 
   // HEADER
+  doc.font("Times-Roman");
   doc.fontSize(20).text(`${invoice.items[0].letra}`, 290, 40);
   doc
     .fontSize(10)
@@ -84,14 +85,18 @@ export const buildInvoicePdf = async (invoice) => {
   doc.fontSize(8).text(`${EMAIL}`, 40, 130);
   doc.fontSize(10).text(`${TAX_CONDITION}`, 40, 150);
 
+  doc.font("Times-Bold");
   doc.fontSize(14).text(`FACTURA`, 375, 25);
+
   doc
     .fontSize(14)
     .text(
-      `Nº 00${invoice.items[0].puesto}-000${invoice.items[0].numero}`,
+      `Nº 00${invoice.items[0].puesto}-000${invoice.items[0].invoiceNumber}`,
       375,
       45
     );
+
+  doc.font("Times-Roman");
   doc.fontSize(10).text(`FECHA: 15/12/2023 10:56`, 375, 65);
   doc.fontSize(10).text(`ORIGINAL`, 375, 78);
 
@@ -103,9 +108,11 @@ export const buildInvoicePdf = async (invoice) => {
   doc.moveTo(297.5, 160).lineTo(297.5, 75).stroke();
 
   // CUSTOMER
+  doc.font("Times-Bold");
   doc
-    .fontSize(10)
-    .text(`${invoice.items[0].codigo} - ${invoice.items[0].nombre}`, 50, 180);
+    .fontSize(12)
+    .text(`${invoice.items[0].codigo} - ${invoice.items[0].name}`, 50, 180);
+  doc.font("Times-Roman");
   doc.fontSize(8).text(`${invoice.items[0].direccion}`, 50, 195);
   doc
     .fontSize(8)
@@ -116,8 +123,9 @@ export const buildInvoicePdf = async (invoice) => {
     );
   doc
     .fontSize(10)
-    .text(`${getIvaCondition(invoice.items[0].tipoiva)}`, 50, 225);
-  doc.fontSize(10).text(`${invoice.items[0].cuit}`, 50, 235);
+    .text(`${getIvaCondition(invoice.items[0].tipoiva)}`, 50, 235);
+  doc.fontSize(10).text(`${invoice.items[0].cuit}`, 180, 235);
+  doc.fontSize(10).text(`${invoice.items[0].textofac}`, 380, 235);
 
   // ITEMS HEADERS
 
@@ -223,9 +231,11 @@ export const buildInvoicePdf = async (invoice) => {
     doc.fontSize(10).text(`$ ${IVA}`, 450, 720);
   }
 
+  doc.font("Times-Bold");
   doc.fontSize(12).text(`TOTAL:`, 350, 750);
   doc.fontSize(12).text(`$ ${TOTAL}`, 450, 750);
 
+  doc.font("Times-Roman");
   doc.moveTo(40, 780).lineTo(550, 780).stroke();
 
   doc.pipe(fs.createWriteStream(pdfPath));
