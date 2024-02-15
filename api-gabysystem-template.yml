@@ -9,6 +9,9 @@ services:
     environment:
       - MONGO_INITDB_ROOT_USERNAME=
       - MONGO_INITDB_ROOT_PASSWORD=
+    volumes:
+      - ~/mongo-data:/data/db
+      - ./mongo-init-scripts:/docker-entrypoint-initdb.d
 
   api-gabysystem:
     image:
@@ -16,6 +19,9 @@ services:
     ports:
       - "xxxx:xxxx"
     restart: always
+    volumes:
+      - ~/pdfHistory:/app/src/public/pdfHistory
+      - ~/pdfInvoices:/app/src/public/pdfInvoices
     environment:
       - NODE_ENV=
       - PORT=
@@ -43,4 +49,4 @@ services:
       - COOKIE_TOKEN=
       - API_VERSION=
       - SALE_NOTE_POSITION=
-      - ORDER_POSITION=
+      - ENABLE_SENDING_INVOICES=
