@@ -110,3 +110,5 @@ export const getSalerName = (name) => {
   const index = SALERS.findIndex((saler) => saler.code === name.toLowerCase());
   return SALERS[index].name;
 };
+
+export const trueStringToBoolean = (str) => /true/i.test(str);

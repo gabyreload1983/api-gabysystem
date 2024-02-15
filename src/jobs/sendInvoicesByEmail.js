@@ -6,6 +6,7 @@ import moment from "moment";
 import { buildInvoicePdf } from "../pdfKit/pdfKit.js";
 import sendMail from "../nodemailer/config.js";
 import { getHtmlInvoicesPending } from "../nodemailer/html/utilsHtml.js";
+import { trueStringToBoolean } from "../utils.js";
 
 const sendInvoicesByEmail = async () => {
   try {
@@ -73,6 +74,6 @@ const job = new CronJob(
   "0 30 20 * * *", // cronTime s m h dom mon dow
   sendInvoicesByEmail, // onTick
   null, // onComplete
-  true, // start
+  trueStringToBoolean(process.env.ENABLE_SENDING_INVOICES), // start
   "America/Argentina/Buenos_Aires" // timeZone
 );
