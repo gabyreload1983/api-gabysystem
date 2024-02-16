@@ -81,3 +81,34 @@ export const getNextNrocompro = (lastNrocompro) => {
   const nextNrocompro = `ORX00${ORDER_POSITION}${zeros}${nextNumber}`;
   return nextNrocompro;
 };
+
+export const getIvaCondition = (type) => {
+  if (type === "E") return "EXENTO";
+  if (type === "I") return "RESPONSABLE INSCRIPTO";
+  return "";
+};
+
+export const getIvaPercentage = (iva) => {
+  if (iva === "1") return 21;
+  if (iva === "3") return 10.5;
+  return "";
+};
+
+export const getCodeInvoice = (type) => {
+  if (type === "A") return "001";
+  if (type === "B") return "006";
+};
+
+export const getSalerName = (name) => {
+  const SALERS = [
+    { code: "clau", name: "claudio" },
+    { code: "mau", name: "mauro" },
+    { code: "mati", name: "matias" },
+    { code: "leo", name: "leonardo" },
+    { code: "gaby", name: "gabriel" },
+  ];
+  const index = SALERS.findIndex((saler) => saler.code === name.toLowerCase());
+  return SALERS[index].name;
+};
+
+export const trueStringToBoolean = (str) => /true/i.test(str);

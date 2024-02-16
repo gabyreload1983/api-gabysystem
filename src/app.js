@@ -16,6 +16,7 @@ import "./dao/dbMongoConfig.js";
 import "./config/init.js";
 import "./jobs/salesCommissions.js";
 import "./jobs/salesToFree.js";
+import "./jobs/sendInvoicesByEmail.js";
 
 import { __dirname, authToken } from "./utils.js";
 

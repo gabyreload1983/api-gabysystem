@@ -285,7 +285,7 @@ export const handleProductsInOrder = async (order, user) => {
       `ORDEN DE REPARACIÓN - ${order.nrocompro}`,
       `Actualizacion Orden`,
       getHtmlProductsInOrder(user, order),
-      result.pdfPath,
+      [{ path: result.pdfPath }],
       user.email
     );
   }

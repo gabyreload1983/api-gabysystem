@@ -6,30 +6,37 @@ const sendMail = async (
   subject,
   text,
   html,
-  filePath = null,
-  bcc = null
+  arrayPath = null,
+  bcc = null,
+  fromEmail = "noReplay"
 ) => {
+  let host = process.env.MAIL_HOST;
+  let user = process.env.MAIL_USER;
+  let pass = process.env.MAIL_PASSWORD;
+  let from = process.env.MAIL_FROM;
+
+  if (fromEmail === "comprobantes") {
+    user = process.env.MAIL_USER_COMPROBANTES;
+    pass = process.env.MAIL_PASSWORD_COMPROBANTES;
+    from = process.env.MAIL_FROM_COMPROBANTES;
+  }
   let transporter = nodemailer.createTransport({
-    host: process.env.MAIL_HOST,
+    host,
     port: 465,
     secure: true,
     auth: {
-      user: process.env.MAIL_USER,
-      pass: process.env.MAIL_PASSWORD,
+      user,
+      pass,
     },
   });
 
   return transporter.sendMail({
-    from: process.env.MAIL_FROM,
-    to: to,
+    from,
+    to,
     subject,
     text,
     html,
-    attachments: filePath
-      ? {
-          path: filePath,
-        }
-      : [],
+    attachments: arrayPath ? [...arrayPath] : [],
     bcc,
   });
 };
