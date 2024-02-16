@@ -32,7 +32,7 @@ const sendMail = async (
 
   return transporter.sendMail({
     from,
-    to: to,
+    to,
     subject,
     text,
     html,
