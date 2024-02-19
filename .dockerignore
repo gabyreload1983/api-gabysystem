@@ -7,7 +7,6 @@ package-lock.json
 .vscode
 /src/logger/logs
 Dockerfile
-docker-compose.template.yml
-gabysystem-api.yml
+api-gabysystem-template.yml
 api-gabysystem.yml
 
