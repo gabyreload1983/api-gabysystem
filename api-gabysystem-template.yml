@@ -45,6 +45,9 @@ services:
       - MAIL_USER=
       - MAIL_PASSWORD=
       - MAIL_FROM=
+      - MAIL_USER_COMPROBANTES=
+      - MAIL_PASSWORD_COMPROBANTES=
+      - MAIL_FROM_COMPROBANTES=
       - MAIL_BCC=
       - COOKIE_TOKEN=
       - API_VERSION=
