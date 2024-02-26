@@ -97,7 +97,13 @@ export const buildInvoicePdf = async (invoice) => {
     );
 
   doc.font("Times-Roman");
-  doc.fontSize(10).text(`FECHA: 15/12/2023 10:56`, 375, 65);
+  doc
+    .fontSize(10)
+    .text(
+      `FECHA: ${moment(invoice.items[0].fecha).format("DD-MM-YYYY hh:mm")}`,
+      375,
+      65
+    );
   doc.fontSize(10).text(`ORIGINAL`, 375, 78);
 
   doc.fontSize(10).text(`CUIT: ${CUIT}`, 395, 115);
