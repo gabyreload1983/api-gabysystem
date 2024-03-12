@@ -314,7 +314,7 @@ const emailSignTechnical = `
                                 color: #8b8b8b;
                                 display: inline;
                               "
-                              >CBU: 0340379000379001926007
+                              >CBU: 0170296720000001151893
                             </span>
                           </p>
                         </td>
@@ -342,7 +342,7 @@ const emailSignTechnical = `
                                 color: #8b8b8b;
                                 display: inline;
                               "
-                              >Alias: sinapsissrl
+                              >Alias: sinapsisbbva
                             </span>
                           </p>
                         </td>
@@ -702,7 +702,7 @@ const emailSignSales = `
                                 color: #8b8b8b;
                                 display: inline;
                               "
-                              >CBU: 0340379000379001926007
+                              >CBU: 0170296720000001151893
                             </span>
                           </p>
                         </td>
@@ -730,7 +730,7 @@ const emailSignSales = `
                                 color: #8b8b8b;
                                 display: inline;
                               "
-                              >Alias: sinapsissrl
+                              >Alias: sinapsisbbva
                             </span>
                           </p>
                         </td>
