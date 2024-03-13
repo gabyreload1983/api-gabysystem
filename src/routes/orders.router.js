@@ -4,6 +4,7 @@ const router = Router();
 import * as ordersController from "../controllers/orders.controller.js";
 import { authorization } from "../utils.js";
 
+router.get("/next", ordersController.getOrders);
 router.get("/in-process", ordersController.getInProcess);
 router.get("/to-deliver", ordersController.getToDeliver);
 router.get("/final-disposition", ordersController.getFinalDisposition);

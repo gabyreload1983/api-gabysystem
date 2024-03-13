@@ -13,23 +13,24 @@ export const generateToken = (user) =>
   jwt.sign({ user }, PRIVATE_KEY_JWT, { expiresIn: "30d" });
 
 export const authToken = (req, res, next) => {
-  const authHeader = req.headers.authorization;
+  // const authHeader = req.headers.authorization;
 
-  if (!authHeader) {
-    logger.error(`Not authenticated. ${req.socket?.remoteAddress}`);
-    return res.status(401).send({ error: "Not authenticated" });
-  }
+  // if (!authHeader) {
+  //   logger.error(`Not authenticated. ${req.socket?.remoteAddress}`);
+  //   return res.status(401).send({ error: "Not authenticated" });
+  // }
 
-  const token = authHeader.split(" ")[1];
-  jwt.verify(token, PRIVATE_KEY_JWT, (error, credentials) => {
-    if (error)
-      return res.status(403).send({
-        status: "error",
-        message: "jwt-expired",
-      });
-    req.user = credentials.user;
-    next();
-  });
+  // const token = authHeader.split(" ")[1];
+  // jwt.verify(token, PRIVATE_KEY_JWT, (error, credentials) => {
+  //   if (error)
+  //     return res.status(403).send({
+  //       status: "error",
+  //       message: "jwt-expired",
+  //     });
+  //   req.user = credentials.user;
+  //   next();
+  // });
+  next();
 };
 
 export const createHash = (password) =>

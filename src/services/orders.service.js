@@ -41,6 +41,9 @@ const productsInOrderRepository = new ProductsInOrderRepository(
   productsInOrderManager
 );
 
+export const getOrdersFiltered = async (status, sector, technical) =>
+  await orderRepository.getOrdersFiltered(status, sector, technical);
+
 export const getInProcess = async () => await orderRepository.getInProcess();
 
 export const getToDeliver = async () => await orderRepository.getToDeliver();

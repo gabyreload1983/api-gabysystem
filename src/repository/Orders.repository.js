@@ -12,6 +12,12 @@ export default class OrdersRepository {
     return orders;
   };
 
+  getOrdersFiltered = async (status, sector, technical) => {
+    const orders = await this.dao.getOrdersFiltered(status, sector, technical);
+    if (!orders) return;
+    return await this.#addingProductsInOrders(orders);
+  };
+
   getInProcess = async () => {
     const inProcess = await this.dao.getInProcess();
     return await this.#addingProductsInOrders(inProcess);

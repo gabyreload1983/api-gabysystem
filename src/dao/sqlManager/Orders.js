@@ -3,6 +3,21 @@ import { sendQueryUrbano } from "./sqlUtils.js";
 export default class Orders {
   constructor() {}
 
+  getOrdersFiltered = async (status, sector, technical) => {
+    let query = "";
+    if (status) query += `estado = ${status} AND `;
+    if (sector) query += `codiart = '${sector}' AND `;
+    if (technical) query += `tecnico = '${technical}' AND `;
+    if (!query) return;
+
+    return await sendQueryUrbano(
+      `SELECT * FROM trabajos 
+      WHERE ${query} codigo != 'ANULADO'
+      ORDER BY prioridad DESC
+      `
+    );
+  };
+
   getInProcess = async () =>
     await sendQueryUrbano(
       `SELECT * FROM trabajos WHERE estado = 22 ORDER BY tecnico`
@@ -94,7 +109,7 @@ export default class Orders {
       `UPDATE trabajos SET textorespuesta = '${path}' WHERE nrocompro = '${nrocompro}'`
     );
 
-  getOrders = async (from, to) =>
+  Filtered = async (from, to) =>
     await sendQueryUrbano(
       `SELECT * FROM trabajos WHERE diagnosticado BETWEEN '${from} 00:00:00' AND '${to} 23:59:59' AND estado = 23`
     );
