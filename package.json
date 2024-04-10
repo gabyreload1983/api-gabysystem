@@ -5,7 +5,7 @@
   "main": "src/app.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha 'test/**/*.test.js'",
     "start": "NODE_ENV=production node src/app.js",
     "dev": "NODE_ENV=development node --env-file=.env.development --watch src/app.js"
   },
@@ -30,5 +30,9 @@
     "passport-jwt": "^4.0.1",
     "pdfkit": "^0.13.0",
     "winston": "^3.8.2"
+  },
+  "devDependencies": {
+    "chai": "^5.1.0",
+    "mocha": "^10.4.0"
   }
 }
