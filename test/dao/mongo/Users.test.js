@@ -10,6 +10,15 @@ await mongoose.connect(URI);
 
 let usersDao;
 
+const mockUser = {
+  email: "test@test.com",
+  password: "password",
+  code_technical: "code_technical",
+  first_name: "first_name",
+  last_name: "last_name",
+  role: "role",
+};
+
 describe("Testing users dao", () => {
   before(() => {
     usersDao = new Users();
@@ -31,14 +40,6 @@ describe("Testing users dao", () => {
   });
 
   it("Insert a new user in the DataBase", async () => {
-    const mockUser = {
-      email: "test@test.com",
-      password: "password",
-      code_technical: "code_technical",
-      first_name: "first_name",
-      last_name: "last_name",
-      role: "role",
-    };
     const result = await usersDao.register(mockUser);
 
     expect(result._id).to.be.ok;
@@ -46,14 +47,6 @@ describe("Testing users dao", () => {
   });
 
   it("Get a user by id", async () => {
-    const mockUser = {
-      email: "test@test.com",
-      password: "password",
-      code_technical: "code_technical",
-      first_name: "first_name",
-      last_name: "last_name",
-      role: "role",
-    };
     const result = await usersDao.register(mockUser);
     const user = await usersDao.getUser(result._id);
 
@@ -62,14 +55,6 @@ describe("Testing users dao", () => {
   });
 
   it("Get a user by email", async () => {
-    const mockUser = {
-      email: "test@test.com",
-      password: "password",
-      code_technical: "code_technical",
-      first_name: "first_name",
-      last_name: "last_name",
-      role: "role",
-    };
     const result = await usersDao.register(mockUser);
     const user = await usersDao.getByEmail(result.email);
 
@@ -78,14 +63,6 @@ describe("Testing users dao", () => {
   });
 
   it("Get a user by code", async () => {
-    const mockUser = {
-      email: "test@test.com",
-      password: "password",
-      code_technical: "code_technical",
-      first_name: "first_name",
-      last_name: "last_name",
-      role: "role",
-    };
     const result = await usersDao.register(mockUser);
     const user = await usersDao.getByCode(result.code_technical);
 
@@ -94,15 +71,6 @@ describe("Testing users dao", () => {
   });
 
   it("Update user", async () => {
-    const mockUser = {
-      email: "test@test.com",
-      password: "password",
-      code_technical: "code_technical",
-      first_name: "first_name",
-      last_name: "last_name",
-      role: "role",
-    };
-
     const mockUserUpdate = {
       email: "update@test.com",
       password: "passwordUpdate",
@@ -136,15 +104,6 @@ describe("Testing users dao", () => {
   });
 
   it("Delete user", async () => {
-    const mockUser = {
-      email: "test@test.com",
-      password: "password",
-      code_technical: "code_technical",
-      first_name: "first_name",
-      last_name: "last_name",
-      role: "role",
-    };
-
     const mongoResponse = { acknowledged: true, deletedCount: 1 };
 
     const result = await usersDao.register(mockUser);
