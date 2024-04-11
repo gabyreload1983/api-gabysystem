@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import User from "../../../src/dao/mongoManagers/Users.js";
+import Users from "../../../src/dao/mongoManagers/Users.js";
 import * as chai from "chai";
 
 const expect = chai.expect;
@@ -12,7 +12,7 @@ let usersDao;
 
 describe("Testing users dao", () => {
   before(() => {
-    usersDao = new User();
+    usersDao = new Users();
   });
 
   afterEach(async () => {
