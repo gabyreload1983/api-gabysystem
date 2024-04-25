@@ -274,21 +274,19 @@ export const handleProductsInOrder = async (order, user) => {
     );
   }
 
-  if (order.products.length > 0) {
-    const result = buildOrderPdf(order, user, now);
-    fileName = result.fileName;
+  const resultPdf = buildOrderPdf(order, user, now);
+  fileName = resultPdf.fileName;
 
-    await orderRepository.savePdfPath(order.nrocompro, fileName);
+  await orderRepository.savePdfPath(order.nrocompro, fileName);
 
-    await sendMail(
-      technical.email,
-      `ORDEN DE REPARACIÓN - ${order.nrocompro}`,
-      `Actualizacion Orden`,
-      getHtmlProductsInOrder(user, order),
-      [{ path: result.pdfPath }],
-      user.email
-    );
-  }
+  await sendMail(
+    technical.email,
+    `ORDEN DE REPARACIÓN - ${order.nrocompro}`,
+    `Actualizacion Orden`,
+    getHtmlProductsInOrder(user, order),
+    [{ path: resultPdf.pdfPath }],
+    user.email
+  );
 
   const data = {
     userEmail: user.email,
@@ -302,7 +300,7 @@ export const handleProductsInOrder = async (order, user) => {
   };
   const result = await productsInOrderRepository.create(data);
 
-  return { result, fileName };
+  return { result: resultPdf, fileName };
 };
 
 export const updateCustomer = async (nrocompro, customer) => {
