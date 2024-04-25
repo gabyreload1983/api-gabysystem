@@ -12,8 +12,8 @@ import {
 
 export const buildOrderPdf = (order, user, date) => {
   const year = moment(date).format("YYYY");
-  const now = moment(date).format("YYYYMMDD-HHmmss");
-  const fileName = `${order.nrocompro}-${now}.pdf`;
+  const now = moment().format("DD-MM-YYYY HH:mm");
+  const fileName = `${order.nrocompro}.pdf`;
   const pdfPath = `${__dirname}/public/pdfHistory/${fileName}`;
 
   const doc = new PDFDocument({ size: "A4" });
@@ -22,9 +22,7 @@ export const buildOrderPdf = (order, user, date) => {
     width: 100,
   });
 
-  doc
-    .fontSize(10)
-    .text(`FECHA: ${moment().format("DD-MM-YYYY HH:mm")}`, 350, 50);
+  doc.fontSize(10).text(`FECHA: ${now}`, 350, 50);
   doc
     .fontSize(10)
     .text(`RESPONSABLE: ${user.first_name} ${user.last_name}`, 350, 70);
