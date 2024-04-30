@@ -224,10 +224,10 @@ export const buildInvoicePdf = async (invoice) => {
   if (invoice.items[0].letra === "A") {
     const SUBTOTAL = (
       Number(invoice.items[0].importe) -
-      (Number(invoice.items[0].iva1) + Number(invoice.items[0].iva2))
+      (Number(invoice.items[0].iva1) + Number(invoice.items[0].iva3))
     ).toFixed(2);
     const IVA = (
-      Number(invoice.items[0].iva1) + Number(invoice.items[0].iva2)
+      Number(invoice.items[0].iva1) + Number(invoice.items[0].iva3)
     ).toFixed(2);
     doc.fontSize(10).text(`SUBTOTAL: `, 350, 700);
     doc.fontSize(10).text(`$ ${SUBTOTAL}`, 450, 700);
