@@ -1,3 +1,4 @@
+import moment from "moment";
 import Customers from "../dao/sqlManager/Customers.js";
 import CustomersRepository from "../repository/Customers.repository.js";
 
@@ -22,6 +23,7 @@ export const getSummaries = async (balanceFilter = 1000) => {
       customer.codigo
     );
     customer.balance = 0;
+    customer.lastPay = "";
 
     const index = salesConditions.findIndex((condition) => {
       return condition.code === Number(customer.condicion);
@@ -41,6 +43,15 @@ export const getSummaries = async (balanceFilter = 1000) => {
 
       if (voucher.tipo === "RE" || voucher.tipo === "NC")
         customer.balance -= Number(voucher.importe);
+
+      if (voucher.tipo === "RE" && !customer.lastPay)
+        customer.lastPay = voucher.fecha;
+      if (
+        voucher.tipo === "RE" &&
+        customer.lastPay &&
+        moment(voucher.fecha).isAfter(customer.lastPay)
+      )
+        customer.lastPay = voucher.fecha;
     }
   }
   return customers
