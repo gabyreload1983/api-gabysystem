@@ -20,7 +20,7 @@ export const searchBy = async (req, res) => {
         .status(404)
         .send({ status: "error", message: "Error searching product" });
 
-    res.send({ status: "success", products });
+    res.send({ status: "success", payload: products });
   } catch (error) {
     logger.error(error.message);
     res.status(500).send(error);
