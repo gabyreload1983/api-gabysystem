@@ -10,6 +10,7 @@ router.get("/final-disposition", ordersController.getFinalDisposition);
 router.get("/pendings-all", ordersController.getPendingsAll);
 router.get("/process/:sector", ordersController.getProcessSector);
 router.get("/pending/:sector", ordersController.getPendings);
+router.get("/all/:from/:to", ordersController.getOrders);
 router.get(
   "/technical/:code_technical",
   ordersController.getInProgressByTechnical
