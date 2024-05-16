@@ -87,7 +87,11 @@ export const getStatistics = async (from, to) => {
     (technical) => new StatisticsTechnicalDto(technical.code_technical)
   );
 
-  const data = await orderRepository.getOrdersWithProducts(from, to);
+  const data = await orderRepository.getOrdersWithProducts(
+    from,
+    to,
+    "diagnosticado"
+  );
   const orders = data.filter((order) => order.estado === 23);
 
   const dollar = await productsRepository.getDollarValue();
