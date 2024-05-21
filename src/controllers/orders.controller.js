@@ -4,6 +4,26 @@ import * as customersServices from "../services/customers.service.js";
 
 import { incompleteValues } from "../validators/validator.js";
 
+export const getOrders = async (req, res) => {
+  try {
+    const { from, to } = req.params;
+    if (!from || !to)
+      return res
+        .status(400)
+        .send({ status: "error", message: "You must send from and to dates" });
+
+    const orders = await ordersService.getOrders(from, to);
+    if (!orders)
+      return res
+        .status(400)
+        .send({ status: "error", message: "Error getting orders" });
+
+    res.send({ status: "success", message: "OK", payload: orders });
+  } catch (error) {
+    logger.error(error.message);
+    res.status(500).send(error);
+  }
+};
 export const getInProcess = async (req, res) => {
   try {
     const orders = await ordersService.getInProcess();
