@@ -41,6 +41,9 @@ const productsInOrderRepository = new ProductsInOrderRepository(
   productsInOrderManager
 );
 
+export const getOrders = async (from, to) =>
+  await orderRepository.getOrders(from, to);
+
 export const getInProcess = async () => await orderRepository.getInProcess();
 
 export const getToDeliver = async () => await orderRepository.getToDeliver();
@@ -84,7 +87,13 @@ export const getStatistics = async (from, to) => {
     (technical) => new StatisticsTechnicalDto(technical.code_technical)
   );
 
-  const orders = await orderRepository.getOrders(from, to);
+  const data = await orderRepository.getOrdersWithProducts(
+    from,
+    to,
+    "diagnosticado"
+  );
+  const orders = data.filter((order) => order.estado === 23);
+
   const dollar = await productsRepository.getDollarValue();
   for (const order of orders) {
     order.products = order.products.map((product) =>

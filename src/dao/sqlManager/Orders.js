@@ -94,9 +94,9 @@ export default class Orders {
       `UPDATE trabajos SET textorespuesta = '${path}' WHERE nrocompro = '${nrocompro}'`
     );
 
-  getOrders = async (from, to) =>
+  getOrders = async (from, to, filter = "ingresado") =>
     await sendQueryUrbano(
-      `SELECT * FROM trabajos WHERE diagnosticado BETWEEN '${from} 00:00:00' AND '${to} 23:59:59' AND estado = 23`
+      `SELECT * FROM trabajos WHERE ${filter} BETWEEN '${from} 00:00:00' AND '${to} 23:59:59' AND codigo != 'ANULADO'`
     );
 
   getTechnicals = async (from, to) =>
