@@ -1,6 +1,8 @@
-# GabySystem Backend 🚀
+# GabySystem Backend
 
 API RESTFul developmented with Node.js
+
+![Node.js](https://raw.githubusercontent.com/github/explore/main/topics/nodejs/nodejs.png)
 
 ## Features
 
@@ -34,8 +36,9 @@ To set up GabySystem API RESTFul and get it running on your local development en
 - NODE.js >= 18
 - Docker
 - Docker Compose
-- Virtual Machine with Urbano Server [Download](https://linkto)
-- Gabysystem Frontend [README](https://github.com/gabyreload1983/front-gabysystem/blob/main/README.md)
+- MongoDB <a href="https://github.com/gabyreload1983/mongodb-gabysystem" target="_blank">README</a>
+- [Urbano Server DEV](#urbano-server-dev)
+- Gabysystem Frontend <a href="https://github.com/gabyreload1983/front-gabysystem/blob/main/README.md" target="_blank">README</a>
 
 ### Develpment
 
@@ -49,6 +52,11 @@ To set up GabySystem API RESTFul and get it running on your local development en
 2. Complete the environment variables of production
 3. Run docker-compose -f api-gabysystem.yml up -d
 
-## MongoDB
+## Urbano Server DEV
 
-[Repo](https://github.com/gabyreload1983/mongodb-gabysystem)
+1. Create a Virtual Machine with Windows 10 or higher
+2. Install Urbano Server
+3. Stop MySQL Service
+4. Copy and replace database backup
+5. Restart MySQL Service
+6. Create firewall rules for entry and exit on port 3306
