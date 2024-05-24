@@ -1,7 +1,7 @@
 version: "3.9"
 services:
   mongo-gabysystem:
-    image: mongo
+    image: gabyreload1983/mongo-gabysystem:vx.x.x
     container_name: mongo-gabysystem
     restart: always
     ports:
@@ -11,10 +11,9 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=
     volumes:
       - ~/mongo-data:/data/db
-      - ./mongo-init-scripts:/docker-entrypoint-initdb.d
 
   api-gabysystem:
-    image:
+    image: gabyreload1983/api-gabysystem:vx.x.x
     container_name: api-gabysystem
     ports:
       - "xxxx:xxxx"
@@ -45,10 +44,10 @@ services:
       - MAIL_USER=
       - MAIL_PASSWORD=
       - MAIL_FROM=
+      - MAIL_BCC=
       - MAIL_USER_COMPROBANTES=
       - MAIL_PASSWORD_COMPROBANTES=
       - MAIL_FROM_COMPROBANTES=
-      - MAIL_BCC=
       - COOKIE_TOKEN=
       - API_VERSION=
       - SALE_NOTE_POSITION=

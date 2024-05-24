@@ -17,6 +17,7 @@ API RESTFul developmented with Node.js
 - Node.js
 - MongoDB
 - MySQL
+- Docker
 
 ## Project Structure
 
@@ -31,12 +32,19 @@ To set up GabySystem API RESTFul and get it running on your local development en
 - Linux or Windows
 - Visual Studio
 - NODE.js >= 18
-- MongoDB
+- Docker
+- Docker Compose
 - Virtual Machine with Urbano Server [Download](https://linkto)
 - Gabysystem Frontend [README](https://github.com/gabyreload1983/front-gabysystem/blob/main/README.md)
 
-## Installation
+### Develpment
 
 1. Clone the repository to your local machine.
+2. Rename .env.template file into .en.development and replace environment variables
+3. Run npm run dev
 
 ## Deploy
+
+1. Rename api-gabysystem-template.yml to api-gabysystem.yml and copy into the server
+2. Complete the environment variables of production
+3. Run docker-compose -f api-gabysystem.yml up -d
