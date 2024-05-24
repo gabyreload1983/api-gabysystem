@@ -48,3 +48,7 @@ To set up GabySystem API RESTFul and get it running on your local development en
 1. Rename api-gabysystem-template.yml to api-gabysystem.yml and copy into the server
 2. Complete the environment variables of production
 3. Run docker-compose -f api-gabysystem.yml up -d
+
+## MongoDB
+
+[Repo](https://github.com/gabyreload1983/mongodb-gabysystem)
