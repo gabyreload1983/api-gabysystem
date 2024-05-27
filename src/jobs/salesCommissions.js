@@ -3,6 +3,7 @@ import * as salesCommissionService from "../services/salesCommission.service.js"
 
 import logger from "../logger/logger.js";
 import moment from "moment";
+import { trueStringToBoolean } from "../utils.js";
 
 const getSalesCommissions = async () => {
   try {
@@ -19,6 +20,6 @@ const job = new CronJob(
   "0 * * * * *", // cronTime s m h dom mon dow
   getSalesCommissions, // onTick
   null, // onComplete
-  true, // start
+  trueStringToBoolean(process.env.ENABLE_JOBS), // start
   "America/Argentina/Buenos_Aires" // timeZone
 );
