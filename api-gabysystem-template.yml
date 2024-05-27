@@ -1,7 +1,7 @@
 version: "3.9"
 services:
   mongo-gabysystem:
-    image: gabyreload1983/mongo-gabysystem:vx.x.x
+    image: gabyreload1983/mongo-gabysystem:v1.0.1
     container_name: mongo-gabysystem
     restart: always
     ports:
