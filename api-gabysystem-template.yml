@@ -1,7 +1,7 @@
 version: "3.9"
 services:
   mongo-gabysystem:
-    image: gabyreload1983/mongo-gabysystem:v1.0.1
+    image: gabyreload1983/mongo-gabysystem:v1.0.2
     container_name: mongo-gabysystem
     restart: always
     ports:
@@ -24,7 +24,7 @@ services:
     environment:
       - NODE_ENV=
       - PORT=
-      - MONGO_URL=
+      - MONGO_URL=mongodb://user:password@mongo-gabysystem:xxxxx/db_name
       - SQL_HOST=
       - ADMIN_FIRST_NAME=
       - ADMIN_LAST_NAME=
