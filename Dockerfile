@@ -4,8 +4,6 @@ RUN ln -sf /usr/share/zoneinfo/America/Argentina/Buenos_Aires /etc/localtime
 RUN npm install -g npm@latest
 RUN npm install pm2 -g
 
-COPY ./mongo-init-scripts /docker-entrypoint-initdb.d
-
 WORKDIR /app
 
 COPY package.json .
