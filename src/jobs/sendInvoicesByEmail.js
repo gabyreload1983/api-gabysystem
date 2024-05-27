@@ -74,6 +74,6 @@ const job = new CronJob(
   "0 30 20 * * *", // cronTime s m h dom mon dow
   sendInvoicesByEmail, // onTick
   null, // onComplete
-  trueStringToBoolean(process.env.ENABLE_SENDING_INVOICES), // start
+  trueStringToBoolean(process.env.ENABLE_JOBS), // start
   "America/Argentina/Buenos_Aires" // timeZone
 );
