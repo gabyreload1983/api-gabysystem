@@ -111,16 +111,16 @@ export default class Orders {
 
   getOrders = async (from, to, filter = "ingresado") => {
     return await sendQueryUrbano(
-      `SELECT * FROM trabajos WHERE ? BETWEEN ? AND codigo != 'ANULADO'`,
-      [filter, `${from} 00:00:00 AND ${to} 23:59:59`]
+      `SELECT * FROM trabajos WHERE ${filter} BETWEEN ? AND ? AND codigo != 'ANULADO'`,
+      [`${from} 00:00:00`, `${to} 23:59:59`]
     );
-  };
+  }; // TODO create 2 new functions: getOrdersIn and getOrdersDiagnosis
 
   getTechnicals = async (from, to) =>
     await sendQueryUrbano(
       `SELECT DISTINCT tecnico as code_technical FROM trabajos 
-      WHERE diagnosticado BETWEEN ? AND tecnico != ''`,
-      [`${from} 00:00:00' AND '${to} 23:59:59`]
+      WHERE diagnosticado BETWEEN ? AND ? AND tecnico != ''`,
+      [`${from} 00:00:00`, `${to} 23:59:59`]
     );
 
   getOrdersByCustomer = async (code, limit = 50) =>
