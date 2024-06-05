@@ -286,8 +286,6 @@ export const handleProductsInOrder = async (order, user) => {
   const resultPdf = buildOrderPdf(order, user, now);
   fileName = resultPdf.fileName;
 
-  await orderRepository.savePdfPath(order.nrocompro, fileName);
-
   await sendMail(
     technical.email,
     `ORDEN DE REPARACIÓN - ${order.nrocompro}`,
