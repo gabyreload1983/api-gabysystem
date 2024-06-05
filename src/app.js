@@ -43,4 +43,6 @@ app.use("*", (req, res) =>
 );
 
 const PORT = process.env.PORT;
-app.listen(PORT, () => logger.info(`Listening on port ${PORT}`));
+app.listen(PORT, () =>
+  logger.info(`Listening on port ${PORT} - ${process.env.NODE_ENV}`)
+);

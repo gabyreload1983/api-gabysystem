@@ -123,8 +123,8 @@ export const take = async (order, code_technical) => {
   const orderUpdate = await getOrder(order.nrocompro);
 
   const customer = await customersRepository.getByCode(order.codigo);
-  if (customer[0].mail) {
-    const info = await sendMail(
+  if (customer[0].mail && process.env.NODE_ENV === "production") {
+    await sendMail(
       customer[0].mail,
       "Sinapsis - ORDEN REPARACION",
       "Notificacion Servicio Tecnico",
@@ -285,8 +285,6 @@ export const handleProductsInOrder = async (order, user) => {
 
   const resultPdf = buildOrderPdf(order, user, now);
   fileName = resultPdf.fileName;
-
-  await orderRepository.savePdfPath(order.nrocompro, fileName);
 
   await sendMail(
     technical.email,

@@ -4,17 +4,17 @@ export default class Customers {
   constructor() {}
 
   getByCode = async (codigo) =>
-    await sendQueryUrbano(`SELECT * FROM clientes WHERE codigo = '${codigo}'`);
+    await sendQueryUrbano(`SELECT * FROM clientes WHERE codigo = ?`, [codigo]);
 
   getByName = async (description) =>
-    await sendQueryUrbano(
-      `SELECT * FROM clientes WHERE nombre LIKE '%${description}%'`
-    );
+    await sendQueryUrbano(`SELECT * FROM clientes WHERE nombre LIKE ?`, [
+      `%${description}%`,
+    ]);
 
   getCustomers = async () => await sendQueryUrbano(`SELECT * FROM clientes`);
 
   getCustomersVouchers = async (id) =>
-    await sendQueryUrbano(`SELECT * FROM ctacli WHERE codigo = '${id}'`);
+    await sendQueryUrbano(`SELECT * FROM ctacli WHERE codigo = ?`, [id]);
 
   getSalesConditions = async () =>
     await sendQueryUrbano(

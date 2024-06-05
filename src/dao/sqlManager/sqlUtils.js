@@ -2,10 +2,11 @@ import logger from "../../logger/logger.js";
 import { connectionUrbano } from "../dbMySqlConfig.js";
 import { connectionTickets } from "../dbMySqlTicketsConfig.js";
 
-export const sendQueryUrbano = (query) => {
+export const sendQueryUrbano = (query, values = []) => {
   return new Promise((resolve, reject) => {
-    logger.debug(query);
-    connectionUrbano.query(query, (error, result) => {
+    logger.debug(`QUERY: ${query}`);
+    logger.debug(`VALUES: ${values}`);
+    connectionUrbano.query(query, values, (error, result) => {
       if (error) {
         logger.error(error);
         reject(new Error(error.message));
@@ -16,10 +17,11 @@ export const sendQueryUrbano = (query) => {
   });
 };
 
-export const sendQueryTickets = (query) => {
+export const sendQueryTickets = (query, values = []) => {
   return new Promise((resolve, reject) => {
-    logger.debug(query);
-    connectionTickets.query(query, (error, result) => {
+    logger.debug(`QUERY: ${query}`);
+    logger.debug(`VALUES: ${values}`);
+    connectionTickets.query(query, values, (error, result) => {
       if (error) {
         logger.error(error);
         reject(new Error(error.message));

@@ -4,7 +4,8 @@ export default class Invoices {
   constructor() {}
 
   getInvoicesCommission = async (from, to) =>
-    await sendQueryUrbano(`
+    await sendQueryUrbano(
+      `
     SELECT 
     cc.fecha,
     cl.codigo,
@@ -21,11 +22,14 @@ export default class Invoices {
     INNER JOIN clientes cl
     ON cc.codigo = cl.codigo
     WHERE 
-    cl.condicion = 20 AND  fecha > '${from}' AND  fecha < '${to}' AND (cc.letra = 'A' OR cc.letra = 'B')
-    GROUP BY cc.nrocompro`);
+    cl.condicion = 20 AND  fecha > ? AND  fecha < ? AND (cc.letra = 'A' OR cc.letra = 'B')
+    GROUP BY cc.nrocompro`,
+      [from, to]
+    );
 
   getInvoicesPending = async (from, to) =>
-    await sendQueryUrbano(`
+    await sendQueryUrbano(
+      `
     SELECT 
     *, 
     cl.provincia AS state,
@@ -38,6 +42,8 @@ export default class Invoices {
     ON ct.nrocompro = cc.nrocompro
     INNER JOIN condvtas cv
     ON cl.condicion = cv.numero
-    WHERE ct.fecha > '${from}' AND  ct.fecha < '${to}' AND ct.saldo != 0 AND ct.tipo = 'FV' AND (ct.letra = 'A' OR ct.letra = 'B')
-    `);
+    WHERE ct.fecha > ? AND  ct.fecha < ? AND ct.saldo != 0 AND ct.tipo = 'FV' AND (ct.letra = 'A' OR ct.letra = 'B')
+    `,
+      [from, to]
+    );
 }
