@@ -10,7 +10,7 @@ const __filename = fileURLToPath(import.meta.url);
 export const __dirname = dirname(__filename);
 
 export const generateToken = (user) =>
-  jwt.sign({ user }, PRIVATE_KEY_JWT, { expiresIn: "30d" });
+  jwt.sign({ user }, PRIVATE_KEY_JWT, { expiresIn: "7d" });
 
 export const authToken = (req, res, next) => {
   const authHeader = req.headers.authorization;
