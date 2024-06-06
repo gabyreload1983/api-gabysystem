@@ -7,6 +7,7 @@ export default class UsersLoginDto {
     this.code_technical = user.code_technical;
     this.role = user.role;
     this.api_version = process.env.API_VERSION;
+    this.front_version = process.env.FRONT_VERSION;
     this.imageUrl = user.imageUrl;
   }
 }

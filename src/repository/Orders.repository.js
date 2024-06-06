@@ -12,42 +12,20 @@ export default class OrdersRepository {
     return orders;
   };
 
-  getInProcess = async () => {
-    const inProcess = await this.dao.getInProcess();
-    return await this.#addingProductsInOrders(inProcess);
-  };
+  getInProcess = async () => await this.dao.getInProcess();
 
-  getToDeliver = async () => {
-    const toDeliver = await this.dao.getToDeliver();
-    return await this.#addingProductsInOrders(toDeliver);
-  };
+  getToDeliver = async () => await this.dao.getToDeliver();
 
-  getFinalDisposition = async () => {
-    const finalDisposition = await this.dao.getFinalDisposition();
-    return await this.#addingProductsInOrders(finalDisposition);
-  };
+  getFinalDisposition = async () => await this.dao.getFinalDisposition();
 
-  getProcessSector = async (sector) => {
-    const orders = await this.dao.getProcessSector(sector);
-    return await this.#addingProductsInOrders(orders);
-  };
+  getProcessSector = async (sector) => await this.dao.getProcessSector(sector);
 
-  getPendings = async (sector) => {
-    const pendings = await this.dao.getPendings(sector);
-    return await this.#addingProductsInOrders(pendings);
-  };
+  getPendings = async (sector) => await this.dao.getPendings(sector);
 
-  getPendingsAll = async () => {
-    const pendings = await this.dao.getPendingsAll();
-    return await this.#addingProductsInOrders(pendings);
-  };
+  getPendingsAll = async () => await this.dao.getPendingsAll();
 
-  getInProgressByTechnical = async (code_technical) => {
-    const ordersTechnical = await this.dao.getInProgressByTechnical(
-      code_technical.toUpperCase()
-    );
-    return await this.#addingProductsInOrders(ordersTechnical);
-  };
+  getInProgressByTechnical = async (code_technical) =>
+    await this.dao.getInProgressByTechnical(code_technical.toUpperCase());
 
   getOrder = async (nrocompro) => {
     const order = await this.dao.getById(nrocompro);

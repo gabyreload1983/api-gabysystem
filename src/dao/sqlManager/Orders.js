@@ -8,13 +8,13 @@ export default class Orders {
       `SELECT * FROM trabajos WHERE estado = 22 ORDER BY tecnico`
     );
 
-  getToDeliver = async (from = "1 YEAR") =>
+  getToDeliver = async (limit = 100) =>
     await sendQueryUrbano(
       `SELECT * FROM trabajos WHERE 
-      ingresado BETWEEN ? AND NOW() AND
+      ingresado BETWEEN DATE_ADD(NOW(), INTERVAL - 1 YEAR) AND NOW() AND
       codigo != 'ANULADO' AND estado = 23  AND diag = 22 AND ubicacion = 21
-      ORDER BY ingresado DESC`,
-      [`DATE_ADD(NOW(), INTERVAL - ${from})`]
+      ORDER BY ingresado DESC LIMIT ?`,
+      [limit]
     );
 
   getFinalDisposition = async () =>
