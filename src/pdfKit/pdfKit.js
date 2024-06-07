@@ -9,6 +9,7 @@ import {
   getIvaPercentage,
   getSalerName,
 } from "../utils.js";
+import { API_INFO } from "../config/info.js";
 
 export const buildOrderPdf = (order, user, date) => {
   const year = moment(date).format("YYYY");
@@ -42,9 +43,7 @@ export const buildOrderPdf = (order, user, date) => {
         (position += 20)
       );
   }
-  doc
-    .fontSize(12)
-    .text(`${year} - GabySystem - V${process.env.API_VERSION}`, 210, 730);
+  doc.fontSize(12).text(`${year} - GSystem - V${API_INFO.version}`, 210, 730);
   doc.fontSize(12).text(`(Developed) => Gabriel Godoy  `, 200, 750);
 
   doc.pipe(fs.createWriteStream(pdfPath));
