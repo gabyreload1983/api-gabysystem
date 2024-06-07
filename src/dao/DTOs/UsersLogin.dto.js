@@ -1,3 +1,5 @@
+import { API_INFO } from "../../config/info.js";
+
 export default class UsersLoginDto {
   constructor(user) {
     this._id = user._id;
@@ -6,8 +8,7 @@ export default class UsersLoginDto {
     this.email = user.email;
     this.code_technical = user.code_technical;
     this.role = user.role;
-    this.api_version = process.env.API_VERSION;
-    this.front_version = process.env.FRONT_VERSION;
+    this.api_version = API_INFO.version;
     this.imageUrl = user.imageUrl;
   }
 }
