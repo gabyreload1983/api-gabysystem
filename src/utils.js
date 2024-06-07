@@ -1,5 +1,6 @@
 import { fileURLToPath } from "url";
-import { dirname } from "path";
+import path, { dirname } from "path";
+import fs from "fs/promises";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import logger from "./logger/logger.js";
@@ -112,3 +113,22 @@ export const getSalerName = (name) => {
 };
 
 export const trueStringToBoolean = (str) => /true/i.test(str);
+
+export const getPackageVersion = async () => {
+  try {
+    const packageJsonPath = path.join(`${__dirname}`, "..", "package.json");
+    await fs.access(packageJsonPath);
+
+    const data = await fs.readFile(packageJsonPath, "utf8");
+
+    const packageJson = JSON.parse(data);
+
+    return packageJson.version;
+  } catch (err) {
+    if (err.code === "ENOENT") {
+      logger.error("package.json not found.");
+    } else {
+      logger.error("Error:", err);
+    }
+  }
+};
