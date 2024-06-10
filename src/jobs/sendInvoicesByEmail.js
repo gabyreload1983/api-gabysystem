@@ -31,7 +31,7 @@ const sendInvoicesByEmail = async () => {
           "FACTURA ${invoice.invoiceId}",
           getHtmlInvoicesPending(invoice),
           [{ path: pdfPath }],
-          null,
+          process.env.MAIL_BCC,
           "comprobantes"
         );
       }
@@ -70,10 +70,12 @@ const sendInvoicesByEmail = async () => {
   }
 };
 
-const job = new CronJob(
-  "0 30 20 * * *", // cronTime s m h dom mon dow
-  sendInvoicesByEmail, // onTick
-  null, // onComplete
-  trueStringToBoolean(process.env.ENABLE_JOBS), // start
-  "America/Argentina/Buenos_Aires" // timeZone
-);
+if (process.env.NODE_APP_INSTANCE === "0") {
+  const job = new CronJob(
+    "0 30 20 * * *", // cronTime s m h dom mon dow
+    sendInvoicesByEmail, // onTick
+    null, // onComplete
+    trueStringToBoolean(process.env.ENABLE_JOBS), // start
+    "America/Argentina/Buenos_Aires" // timeZone
+  );
+}
