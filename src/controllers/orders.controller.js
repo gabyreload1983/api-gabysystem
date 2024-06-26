@@ -2,7 +2,7 @@ import logger from "../logger/logger.js";
 import * as ordersService from "../services/orders.service.js";
 import * as customersServices from "../services/customers.service.js";
 
-import { incompleteValues } from "../validators/validator.js";
+import { incompleteValues, isValidOrder } from "../validators/validator.js";
 
 export const getOrders = async (req, res) => {
   try {
@@ -409,7 +409,7 @@ export const updateCustomer = async (req, res) => {
 export const create = async (req, res) => {
   try {
     const { order } = req.body;
-    if (!order) {
+    if (!order || !isValidOrder(order)) {
       return res
         .status(400)
         .send({ status: "error", message: "Incomplete values" });
