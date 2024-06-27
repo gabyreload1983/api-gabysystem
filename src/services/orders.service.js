@@ -397,3 +397,8 @@ export const create = async (order) => {
     );
   }
 };
+
+export const createPdf = async ({ order, user }) => {
+  const resultPdf = buildOrderPdf(order, user, moment());
+  return resultPdf.fileName;
+};
