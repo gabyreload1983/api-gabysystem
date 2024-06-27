@@ -25,6 +25,8 @@ router.get(
 
 router.get("/customer/:code", ordersController.getOrdersByCustomer);
 
+router.get("/pdf/:nrocompro", ordersController.getPdf);
+
 router.post("/", ordersController.create);
 
 router.put(
