@@ -9,7 +9,7 @@ import {
   getIvaPercentage,
   getSalerName,
 } from "../utils.js";
-import { API_INFO } from "../config/info.js";
+import { API_INFO, LEYEND_ORDER } from "../config/info.js";
 
 export const buildOrderPdf = (order, user, date) => {
   const year = moment(date).format("YYYY");
@@ -45,6 +45,107 @@ export const buildOrderPdf = (order, user, date) => {
   }
   doc.fontSize(12).text(`${year} - GSystem - V${API_INFO.version}`, 210, 730);
   doc.fontSize(12).text(`(Developed) => Gabriel Godoy  `, 200, 750);
+
+  doc.pipe(fs.createWriteStream(pdfPath));
+  doc.end();
+
+  return { pdfPath, fileName };
+};
+export const buildOrderPDF = (order, user) => {
+  const year = moment().format("YYYY");
+  const now = moment().format("DD-MM-YYYY HH:mm");
+  const fileName = `${order.nrocompro}.pdf`;
+  const pdfPath = `${__dirname}/public/pdfHistory/${fileName}`;
+
+  const doc = new PDFDocument({ size: "A4" });
+
+  doc.image(`${__dirname}/public/images/logo2.png`, 250, 20, {
+    width: 50,
+  });
+
+  doc.fontSize(14).text(`ORDEN: ${order.nrocompro}`, 340, 40);
+  doc.fontSize(10).text(`FECHA: ${now}`, 340, 60);
+  doc
+    .fontSize(10)
+    .text(`USUARIO: ${user.first_name} ${user.last_name}`, 340, 80);
+  if (order.tecnico)
+    doc.fontSize(10).text(`TECNICO: ${order.tecnico}`, 340, 100);
+
+  doc.fontSize(14).text(`${order.nombre}`, 50, 40);
+  doc.fontSize(10).text(`TELEFONO: ${order.telefono || ""}`, 50, 60);
+  doc.fontSize(10).text(`MAIL: ${order.mail || ""}`, 50, 75);
+
+  doc.fontSize(14).text(`${order.descart}`, 50, 120);
+  doc.fontSize(12).text(`ACCESORIOS: ${order.accesorios}`, 50, 140);
+  doc.fontSize(12).text(`FALLA:`, 50, 155);
+  doc.fontSize(8).text(`${order.falla}`, 50, 165);
+
+  doc.moveTo(40, 240).lineTo(550, 240).stroke();
+  if (order.products.length) {
+    doc.fontSize(14).text("ARTICULOS", 50, 230);
+    let position = 240;
+    for (let product of order.products) {
+      doc
+        .fontSize(10)
+        .text(
+          `${product.codigo} - ${product.descrip} - ${product.serie}`,
+          70,
+          (position += 20)
+        );
+    }
+  }
+  doc.fontSize(12).text(`Sinapsis SRL`, 250, 730);
+  doc.fontSize(12).text(`${year} - GSystem - V${API_INFO.version}`, 210, 750);
+
+  doc.pipe(fs.createWriteStream(pdfPath));
+  doc.end();
+
+  return { pdfPath, fileName };
+};
+export const buildOrderCustomerPDF = (order, user) => {
+  const year = moment().format("YYYY");
+  const now = moment().format("DD-MM-YYYY HH:mm");
+  const fileName = `${order.nrocompro}.pdf`;
+  const pdfPath = `${__dirname}/public/pdfHistory/${fileName}`;
+
+  const doc = new PDFDocument({ size: "A4" });
+
+  doc.fontSize(14).text(`SINAPSIS SRL`, 50, 40);
+  doc.image(`${__dirname}/public/images/logo2.png`, 250, 30, {
+    width: 30,
+  });
+  doc.fontSize(10).text(`AV San Martin 2144`, 50, 65);
+  doc.fontSize(10).text(`3476-43122 / 3476-309819`, 50, 77);
+  doc.fontSize(10).text(`info@sinapsis.com.ar`, 50, 89);
+  doc.fontSize(10).text(`Alias Bancario: sinapsisbbva`, 50, 101);
+
+  doc.fontSize(14).text(`ORDEN: ${order.nrocompro}`, 340, 40);
+  doc.fontSize(10).text(`FECHA: ${now}`, 340, 60);
+  doc
+    .fontSize(10)
+    .text(`USUARIO: ${user.first_name} ${user.last_name}`, 340, 75);
+
+  // doc.fontSize(14).text(`${order.nombre}`, 50, 40);
+  // doc.fontSize(10).text(`TELEFONO: ${order.telefono || ""}`, 50, 60);
+  // doc.fontSize(10).text(`MAIL: ${order.mail || ""}`, 50, 75);
+
+  doc.moveTo(40, 120).lineTo(550, 120).stroke();
+
+  // doc.fontSize(14).text(`ARTICULO: ${order.descart.toUpperCase()}`, 50, 130);
+  // doc.fontSize(12).text(`ACCESORIOS: ${order.accesorios}`, 50, 150);
+  // doc.fontSize(12).text(`FALLA:`, 50, 165);
+  // doc.fontSize(10).text(`${order.falla}`, 50, 180);
+
+  doc.fontSize(10).text(`FIRMA:`, 50, 400);
+  doc.moveTo(140, 410).lineTo(300, 410).stroke();
+  doc.fontSize(10).text(`ACLARACION:`, 50, 440);
+  doc.moveTo(140, 450).lineTo(300, 450).stroke();
+  doc.fontSize(10).text(`DNI:`, 50, 480);
+  doc.moveTo(140, 490).lineTo(300, 490).stroke();
+
+  doc.fontSize(8).text(LEYEND_ORDER, 40, 660);
+  doc.fontSize(12).text(`Sinapsis SRL`, 250, 730);
+  doc.fontSize(12).text(`${year} - GSystem - V${API_INFO.version}`, 210, 750);
 
   doc.pipe(fs.createWriteStream(pdfPath));
   doc.end();

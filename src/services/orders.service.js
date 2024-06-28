@@ -19,7 +19,7 @@ import {
 import { nanoid } from "nanoid";
 import Users from "./../dao/mongoManagers/Users.js";
 import UsersRepository from "./../repository/Users.repository.js";
-import { buildOrderPdf } from "../pdfKit/pdfKit.js";
+import { buildOrderCustomerPDF, buildOrderPdf } from "../pdfKit/pdfKit.js";
 import ProductsInOrder from "./../dao/mongoManagers/ProductsInOrder.js";
 import ProductsInOrderRepository from "../repository/ProductsInOrder.repository.js";
 import StatisticsTechnicalDto from "../dao/DTOs/StatisticsTechnical.dto.js";
@@ -399,6 +399,6 @@ export const create = async (order) => {
 };
 
 export const createPdf = async ({ order, user }) => {
-  const resultPdf = buildOrderPdf(order, user, moment());
+  const resultPdf = buildOrderCustomerPDF(order, user);
   return resultPdf.fileName;
 };
