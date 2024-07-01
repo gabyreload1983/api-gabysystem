@@ -416,7 +416,7 @@ export const create = async (req, res) => {
     }
 
     order.saler = req.user.code_technical;
-    const result = await ordersService.create(order);
+    const result = await ordersService.create({ order, user: req.user });
 
     if (!result)
       return res

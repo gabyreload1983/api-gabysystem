@@ -11,102 +11,14 @@ import {
 } from "../utils.js";
 import { API_INFO, LEYEND_ORDER } from "../config/info.js";
 
-export const buildOrderPdf = (order, user, date) => {
-  const year = moment(date).format("YYYY");
-  const now = moment().format("DD-MM-YYYY HH:mm");
-  const fileName = `${order.nrocompro}.pdf`;
-  const pdfPath = `${__dirname}/public/pdfHistory/${fileName}`;
-
-  const doc = new PDFDocument({ size: "A4" });
-
-  doc.image(`${__dirname}/public/images/logo2.png`, 50, 30, {
-    width: 100,
-  });
-
-  doc.fontSize(10).text(`FECHA: ${now}`, 350, 50);
-  doc
-    .fontSize(10)
-    .text(`RESPONSABLE: ${user.first_name} ${user.last_name}`, 350, 70);
-  doc.fontSize(10).text(`TECNICO: ${order.tecnico}`, 350, 90);
-
-  doc.fontSize(14).text(`ORDEN: ${order.nrocompro}`, 50, 140);
-  doc.fontSize(14).text(`CLIENTE: ${order.nombre}`, 50, 160);
-  doc.moveTo(40, 200).lineTo(550, 200).stroke();
-  doc.fontSize(14).text("ARTICULOS", 50, 230);
-  let position = 240;
-  for (let product of order.products) {
-    doc
-      .fontSize(10)
-      .text(
-        `${product.codigo} - ${product.descrip} - ${product.serie}`,
-        70,
-        (position += 20)
-      );
-  }
-  doc.fontSize(12).text(`${year} - GSystem - V${API_INFO.version}`, 210, 730);
-  doc.fontSize(12).text(`(Developed) => Gabriel Godoy  `, 200, 750);
-
-  doc.pipe(fs.createWriteStream(pdfPath));
-  doc.end();
-
-  return { pdfPath, fileName };
-};
-export const buildOrderPDF = (order, user) => {
+export const buildOrderPDF = (order, user, customer = false) => {
   const year = moment().format("YYYY");
-  const now = moment().format("DD-MM-YYYY HH:mm");
+  const dateIn = moment(order.ingresado).format("DD-MM-YYYY HH:mm");
   const fileName = `${order.nrocompro}.pdf`;
-  const pdfPath = `${__dirname}/public/pdfHistory/${fileName}`;
-
-  const doc = new PDFDocument({ size: "A4" });
-
-  doc.image(`${__dirname}/public/images/logo2.png`, 250, 20, {
-    width: 50,
-  });
-
-  doc.fontSize(14).text(`ORDEN: ${order.nrocompro}`, 340, 40);
-  doc.fontSize(10).text(`FECHA: ${now}`, 340, 60);
-  doc
-    .fontSize(10)
-    .text(`USUARIO: ${user.first_name} ${user.last_name}`, 340, 80);
-  if (order.tecnico)
-    doc.fontSize(10).text(`TECNICO: ${order.tecnico}`, 340, 100);
-
-  doc.fontSize(14).text(`${order.nombre}`, 50, 40);
-  doc.fontSize(10).text(`TELEFONO: ${order.telefono || ""}`, 50, 60);
-  doc.fontSize(10).text(`MAIL: ${order.mail || ""}`, 50, 75);
-
-  doc.fontSize(14).text(`${order.descart}`, 50, 120);
-  doc.fontSize(12).text(`ACCESORIOS: ${order.accesorios}`, 50, 140);
-  doc.fontSize(12).text(`FALLA:`, 50, 155);
-  doc.fontSize(8).text(`${order.falla}`, 50, 165);
-
-  doc.moveTo(40, 240).lineTo(550, 240).stroke();
-  if (order.products.length) {
-    doc.fontSize(14).text("ARTICULOS", 50, 230);
-    let position = 240;
-    for (let product of order.products) {
-      doc
-        .fontSize(10)
-        .text(
-          `${product.codigo} - ${product.descrip} - ${product.serie}`,
-          70,
-          (position += 20)
-        );
-    }
+  let pdfPath = `${__dirname}/public/pdfHistory/orders/${fileName}`;
+  if (customer) {
+    pdfPath = `${__dirname}/public/pdfHistory/customers/${fileName}`;
   }
-  doc.fontSize(12).text(`Sinapsis SRL`, 250, 730);
-  doc.fontSize(12).text(`${year} - GSystem - V${API_INFO.version}`, 210, 750);
-
-  doc.pipe(fs.createWriteStream(pdfPath));
-  doc.end();
-
-  return { pdfPath, fileName };
-};
-export const buildOrderCustomerPDF = (order, user) => {
-  const year = moment().format("YYYY");
-  const now = moment().format("DD-MM-YYYY HH:mm");
-  const fileName = `${order.nrocompro}.pdf`;
-  const pdfPath = `${__dirname}/public/pdfHistory/${fileName}`;
 
   const doc = new PDFDocument({ size: "A4" });
 
@@ -120,30 +32,56 @@ export const buildOrderCustomerPDF = (order, user) => {
   doc.fontSize(10).text(`Alias Bancario: sinapsisbbva`, 50, 101);
 
   doc.fontSize(14).text(`ORDEN: ${order.nrocompro}`, 340, 40);
-  doc.fontSize(10).text(`FECHA: ${now}`, 340, 60);
+  doc.fontSize(10).text(`FECHA: ${dateIn}`, 340, 60);
   doc
     .fontSize(10)
     .text(`USUARIO: ${user.first_name} ${user.last_name}`, 340, 75);
-
-  // doc.fontSize(14).text(`${order.nombre}`, 50, 40);
-  // doc.fontSize(10).text(`TELEFONO: ${order.telefono || ""}`, 50, 60);
-  // doc.fontSize(10).text(`MAIL: ${order.mail || ""}`, 50, 75);
+  doc.fontSize(10).text(`PRIORIDAD: ${order.prioridad}`, 340, 90);
+  if (order.tecnico) {
+    doc.fontSize(10).text(`TECNICO: ${order.tecnico}`, 340, 105);
+  }
 
   doc.moveTo(40, 120).lineTo(550, 120).stroke();
 
-  // doc.fontSize(14).text(`ARTICULO: ${order.descart.toUpperCase()}`, 50, 130);
-  // doc.fontSize(12).text(`ACCESORIOS: ${order.accesorios}`, 50, 150);
-  // doc.fontSize(12).text(`FALLA:`, 50, 165);
-  // doc.fontSize(10).text(`${order.falla}`, 50, 180);
+  doc.fontSize(14).text(`${order.nombre}`, 50, 130);
+  doc.fontSize(10).text(`TELEFONO: ${order.telefono || ""}`, 50, 155);
+  doc.fontSize(10).text(`MAIL: ${order.mail || ""}`, 50, 170);
 
-  doc.fontSize(10).text(`FIRMA:`, 50, 400);
-  doc.moveTo(140, 410).lineTo(300, 410).stroke();
-  doc.fontSize(10).text(`ACLARACION:`, 50, 440);
-  doc.moveTo(140, 450).lineTo(300, 450).stroke();
-  doc.fontSize(10).text(`DNI:`, 50, 480);
-  doc.moveTo(140, 490).lineTo(300, 490).stroke();
+  doc.moveTo(40, 190).lineTo(550, 190).stroke();
 
-  doc.fontSize(8).text(LEYEND_ORDER, 40, 660);
+  doc.fontSize(14).text(`ARTICULO: ${order.descart.toUpperCase()}`, 50, 200);
+  doc.fontSize(12).text(`ACCESORIOS: ${order.accesorios}`, 50, 220);
+  if (customer) {
+    doc.fontSize(12).text(`FALLA:`, 50, 235);
+    doc.fontSize(10).text(`${order.falla}`, 50, 250);
+  }
+
+  if (!customer) {
+    doc.moveTo(40, 250).lineTo(550, 250).stroke();
+    doc.fontSize(12).text("PODUCTOS EN ORDEN", 50, 260);
+    doc.fontSize(10).text("CODIGO", 50, 280);
+    doc.fontSize(10).text("DESCRIPCION", 100, 280);
+    doc.fontSize(10).text("SERIE", 400, 280);
+    let positionX = 295;
+    let positionY = 50;
+    for (let product of order.products) {
+      doc.fontSize(10).text(`${product.codigo}`, positionY, positionX);
+      doc.fontSize(10).text(`${product.descrip}`, positionY + 50, positionX);
+      doc.fontSize(10).text(`${product.serie}`, positionY + 350, positionX);
+      positionX += 20;
+    }
+  }
+
+  if (customer) {
+    doc.fontSize(10).text(`FIRMA:`, 50, 540);
+    doc.moveTo(140, 550).lineTo(300, 550).stroke();
+    doc.fontSize(10).text(`ACLARACION:`, 50, 580);
+    doc.moveTo(140, 590).lineTo(300, 590).stroke();
+    doc.fontSize(10).text(`DNI:`, 50, 620);
+    doc.moveTo(140, 630).lineTo(300, 630).stroke();
+
+    doc.fontSize(8).text(LEYEND_ORDER, 40, 660);
+  }
   doc.fontSize(12).text(`Sinapsis SRL`, 250, 730);
   doc.fontSize(12).text(`${year} - GSystem - V${API_INFO.version}`, 210, 750);
 
