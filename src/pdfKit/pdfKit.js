@@ -4,6 +4,7 @@ import PDFDocument from "pdfkit";
 import bwipjs from "bwip-js";
 import {
   __dirname,
+  decodeOrderTier,
   getCodeInvoice,
   getIvaCondition,
   getIvaPercentage,
@@ -14,10 +15,10 @@ import { API_INFO, LEYEND_ORDER } from "../config/info.js";
 export const buildOrderPDF = (order, user, customer = false) => {
   const year = moment().format("YYYY");
   const dateIn = moment(order.ingresado).format("DD-MM-YYYY HH:mm");
-  const fileName = `${order.nrocompro}.pdf`;
-  let pdfPath = `${__dirname}/public/pdfHistory/orders/${fileName}`;
+  const fileName = `${order.nrocompro}`;
+  let pdfPath = `${__dirname}/public/pdfHistory/orders/${fileName}.pdf`;
   if (customer) {
-    pdfPath = `${__dirname}/public/pdfHistory/customers/${fileName}`;
+    pdfPath = `${__dirname}/public/pdfHistory/customers/${fileName}.pdf`;
   }
 
   const doc = new PDFDocument({ size: "A4" });
@@ -29,23 +30,26 @@ export const buildOrderPDF = (order, user, customer = false) => {
   doc.fontSize(10).text(`AV San Martin 2144`, 50, 65);
   doc.fontSize(10).text(`3476-43122 / 3476-309819`, 50, 77);
   doc.fontSize(10).text(`info@sinapsis.com.ar`, 50, 89);
-  doc.fontSize(10).text(`Alias Bancario: sinapsisbbva`, 50, 101);
+  doc.fontSize(10).text(`Alias Banco BBVA: sinapsisbbva`, 50, 101);
 
   doc.fontSize(14).text(`ORDEN: ${order.nrocompro}`, 340, 40);
   doc.fontSize(10).text(`FECHA: ${dateIn}`, 340, 60);
   doc
     .fontSize(10)
     .text(`USUARIO: ${user.first_name} ${user.last_name}`, 340, 75);
-  doc.fontSize(10).text(`PRIORIDAD: ${order.prioridad}`, 340, 90);
-  if (order.tecnico) {
+  doc
+    .fontSize(10)
+    .text(`PRIORIDAD: ${decodeOrderTier(order.prioridad)}`, 340, 90);
+  if (order.tecnico && !customer) {
     doc.fontSize(10).text(`TECNICO: ${order.tecnico}`, 340, 105);
   }
 
   doc.moveTo(40, 120).lineTo(550, 120).stroke();
 
-  doc.fontSize(14).text(`${order.nombre}`, 50, 130);
-  doc.fontSize(10).text(`TELEFONO: ${order.telefono || ""}`, 50, 155);
-  doc.fontSize(10).text(`MAIL: ${order.mail || ""}`, 50, 170);
+  doc.fontSize(14).text(`${order.codigo} - ${order.nombre}`, 50, 130);
+  doc.fontSize(10).text(`DIRECCION: ${order.direccion}`, 50, 150);
+  doc.fontSize(10).text(`TELEFONO: ${order.telefono || ""}`, 340, 150);
+  doc.fontSize(10).text(`MAIL: ${order.mail || ""}`, 340, 165);
 
   doc.moveTo(40, 190).lineTo(550, 190).stroke();
 
@@ -73,14 +77,16 @@ export const buildOrderPDF = (order, user, customer = false) => {
   }
 
   if (customer) {
-    doc.fontSize(10).text(`FIRMA:`, 50, 540);
-    doc.moveTo(140, 550).lineTo(300, 550).stroke();
-    doc.fontSize(10).text(`ACLARACION:`, 50, 580);
-    doc.moveTo(140, 590).lineTo(300, 590).stroke();
-    doc.fontSize(10).text(`DNI:`, 50, 620);
-    doc.moveTo(140, 630).lineTo(300, 630).stroke();
+    doc.moveTo(40, 450).lineTo(550, 450).stroke();
+    doc.fontSize(8).text(LEYEND_ORDER, 40, 460);
+    doc.moveTo(40, 530).lineTo(550, 530).stroke();
 
-    doc.fontSize(8).text(LEYEND_ORDER, 40, 660);
+    doc.fontSize(10).text(`FIRMA:`, 50, 580);
+    doc.moveTo(140, 590).lineTo(300, 590).stroke();
+    doc.fontSize(10).text(`ACLARACION:`, 50, 620);
+    doc.moveTo(140, 630).lineTo(300, 630).stroke();
+    doc.fontSize(10).text(`DNI:`, 50, 660);
+    doc.moveTo(140, 670).lineTo(300, 670).stroke();
   }
   doc.fontSize(12).text(`Sinapsis SRL`, 250, 730);
   doc.fontSize(12).text(`${year} - GSystem - V${API_INFO.version}`, 210, 750);

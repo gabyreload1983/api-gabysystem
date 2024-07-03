@@ -15,6 +15,7 @@ import {
   formatProduct,
   getTotalOrder,
   getNextNrocompro,
+  wait,
 } from "../utils.js";
 import { nanoid } from "nanoid";
 import Users from "./../dao/mongoManagers/Users.js";
@@ -400,7 +401,17 @@ export const create = async ({ order, user }) => {
   }
 };
 
-export const createPdf = async ({ order, user }) => {
-  const resultPdf = buildOrderPDF(order, user);
-  return resultPdf;
+export const createPdf = async ({ order, user, customer = false }) => {
+  const result = buildOrderPDF(order, user, customer);
+  if (customer) {
+    await sendMail(
+      "gabyreload@gmail.com",
+      "INGRESO ORDEN DE REPARACION",
+      "",
+      "",
+      [{ path: result.pdfPath }]
+    );
+  }
+  await wait(3000);
+  return result;
 };

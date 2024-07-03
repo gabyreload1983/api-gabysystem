@@ -132,3 +132,20 @@ export const getPackageVersion = async () => {
     }
   }
 };
+
+export const decodeOrderTier = (tier) => {
+  if (tier === 0) return "NORMAL";
+  if (tier === 1) return "1";
+  if (tier === 2) return "2";
+  if (tier === 3) return "ARMADOS";
+  if (tier === 4) return "TURNOS/PRIORIDADES";
+  if (tier === 5) return "GARANTIA REPARACION";
+  if (tier === 6) return "6";
+  if (tier === 7) return "7";
+  if (tier === 8) return "BOXES";
+  if (tier === 9) return "ABONADOS";
+  if (tier === 10) return "GARANTIA COMPRA";
+};
+
+export const wait = async (delay) =>
+  await new Promise((resolve) => setTimeout(resolve, delay));

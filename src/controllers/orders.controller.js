@@ -434,17 +434,17 @@ export const create = async (req, res) => {
   }
 };
 
-export const getPdf = async (req, res) => {
+export const createPdf = async (req, res) => {
   try {
-    const { nrocompro } = req.params;
     const { user } = req;
+    const { nrocompro, customer } = req.body;
     const order = await ordersService.getOrder(nrocompro);
     if (!order)
       return res
         .status(404)
         .send({ status: "error", message: "No se encontro orden" });
 
-    const response = await ordersService.createPdf({ order, user });
+    const response = await ordersService.createPdf({ order, user, customer });
     if (!response)
       return res
         .status(400)
