@@ -401,17 +401,5 @@ export const create = async ({ order, user }) => {
   }
 };
 
-export const createPdf = async ({ order, user, customer = false }) => {
-  const result = buildOrderPDF(order, user, customer);
-  if (customer) {
-    await sendMail(
-      "gabyreload@gmail.com",
-      "INGRESO ORDEN DE REPARACION",
-      "",
-      "",
-      [{ path: result.pdfPath }]
-    );
-  }
-  await wait(3000);
-  return result;
-};
+export const createPdf = async ({ order, user, customer = false }) =>
+  buildOrderPDF(order, user, customer);
