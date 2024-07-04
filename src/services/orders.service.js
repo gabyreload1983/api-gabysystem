@@ -15,11 +15,12 @@ import {
   formatProduct,
   getTotalOrder,
   getNextNrocompro,
+  wait,
 } from "../utils.js";
 import { nanoid } from "nanoid";
 import Users from "./../dao/mongoManagers/Users.js";
 import UsersRepository from "./../repository/Users.repository.js";
-import { buildOrderPdf } from "../pdfKit/pdfKit.js";
+import { buildOrderPDF } from "../pdfKit/pdfKit.js";
 import ProductsInOrder from "./../dao/mongoManagers/ProductsInOrder.js";
 import ProductsInOrderRepository from "../repository/ProductsInOrder.repository.js";
 import StatisticsTechnicalDto from "../dao/DTOs/StatisticsTechnical.dto.js";
@@ -283,7 +284,7 @@ export const handleProductsInOrder = async (order, user) => {
     );
   }
 
-  const resultPdf = buildOrderPdf(order, user, now);
+  const resultPdf = buildOrderPDF(order, user);
   fileName = resultPdf.fileName;
 
   await sendMail(
@@ -360,7 +361,7 @@ export const createOrdenMongo = async (order) => {
   return orderMongo;
 };
 
-export const create = async (order) => {
+export const create = async ({ order, user }) => {
   const SALE_NOTE_POSITION = process.env.SALE_NOTE_POSITION;
   const lastNrocompro = await orderRepository.getLastOrderNumber(
     process.env.ORDER_POSITION
@@ -389,16 +390,16 @@ export const create = async (order) => {
     );
 
     //save order in mongo
-    return await orderRepositoryMongo.create(
+    await orderRepositoryMongo.create(
       order,
       saleNote,
       SALE_NOTE_POSITION,
       saleNoteNumber
     );
+
+    return buildOrderPDF(order, user, true);
   }
 };
 
-export const createPdf = async ({ order, user }) => {
-  const resultPdf = buildOrderPdf(order, user, moment());
-  return resultPdf.fileName;
-};
+export const createPdf = async ({ order, user, customer = false }) =>
+  buildOrderPDF(order, user, customer);

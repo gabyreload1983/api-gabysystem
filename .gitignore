@@ -6,7 +6,8 @@ package-lock.json
 .env.development
 .env.testing
 /src/logger/logs
-/src/public/pdfHistory
+/src/public/pdfHistory/customers
+/src/public/pdfHistory/orders
 /src/public/pdfInvoices
 gabysystem-api.yml
 gabysystem-api-prod.yml
