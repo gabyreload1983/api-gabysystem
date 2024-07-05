@@ -1,4 +1,5 @@
 import OrderUrbanoDto from "../dao/DTOs/OrderUrbano.dto.js";
+import OrderUrbanoUpdateDto from "../dao/DTOs/OrderUrbanoUpdate.dto.js";
 
 export default class OrdersRepository {
   constructor(dao) {
@@ -114,4 +115,9 @@ export default class OrdersRepository {
 
   create = async (newOrder) =>
     await this.dao.create(new OrderUrbanoDto(newOrder));
+
+  updateOrder = async ({ nrocompro, order }) => {
+    const orderDto = new OrderUrbanoUpdateDto(order);
+    return await this.dao.updateOrder(nrocompro, orderDto);
+  };
 }

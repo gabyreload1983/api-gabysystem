@@ -434,6 +434,41 @@ export const create = async (req, res) => {
   }
 };
 
+export const updateOrder = async (req, res) => {
+  try {
+    const { nrocompro } = req.params;
+    const { order } = req.body;
+
+    if (!order) {
+      return res
+        .status(400)
+        .send({ status: "error", message: "Incomplete values" });
+    }
+
+    const orderExists = await ordersService.getOrder(nrocompro);
+    if (!orderExists)
+      return res
+        .status(404)
+        .send({ status: "error", message: "Order not found" });
+
+    const result = await ordersService.updateOrder({ nrocompro, order });
+
+    if (!result)
+      return res
+        .status(404)
+        .send({ status: "error", message: "Error Order update" });
+
+    res.send({
+      status: "success",
+      message: "Order updated successfully",
+      payload: result,
+    });
+  } catch (error) {
+    logger.error(error.message);
+    res.status(500).send(error);
+  }
+};
+
 export const createPdf = async (req, res) => {
   try {
     const { user } = req;
