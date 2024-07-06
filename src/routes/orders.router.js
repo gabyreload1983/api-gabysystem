@@ -29,6 +29,8 @@ router.post("/pdf", ordersController.createPdf);
 
 router.post("/", ordersController.create);
 
+router.patch("/:nrocompro", ordersController.updateOrder);
+
 router.put(
   "/take",
   authorization("technical", "premium"),

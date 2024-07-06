@@ -401,5 +401,8 @@ export const create = async ({ order, user }) => {
   }
 };
 
+export const updateOrder = async ({ nrocompro, order }) =>
+  await orderRepository.updateOrder({ nrocompro, order });
+
 export const createPdf = async ({ order, user, customer = false }) =>
   buildOrderPDF(order, user, customer);

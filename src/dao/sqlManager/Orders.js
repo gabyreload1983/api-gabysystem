@@ -250,4 +250,24 @@ export default class Orders {
         newOrder.prioridad,
       ]
     );
+
+  updateOrder = async (nrocompro, order) =>
+    await sendQueryUrbano(
+      `
+    UPDATE trabajos 
+    SET codigo = ?, nombre = ?, codiart = ?, descart = ?, 
+    accesorios = ?, falla = ?, serie = ?, prioridad = ?
+    WHERE nrocompro = ?`,
+      [
+        order.codigo,
+        order.nombre,
+        order.codiart,
+        order.descart,
+        order.accesorios,
+        order.falla,
+        order.serie,
+        order.prioridad,
+        nrocompro,
+      ]
+    );
 }
