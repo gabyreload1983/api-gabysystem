@@ -495,3 +495,34 @@ export const createPdf = async (req, res) => {
     res.status(500).send(error);
   }
 };
+
+export const sendCustomerPdf = async (req, res) => {
+  try {
+    const { user } = req;
+    const { nrocompro } = req.body;
+    const order = await ordersService.getOrder(nrocompro);
+    if (!order)
+      return res
+        .status(404)
+        .send({ status: "error", message: "Order not found" });
+
+    const response = await ordersService.sendCustomerPdf({
+      order,
+      user,
+    });
+    if (!response)
+      return res.status(400).send({
+        status: "error",
+        message: "Error sending pdf by whatsapp. Check phone number",
+      });
+
+    res.send({
+      status: "success",
+      message: "PDF sending successfully",
+      payload: response,
+    });
+  } catch (error) {
+    logger.error(error.message);
+    res.status(500).send(error);
+  }
+};

@@ -15,7 +15,7 @@ import {
   formatProduct,
   getTotalOrder,
   getNextNrocompro,
-  wait,
+  formatWhatsappNumber,
 } from "../utils.js";
 import { nanoid } from "nanoid";
 import Users from "./../dao/mongoManagers/Users.js";
@@ -26,6 +26,8 @@ import ProductsInOrderRepository from "../repository/ProductsInOrder.repository.
 import StatisticsTechnicalDto from "../dao/DTOs/StatisticsTechnical.dto.js";
 import OrdersMongo from "../dao/mongoManagers/Orders.js";
 import OrdersMongoRepository from "../repository/OrdersMongo.repository.js";
+import { sendOrder } from "../whatsapp/sendWhatsapp.js";
+import { isValidPhoneNumber } from "../validators/validator.js";
 
 const orderMongoManager = new OrdersMongo();
 const orderRepositoryMongo = new OrdersMongoRepository(orderMongoManager);
@@ -410,3 +412,23 @@ export const updateOrder = async ({ nrocompro, order }) =>
 
 export const createPdf = async ({ order, user, customer = false }) =>
   buildOrderPDF(order, user, customer);
+
+export const sendCustomerPdf = async ({ order, user }) => {
+  if (!order.telefono || !isValidPhoneNumber(order.telefono)) {
+    return null;
+  }
+
+  // const nrocompro = order.nrocompro;
+  const nrocompro = "ORX001100018914";
+  const recipient = formatWhatsappNumber(order.telefono);
+
+  const response = await fetch(
+    `https://sinapsis.com.ar/resources/serviceworks/${nrocompro}.pdf`
+  );
+  if (response?.status === 200) {
+    const response = await sendOrder({ nrocompro, recipient });
+    return response.status;
+  }
+
+  return false;
+};

@@ -14,12 +14,7 @@ export const sendWhatsapp = (data) => {
   return axios(config);
 };
 
-export const getTextMessageInput = (
-  recipient,
-  templateName,
-  languageCode,
-  components
-) => {
+export const getDataMessageTemplate = (recipient, templateName, components) => {
   return JSON.stringify({
     messaging_product: "whatsapp",
     preview_url: false,
@@ -29,39 +24,58 @@ export const getTextMessageInput = (
     template: {
       name: templateName,
       language: {
-        code: languageCode,
+        code: "es_AR",
       },
       components: components,
     },
   });
 };
 
-export async function sendPdfToWhatsapp(pdfBase64, recipientNumber) {
-  const data = {
-    messaging_product: "whatsapp",
-    to: recipientNumber,
-    type: "document",
-    document: {
-      filename: "document.pdf",
-      document: pdfBase64,
-    },
-  };
+export const getComponentWithLink = (text, link) => [
+  {
+    type: "header",
+    parameters: [
+      {
+        type: "document",
+        document: {
+          link: link,
+          filename: text,
+        },
+      },
+    ],
+  },
+  {
+    type: "body",
+    parameters: [
+      {
+        type: "text",
+        text: text,
+      },
+    ],
+  },
+];
 
-  const config = {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${whatsappToken}`,
-    },
-  };
+export const getComponentTemplate = (text) => [
+  {
+    type: "body",
+    parameters: [
+      {
+        type: "text",
+        text: text,
+      },
+    ],
+  },
+];
 
-  try {
-    const response = await axios.post(
-      "https://graph.facebook.com/v13.0/your_whatsapp_business_account/messages",
-      data,
-      config
-    );
-    return response.data;
-  } catch (error) {
-    console.log(error);
-  }
-}
+export const sendOrder = async ({ nrocompro, recipient }) => {
+  const link = `https://sinapsis.com.ar/resources/serviceworks/${nrocompro}.pdf`;
+  const component = getComponentWithLink(nrocompro, link);
+  const data = getDataMessageTemplate(recipient, "enviar_orden", component);
+  return await sendWhatsapp(data);
+};
+
+export const sendFinishOrder = async ({ nrocompro, recipient }) => {
+  const component = getComponentTemplate(nrocompro);
+  const data = getDataMessageTemplate(recipient, "orden_finalizada", component);
+  return await sendWhatsapp(data);
+};
