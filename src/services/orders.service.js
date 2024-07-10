@@ -16,6 +16,7 @@ import {
   getTotalOrder,
   getNextNrocompro,
   formatWhatsappNumber,
+  __dirname,
 } from "../utils.js";
 import { nanoid } from "nanoid";
 import Users from "./../dao/mongoManagers/Users.js";
@@ -28,6 +29,7 @@ import OrdersMongo from "../dao/mongoManagers/Orders.js";
 import OrdersMongoRepository from "../repository/OrdersMongo.repository.js";
 import { sendOrder } from "../whatsapp/sendWhatsapp.js";
 import { isValidPhoneNumber } from "../validators/validator.js";
+import { sendPdfToSinapsisWeb } from "../ftpService/FtpService.js";
 
 const orderMongoManager = new OrdersMongo();
 const orderRepositoryMongo = new OrdersMongoRepository(orderMongoManager);
@@ -418,17 +420,20 @@ export const sendCustomerPdf = async ({ order, user }) => {
     return null;
   }
 
-  // const nrocompro = order.nrocompro;
-  const nrocompro = "ORX001100018914";
+  // const nrocompro = "ORX001100018914";
+  const nrocompro = order.nrocompro;
+  const pathPdf = `${__dirname}/public/pdfHistory/customers/${nrocompro}.pdf`;
   const recipient = formatWhatsappNumber(order.telefono);
 
-  const response = await fetch(
+  const responseWeb = await fetch(
     `https://sinapsis.com.ar/resources/serviceworks/${nrocompro}.pdf`
   );
-  if (response?.status === 200) {
-    const response = await sendOrder({ nrocompro, recipient });
-    return response.status;
+
+  if (responseWeb?.status !== 200) {
+    const responseFtp = sendPdfToSinapsisWeb({ path: pathPdf, nrocompro });
+    if (!responseFtp) return false;
   }
 
-  return false;
+  const response = await sendOrder({ nrocompro, recipient });
+  return response.status;
 };
