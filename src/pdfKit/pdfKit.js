@@ -11,15 +11,16 @@ import {
   getSalerName,
 } from "../utils.js";
 import { API_INFO, LEYEND_ORDER } from "../config/info.js";
+import * as usersService from "../services/users.service.js";
 
-export const buildOrderPDF = (order, user, customer = false) => {
+export const buildOrderPDF = async (order, user, customer = false) => {
   const year = moment().format("YYYY");
   const dateIn = moment(order.ingresado).format("DD-MM-YYYY HH:mm");
   const fileName = `${order.nrocompro}`;
-  let pdfPath = `${__dirname}/public/pdfHistory/orders/${fileName}.pdf`;
-  if (customer) {
-    pdfPath = `${__dirname}/public/pdfHistory/customers/${fileName}.pdf`;
-  }
+
+  const pdfPath = customer
+    ? `${__dirname}/public/pdfHistory/customers/${fileName}.pdf`
+    : `${__dirname}/public/pdfHistory/orders/${fileName}.pdf`;
 
   const doc = new PDFDocument({ size: "A4" });
 
@@ -34,9 +35,20 @@ export const buildOrderPDF = (order, user, customer = false) => {
 
   doc.fontSize(14).text(`ORDEN: ${order.nrocompro}`, 340, 40);
   doc.fontSize(10).text(`FECHA: ${dateIn}`, 340, 60);
-  doc
-    .fontSize(10)
-    .text(`USUARIO: ${user.first_name} ${user.last_name}`, 340, 75);
+  if (order.operador) {
+    const operador = await usersService.getByCode(order.operador);
+    if (operador) {
+      doc
+        .fontSize(10)
+        .text(`USUARIO: ${operador.first_name} ${operador.last_name}`, 340, 75);
+    } else {
+      doc.fontSize(10).text(`USUARIO: ${order.operador}`, 340, 75);
+    }
+  } else {
+    doc
+      .fontSize(10)
+      .text(`USUARIO: ${user.first_name} ${user.last_name}`, 340, 75);
+  }
   doc
     .fontSize(10)
     .text(`PRIORIDAD: ${decodeOrderTier(order.prioridad)}`, 340, 90);

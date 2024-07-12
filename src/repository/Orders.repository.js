@@ -28,6 +28,7 @@ export default class OrdersRepository {
   getInProgressByTechnical = async (code_technical) =>
     await this.dao.getInProgressByTechnical(code_technical.toUpperCase());
 
+  //TODO return a single object
   getOrder = async (nrocompro) => {
     const order = await this.dao.getById(nrocompro);
     return await this.#addingProductsInOrders(order);

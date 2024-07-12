@@ -288,7 +288,7 @@ export const handleProductsInOrder = async (order, user) => {
     );
   }
 
-  const resultPdf = buildOrderPDF(order, user);
+  const resultPdf = await buildOrderPDF(order, user);
   fileName = resultPdf.fileName;
 
   await sendMail(
@@ -310,6 +310,7 @@ export const handleProductsInOrder = async (order, user) => {
     pdfName: fileName,
     date: now,
   };
+  //TODO see to remove this line
   const result = await productsInOrderRepository.create(data);
 
   return { result: resultPdf, fileName };
@@ -406,30 +407,34 @@ export const create = async ({ order, user }) => {
     saleNoteNumber
   );
 
-  return buildOrderPDF(lastOrder, user, true);
+    return await buildOrderPDF(order, user, true);
+  }
 };
 
 export const updateOrder = async ({ nrocompro, order }) =>
   await orderRepository.updateOrder({ nrocompro, order });
 
 export const createPdf = async ({ order, user, customer = false }) =>
-  buildOrderPDF(order, user, customer);
+  await buildOrderPDF(order, user, customer);
 
 export const sendCustomerPdf = async ({ order, user }) => {
-  if (!order.telefono || !isValidPhoneNumber(order.telefono)) {
+  const responseCustomer = await customersRepository.getByCode(order.codigo);
+  const customer = responseCustomer[0];
+
+  if (!customer.telefono || !isValidPhoneNumber(customer.telefono)) {
     return null;
   }
+  const recipient = formatWhatsappNumber(customer.telefono);
 
-  // const nrocompro = "ORX001100018914";
   const nrocompro = order.nrocompro;
   const pathPdf = `${__dirname}/public/pdfHistory/customers/${nrocompro}.pdf`;
-  const recipient = formatWhatsappNumber(order.telefono);
 
   const responseWeb = await fetch(
     `https://sinapsis.com.ar/resources/serviceworks/${nrocompro}.pdf`
   );
 
   if (responseWeb?.status !== 200) {
+    await createPdf({ order, user, customer: true });
     const responseFtp = sendPdfToSinapsisWeb({ path: pathPdf, nrocompro });
     if (!responseFtp) return false;
   }
