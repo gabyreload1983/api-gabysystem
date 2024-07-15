@@ -362,43 +362,47 @@ export const createOrdenMongo = async (order) => {
 };
 
 export const create = async ({ order, user }) => {
+  const lastOrderNumber = await orderRepository.getLastOrderNumber();
+  if (!lastOrderNumber) return false;
+
+  const nextNrocompro = getNextNrocompro(lastOrderNumber);
+  const orderToCreate = { ...order, nrocompro: nextNrocompro };
+  const response = await orderRepository.create(orderToCreate);
+  if (!response) return false;
+
+  const lastOrder = await getOrder(nextNrocompro);
+  if (!lastOrder) return false;
+
+  await orderRepository.updateLastOrderNumber(lastOrderNumber + 1);
+
+  //TODO
+  // get from pto00xx table
+  //remove all arguments from getLastSaleNoteNumber and createSaleNote.
   const SALE_NOTE_POSITION = process.env.SALE_NOTE_POSITION;
-  const lastNrocompro = await orderRepository.getLastOrderNumber(
-    process.env.ORDER_POSITION
+  const lastSaleNoteNumber = await orderRepository.getLastSaleNoteNumber(
+    SALE_NOTE_POSITION
   );
-  if (!lastNrocompro) return false;
-  const nextNrocompro = getNextNrocompro(lastNrocompro);
 
-  const newOrder = { ...order, nrocompro: nextNrocompro };
+  const saleNoteNumber = lastSaleNoteNumber + 1;
+  const saleNote = getSaleNoteString(saleNoteNumber, SALE_NOTE_POSITION);
 
-  const response = await orderRepository.create(newOrder);
+  await orderRepository.createSaleNote(
+    lastOrder,
+    saleNote,
+    SALE_NOTE_POSITION,
+    saleNoteNumber
+  );
 
-  if (response) {
-    const order = await getOrder(nextNrocompro);
-    const lastSaleNoteNumber = await orderRepository.getLastSaleNoteNumber(
-      SALE_NOTE_POSITION
-    );
+  //TODO remove this, do not need save in mongo
+  //save order in mongo
+  await orderRepositoryMongo.create(
+    lastOrder,
+    saleNote,
+    SALE_NOTE_POSITION,
+    saleNoteNumber
+  );
 
-    const saleNoteNumber = lastSaleNoteNumber + 1;
-    const saleNote = getSaleNoteString(saleNoteNumber, SALE_NOTE_POSITION);
-
-    await orderRepository.createSaleNote(
-      order,
-      saleNote,
-      SALE_NOTE_POSITION,
-      saleNoteNumber
-    );
-
-    //save order in mongo
-    await orderRepositoryMongo.create(
-      order,
-      saleNote,
-      SALE_NOTE_POSITION,
-      saleNoteNumber
-    );
-
-    return buildOrderPDF(order, user, true);
-  }
+  return buildOrderPDF(lastOrder, user, true);
 };
 
 export const updateOrder = async ({ nrocompro, order }) =>
