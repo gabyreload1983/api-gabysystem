@@ -407,8 +407,7 @@ export const create = async ({ order, user }) => {
     saleNoteNumber
   );
 
-    return await buildOrderPDF(order, user, true);
-  }
+  return await buildOrderPDF(lastOrder, user, true);
 };
 
 export const updateOrder = async ({ nrocompro, order }) =>
@@ -435,7 +434,10 @@ export const sendCustomerPdf = async ({ order, user }) => {
 
   if (responseWeb?.status !== 200) {
     await createPdf({ order, user, customer: true });
-    const responseFtp = sendPdfToSinapsisWeb({ path: pathPdf, nrocompro });
+    const responseFtp = sendPdfToSinapsisWeb({
+      path: pathPdf,
+      nrocompro,
+    });
     if (!responseFtp) return false;
   }
 

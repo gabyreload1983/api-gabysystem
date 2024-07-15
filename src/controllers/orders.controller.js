@@ -420,8 +420,8 @@ export const create = async (req, res) => {
 
     if (!result)
       return res
-        .status(404)
-        .send({ status: "error", message: "Order created" });
+        .status(400)
+        .send({ status: "error", message: "Error creating order" });
 
     res.send({
       status: "success",

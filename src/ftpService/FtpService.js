@@ -19,12 +19,14 @@ export const sendPdfToSinapsisWeb = async ({ path, nrocompro }) => {
           c.end();
           logger.error("ERROR", err);
           reject(false);
+        } else {
+          c.end();
+          logger.info("PDF Upload successfully!");
+          resolve(true);
         }
       });
-      c.end();
-      logger.info("PDF Upload successfully!");
-      resolve(true);
     });
+
     c.on("error", (err) => {
       logger.error("FTP Connection Error", err);
       reject(false);
