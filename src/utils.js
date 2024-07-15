@@ -73,14 +73,10 @@ export const getSaleNoteString = (saleNoteNumber, saleNotePosition) => {
 
 export const getNextNrocompro = (lastNrocompro) => {
   const ORDER_POSITION = process.env.ORDER_POSITION;
-  const number = parseInt(
-    lastNrocompro.replace(`ORX00${ORDER_POSITION}`, ""),
-    10
-  );
-  const nextNumber = +number + 1;
-  const zeros = "00000000".slice(number.toString().length);
-  const nextNrocompro = `ORX00${ORDER_POSITION}${zeros}${nextNumber}`;
-  return nextNrocompro;
+  const nextNumber = lastNrocompro + 1;
+  const zeros = "00000000".slice(lastNrocompro.toString().length);
+
+  return `ORX00${ORDER_POSITION}${zeros}${nextNumber}`;
 };
 
 export const getIvaCondition = (type) => {

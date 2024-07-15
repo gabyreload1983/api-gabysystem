@@ -221,9 +221,13 @@ export default class Orders {
 
   getLastOrderNumber = async (position) =>
     await sendQueryUrbano(
-      `
-    SELECT nrocompro FROM trabajos WHERE nrocompro LIKE ? ORDER BY nrocompro DESC LIMIT 1`,
-      [`%ORX00${position}%`]
+      `SELECT numero FROM pto00${position} WHERE tipo = 'OR'`
+    );
+
+  updateLastOrderNumber = async (position, nextNumber) =>
+    await sendQueryUrbano(
+      `UPDATE pto00${position} SET numero = ? WHERE tipo = 'OR'`,
+      [nextNumber]
     );
 
   create = async (newOrder) =>

@@ -107,10 +107,15 @@ export default class OrdersRepository {
   cancelSaleNoteReservation = async (saleNote) =>
     await this.dao.cancelSaleNoteReservation(saleNote);
 
-  getLastOrderNumber = async (position) => {
-    const result = await this.dao.getLastOrderNumber(position);
-    if (result && result.length > 0) return result[0].nrocompro;
-    return false;
+  getLastOrderNumber = async () => {
+    const ORDER_POSITION = process.env.ORDER_POSITION;
+    const result = await this.dao.getLastOrderNumber(ORDER_POSITION);
+    return result[0].numero;
+  };
+
+  updateLastOrderNumber = async (lastNumber) => {
+    const ORDER_POSITION = process.env.ORDER_POSITION;
+    return await this.dao.updateLastOrderNumber(ORDER_POSITION, lastNumber);
   };
 
   create = async (newOrder) =>
