@@ -18,7 +18,9 @@ export const authToken = (req, res, next) => {
 
   if (!authHeader) {
     logger.error(`Not authenticated. ${req.socket?.remoteAddress}`);
-    return res.status(401).send({ error: "Not authenticated" });
+    return res
+      .status(401)
+      .send({ status: "error", message: "Not authenticated" });
   }
 
   const token = authHeader.split(" ")[1];
