@@ -27,11 +27,19 @@ router.get("/customer/:code", ordersController.getOrdersByCustomer);
 
 router.post("/pdf", ordersController.createPdf);
 
-router.post("/send/customer-pdf", ordersController.sendCustomerPdf);
+router.post(
+  "/send/customer-pdf",
+  authorization("saler", "premium"),
+  ordersController.sendCustomerPdf
+);
 
-router.post("/", ordersController.create);
+router.post("/", authorization("saler", "premium"), ordersController.create);
 
-router.patch("/:nrocompro", ordersController.updateOrder);
+router.patch(
+  "/:nrocompro",
+  authorization("saler", "premium"),
+  ordersController.updateOrder
+);
 
 router.put(
   "/take",
