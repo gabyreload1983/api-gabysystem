@@ -20,3 +20,9 @@ export const isValidOrder = (order) => {
 
   return missingKeys.length ? false : true;
 };
+
+export const isValidPhoneNumber = (number) => {
+  if (number.length !== 10) return false;
+
+  return number;
+};

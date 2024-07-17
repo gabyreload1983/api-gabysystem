@@ -15,7 +15,8 @@ import {
   formatProduct,
   getTotalOrder,
   getNextNrocompro,
-  wait,
+  formatWhatsappNumber,
+  __dirname,
 } from "../utils.js";
 import { nanoid } from "nanoid";
 import Users from "./../dao/mongoManagers/Users.js";
@@ -26,6 +27,9 @@ import ProductsInOrderRepository from "../repository/ProductsInOrder.repository.
 import StatisticsTechnicalDto from "../dao/DTOs/StatisticsTechnical.dto.js";
 import OrdersMongo from "../dao/mongoManagers/Orders.js";
 import OrdersMongoRepository from "../repository/OrdersMongo.repository.js";
+import { sendOrder } from "../whatsapp/sendWhatsapp.js";
+import { isValidPhoneNumber } from "../validators/validator.js";
+import { sendPdfToSinapsisWeb } from "../ftpService/FtpService.js";
 
 const orderMongoManager = new OrdersMongo();
 const orderRepositoryMongo = new OrdersMongoRepository(orderMongoManager);
@@ -284,7 +288,7 @@ export const handleProductsInOrder = async (order, user) => {
     );
   }
 
-  const resultPdf = buildOrderPDF(order, user);
+  const resultPdf = await buildOrderPDF(order, user);
   fileName = resultPdf.fileName;
 
   await sendMail(
@@ -306,6 +310,7 @@ export const handleProductsInOrder = async (order, user) => {
     pdfName: fileName,
     date: now,
   };
+  //TODO see to remove this line
   const result = await productsInOrderRepository.create(data);
 
   return { result: resultPdf, fileName };
@@ -402,11 +407,40 @@ export const create = async ({ order, user }) => {
     saleNoteNumber
   );
 
-  return buildOrderPDF(lastOrder, user, true);
+  return await buildOrderPDF(lastOrder, user, true);
 };
 
 export const updateOrder = async ({ nrocompro, order }) =>
   await orderRepository.updateOrder({ nrocompro, order });
 
 export const createPdf = async ({ order, user, customer = false }) =>
-  buildOrderPDF(order, user, customer);
+  await buildOrderPDF(order, user, customer);
+
+export const sendCustomerPdf = async ({ order, user }) => {
+  const responseCustomer = await customersRepository.getByCode(order.codigo);
+  const customer = responseCustomer[0];
+
+  if (!customer.telefono || !isValidPhoneNumber(customer.telefono)) {
+    return null;
+  }
+  const recipient = formatWhatsappNumber(customer.telefono);
+
+  const nrocompro = order.nrocompro;
+  const pathPdf = `${__dirname}/public/pdfHistory/customers/${nrocompro}.pdf`;
+
+  const responseWeb = await fetch(
+    `https://sinapsis.com.ar/resources/serviceworks/${nrocompro}.pdf`
+  );
+
+  if (responseWeb?.status !== 200) {
+    await createPdf({ order, user, customer: true });
+    const responseFtp = sendPdfToSinapsisWeb({
+      path: pathPdf,
+      nrocompro,
+    });
+    if (!responseFtp) return false;
+  }
+
+  const response = await sendOrder({ nrocompro, recipient });
+  return response.status;
+};

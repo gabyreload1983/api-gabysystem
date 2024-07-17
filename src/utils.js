@@ -145,3 +145,5 @@ export const decodeOrderTier = (tier) => {
 
 export const wait = async (delay) =>
   await new Promise((resolve) => setTimeout(resolve, delay));
+
+export const formatWhatsappNumber = (number) => `54${number}`;
