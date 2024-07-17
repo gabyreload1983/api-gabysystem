@@ -1,7 +1,6 @@
 import Client from "ftp";
 import logger from "../logger/logger.js";
 
-// sinapsis
 const config = {
   host: process.env.FTP_HOST,
   user: process.env.FTP_USER,
