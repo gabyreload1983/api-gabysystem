@@ -1,6 +1,6 @@
 {
   "name": "gabysystem-api",
-  "version": "5.27.10",
+  "version": "5.27.11",
   "description": "API-REST",
   "main": "src/app.js",
   "type": "module",
