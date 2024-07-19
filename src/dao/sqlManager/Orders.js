@@ -259,18 +259,32 @@ export default class Orders {
     await sendQueryUrbano(
       `
     UPDATE trabajos 
-    SET codigo = ?, nombre = ?, codiart = ?, descart = ?, 
-    accesorios = ?, falla = ?, serie = ?, prioridad = ?
+    SET 
+    codigo = ?, nombre = ?, telefono = ?, codiart = ?, descart = ?, serie = ?, operador = ?, 
+    falla = ?, accesorios = ?, estado = ?, diag = ?, diagnosticado = ?, ubicacion = ?, ubicado = ?, 
+    diagnostico = ?, prioridad = ?, tecnico = ?, costo = ?, egresado = ?, pendiente = ?
     WHERE nrocompro = ?`,
       [
         order.codigo,
         order.nombre,
+        order.telefono,
         order.codiart,
         order.descart,
-        order.accesorios,
-        order.falla,
         order.serie,
+        order.operador,
+        order.falla,
+        order.accesorios,
+        order.estado,
+        order.diag,
+        order.diagnosticado,
+        order.ubicacion,
+        order.ubicado,
+        order.diagnostico,
         order.prioridad,
+        order.tecnico,
+        order.costo,
+        order.egresado,
+        order.pendiente,
         nrocompro,
       ]
     );
