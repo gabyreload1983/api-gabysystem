@@ -269,6 +269,12 @@ export const close = async (req, res) => {
         .status(400)
         .send({ status: "error", message: "Incomplete values" });
 
+    const order = await ordersService.getOrder(nrocompro);
+    if (!order)
+      return res
+        .status(404)
+        .send({ status: "error", message: "Order not found" });
+
     const result = await ordersService.close(
       nrocompro,
       diagnostico,

@@ -145,6 +145,12 @@ export const decodeOrderTier = (tier) => {
   if (tier === 10) return "GARANTIA COMPRA";
 };
 
+export const getDiagnosis = (diag) => {
+  if (diag === "repair") return 22;
+  if (diag === "withoutrepair") return 23;
+  return;
+};
+
 export const wait = async (delay) =>
   await new Promise((resolve) => setTimeout(resolve, delay));
 

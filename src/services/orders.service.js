@@ -17,6 +17,7 @@ import {
   getNextNrocompro,
   formatWhatsappNumber,
   __dirname,
+  getDiagnosis,
 } from "../utils.js";
 import { nanoid } from "nanoid";
 import Users from "./../dao/mongoManagers/Users.js";
@@ -154,6 +155,9 @@ export const close = async (
   diag,
   notification
 ) => {
+  diag = getDiagnosis(diag);
+  if (!diag) return;
+
   const result = await orderRepository.close(
     nrocompro,
     diagnostico,
