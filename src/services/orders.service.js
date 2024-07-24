@@ -143,8 +143,8 @@ export const take = async (order, code_technical) => {
   return await createOrdenMongo(orderUpdate);
 };
 
-export const update = async (nrocompro, diagnostico, costo, code_technical) =>
-  await orderRepository.update(nrocompro, diagnostico, costo, code_technical);
+export const updateDiagnosis = async ({ nrocompro, diagnosis, user }) =>
+  await orderRepository.updateDiagnosis({ nrocompro, diagnosis, user });
 
 export const close = async (
   nrocompro,

@@ -49,7 +49,7 @@ router.put(
 router.put(
   "/update",
   authorization("technical", "premium"),
-  ordersController.update
+  ordersController.updateDiagnosis
 );
 router.put(
   "/close",
