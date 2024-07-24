@@ -437,21 +437,21 @@ export const create = async (req, res) => {
 export const updateOrder = async (req, res) => {
   try {
     const { nrocompro } = req.params;
-    const { order } = req.body;
+    const newOrder = req.body.order;
 
-    if (!order) {
+    if (!newOrder) {
       return res
         .status(400)
         .send({ status: "error", message: "Incomplete values" });
     }
 
-    const orderExists = await ordersService.getOrder(nrocompro);
-    if (!orderExists)
+    const order = await ordersService.getOrder(nrocompro);
+    if (!order)
       return res
         .status(404)
         .send({ status: "error", message: "Order not found" });
 
-    const result = await ordersService.updateOrder({ nrocompro, order });
+    const result = await ordersService.updateOrder({ newOrder, order });
 
     if (!result)
       return res
