@@ -79,12 +79,11 @@ export default class Orders {
       [code_technical, nrocompro]
     );
 
-  update = async (nrocompro, diagnostico, costo, code_technical) =>
+  updateDiagnosis = async ({ nrocompro, diagnosis, code_technical }) =>
     await sendQueryUrbano(
-      `UPDATE trabajos SET diagnostico = ?, costo = ?, pendiente = ?, 
-      tecnico = ?, diagnosticado = NOW()
+      `UPDATE trabajos SET diagnostico = ?, tecnico = ?, diagnosticado = NOW()
       WHERE nrocompro = ?`,
-      [diagnostico, costo, costo, code_technical, nrocompro]
+      [diagnosis, code_technical, nrocompro]
     );
 
   close = async (nrocompro, diagnostico, costo, code_technical, diag) =>

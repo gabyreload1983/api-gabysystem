@@ -220,20 +220,28 @@ export const take = async (req, res) => {
   }
 };
 
-export const update = async (req, res) => {
+export const updateDiagnosis = async (req, res) => {
   try {
-    const { nrocompro, diagnostico, costo, code_technical } = req.body;
-    if (incompleteValues(nrocompro, diagnostico, costo, code_technical))
+    const { diagnosis, nrocompro } = req.body;
+    const { user } = req;
+
+    if (!diagnosis || !nrocompro) {
       return res
         .status(400)
         .send({ status: "error", message: "Incomplete values" });
+    }
 
-    const result = await ordersService.update(
+    const order = await ordersService.getOrder(nrocompro);
+    if (!order)
+      return res
+        .status(404)
+        .send({ status: "error", message: "Order not found" });
+
+    const result = await ordersService.updateDiagnosis({
       nrocompro,
-      diagnostico,
-      costo,
-      code_technical
-    );
+      diagnosis,
+      user,
+    });
     if (!result)
       return res
         .status(400)
@@ -260,6 +268,12 @@ export const close = async (req, res) => {
       return res
         .status(400)
         .send({ status: "error", message: "Incomplete values" });
+
+    const order = await ordersService.getOrder(nrocompro);
+    if (!order)
+      return res
+        .status(404)
+        .send({ status: "error", message: "Order not found" });
 
     const result = await ordersService.close(
       nrocompro,

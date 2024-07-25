@@ -49,8 +49,12 @@ export default class OrdersRepository {
   take = async (nrocompro, code_technical) =>
     await this.dao.take(nrocompro, code_technical);
 
-  update = async (nrocompro, diagnostico, costo, code_technical) =>
-    await this.dao.update(nrocompro, diagnostico, costo, code_technical);
+  updateDiagnosis = async ({ nrocompro, diagnosis, user }) =>
+    await this.dao.updateDiagnosis({
+      nrocompro,
+      diagnosis,
+      code_technical: user.code_technical,
+    });
 
   close = async (
     nrocompro,
