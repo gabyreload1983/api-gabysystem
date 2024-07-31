@@ -13,6 +13,7 @@ API RESTFul developmented with Node.js
 - Send Emails
 - Cron Jobs
 - Statics Files
+- Whastapp API
 
 ## Technologies Used
 
@@ -37,26 +38,19 @@ To set up GabySystem API RESTFul and get it running on your local development en
 - Docker
 - Docker Compose
 - MongoDB <a href="https://github.com/gabyreload1983/mongodb-gabysystem" target="_blank">README</a>
-- [Urbano Server DEV](#urbano-server-dev)
+- Urbano Server DEV <a href="https://github.com/gabyreload1983/urbano-dev" target="_blank">README</a>
 - Gabysystem Frontend <a href="https://github.com/gabyreload1983/front-gabysystem/blob/main/README.md" target="_blank">README</a>
 
 ### Develpment
 
 1. Clone the repository to your local machine.
-2. Rename .env.template file into .en.development and replace environment variables
-3. Run npm run dev
+2. Rename .env.template file into .env.development and replace environment variables
+3. Start application in development mode
+
+```bash
+npm run dev
+```
 
 ## Deploy
 
-1. Rename api-gabysystem-template.yml to api-gabysystem.yml and copy into the server
-2. Complete the environment variables of production
-3. Run docker-compose -f api-gabysystem.yml up -d
-
-## Urbano Server DEV
-
-1. Create a Virtual Machine with Windows 10 or higher
-2. Install Urbano Server
-3. Stop MySQL Service
-4. Copy and replace database backup
-5. Restart MySQL Service
-6. Create firewall rules for entry and exit on port 3306
+- Docker Server Sinapsis <a href="https://github.com/gabyreload1983/docker-server-sinapsis" target="_blank">README</a>
