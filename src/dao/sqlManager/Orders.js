@@ -177,8 +177,17 @@ export default class Orders {
       [nrocompro, puesto, numero, order.codigo, order.nrocompro]
     );
 
+  getSaleNoteNumber = async (nroOrder) => {
+    await sendQueryUrbano(`SELECT nrocompro FROM nvhead WHERE nombre = ?`, [
+      nroOrder,
+    ]);
+  };
+
   createSaleNoteReservation = async (
-    orderMongo,
+    saleNote,
+    position,
+    saleNoteNumber,
+    nrocompro,
     product,
     itemNumber,
     quantity = 1,
@@ -190,13 +199,13 @@ export default class Orders {
     codiart, descart, cantidad, precio, subtotal, operador, equipo, lote, pendiente) 
   VALUES( ?, 'NV', 'X', ?, ?, ?, ?, ?, ?, ?, ?, ?, 'GABYSYSTEM', 'MOSTRADOR', ?, ? )`,
       [
-        orderMongo.saleNote,
-        orderMongo.saleNotePosition,
-        orderMongo.saleNoteNumber,
-        orderMongo.nrocompro,
+        saleNote,
+        position,
+        saleNoteNumber,
+        nrocompro,
         itemNumber,
         product.codigo,
-        orderMongo.nrocompro,
+        nrocompro,
         quantity,
         precio,
         precio,
