@@ -14,10 +14,10 @@ import {
   getSaleNoteString,
   formatProduct,
   getTotalOrder,
-  getNextNrocompro,
   formatWhatsappNumber,
   __dirname,
   getDiagnosis,
+  getNroComproString,
 } from "../utils.js";
 import { nanoid } from "nanoid";
 import Users from "./../dao/mongoManagers/Users.js";
@@ -371,45 +371,15 @@ export const createOrdenMongo = async (order) => {
 };
 
 export const create = async ({ order, user }) => {
-  const lastOrderNumber = await orderRepository.getLastOrderNumber();
-  if (!lastOrderNumber) return false;
+  await orderRepository.create(order);
 
-  const nextNrocompro = getNextNrocompro(lastOrderNumber);
-  const orderToCreate = { ...order, nrocompro: nextNrocompro };
-  const response = await orderRepository.create(orderToCreate);
-  if (!response) return false;
-
-  const lastOrder = await getOrder(nextNrocompro);
-  if (!lastOrder) return false;
-
-  await orderRepository.updateLastOrderNumber(lastOrderNumber + 1);
-
-  //TODO
-  // get from pto00xx table
-  //remove all arguments from getLastSaleNoteNumber and createSaleNote.
-  const SALE_NOTE_POSITION = process.env.SALE_NOTE_POSITION;
-  const lastSaleNoteNumber = await orderRepository.getLastSaleNoteNumber(
-    SALE_NOTE_POSITION
+  const lastNrocompro = await orderRepository.getLastNumberTable(
+    process.env.ORDER_POSITION,
+    "OR"
   );
+  const lastOrder = await getOrder(getNroComproString(lastNrocompro));
 
-  const saleNoteNumber = lastSaleNoteNumber + 1;
-  const saleNote = getSaleNoteString(saleNoteNumber, SALE_NOTE_POSITION);
-
-  await orderRepository.createSaleNote(
-    lastOrder,
-    saleNote,
-    SALE_NOTE_POSITION,
-    saleNoteNumber
-  );
-
-  //TODO remove this, do not need save in mongo
-  //save order in mongo
-  await orderRepositoryMongo.create(
-    lastOrder,
-    saleNote,
-    SALE_NOTE_POSITION,
-    saleNoteNumber
-  );
+  await orderRepository.createSaleNote({ order: lastOrder });
 
   return await buildOrderPDF(lastOrder, user, true);
 };

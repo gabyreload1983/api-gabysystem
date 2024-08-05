@@ -73,9 +73,9 @@ export const getSaleNoteString = (saleNoteNumber, saleNotePosition) => {
   );
 };
 
-export const getNextNrocompro = (lastNrocompro) => {
+export const getNroComproString = (lastNrocompro) => {
   const ORDER_POSITION = process.env.ORDER_POSITION;
-  const nextNumber = lastNrocompro + 1;
+  const nextNumber = lastNrocompro;
   const zeros = "00000000".slice(lastNrocompro.toString().length);
 
   return `ORX00${ORDER_POSITION}${zeros}${nextNumber}`;

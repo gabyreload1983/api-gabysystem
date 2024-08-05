@@ -218,15 +218,14 @@ export default class Orders {
       [saleNote]
     );
 
-  getLastOrderNumber = async (position) =>
+  getLastNumberTable = async (position, tipo) =>
     await sendQueryUrbano(
-      `SELECT numero FROM pto00${position} WHERE tipo = 'OR'`
+      `SELECT numero FROM pto00${position} WHERE tipo = '${tipo}'`
     );
 
-  updateLastOrderNumber = async (position, nextNumber) =>
+  updateLastNumberTable = async (position, tipo) =>
     await sendQueryUrbano(
-      `UPDATE pto00${position} SET numero = ? WHERE tipo = 'OR'`,
-      [nextNumber]
+      `UPDATE pto00${position} SET numero = numero + 1 WHERE tipo = '${tipo}'`
     );
 
   create = async (newOrder) =>
