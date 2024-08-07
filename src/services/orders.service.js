@@ -177,8 +177,10 @@ export const free = async (nrocompro) => await orderRepository.free(nrocompro);
 
 export const out = async (order, notification, user) => {
   if (order.products.length > 0) {
+    const saleNote = await orderRepository.getSaleNoteNumber(order.nrocompro);
     for (const product of order.products) {
       await productsRepository.removeReservation(product.codigo);
+      await orderRepository.removeSaleNoteReservation(saleNote, product);
     }
   }
   const result = await orderRepository.out(order.nrocompro);
