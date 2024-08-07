@@ -96,7 +96,7 @@ export default class OrdersRepository {
     itemNumber
   ) => {
     const position = process.env.SALE_NOTE_POSITION;
-    const saleNoteNumber = this.getLastNumberTable(position, "NV");
+    const saleNoteNumber = await this.getLastNumberTable(position, "NV");
     return await this.dao.createSaleNoteReservation(
       saleNote,
       position,
@@ -129,8 +129,11 @@ export default class OrdersRepository {
     );
   };
 
-  getSaleNoteNumber = async (nroOrder) =>
-    await this.dao.getSaleNoteNumber(nroOrder);
+  getSaleNoteNumber = async (nroOrder) => {
+    const res = await this.dao.getSaleNoteNumber(nroOrder);
+    if (res?.length > 0) return res[0].nrocompro;
+    return false;
+  };
 
   removeSaleNoteReservation = async (saleNote, product) =>
     await this.dao.removeSaleNoteReservation(saleNote, product);

@@ -177,11 +177,10 @@ export default class Orders {
       [nrocompro, puesto, numero, order.codigo, order.nrocompro]
     );
 
-  getSaleNoteNumber = async (nroOrder) => {
+  getSaleNoteNumber = async (nroOrder) =>
     await sendQueryUrbano(`SELECT nrocompro FROM nvhead WHERE nombre = ?`, [
       nroOrder,
     ]);
-  };
 
   createSaleNoteReservation = async (
     saleNote,

@@ -226,6 +226,7 @@ export const handleProductsInOrder = async (order, user) => {
   if (!saleNote) {
     await orderRepository.createSaleNote({ order: oldOrder });
     saleNote = await orderRepository.getSaleNoteNumber(oldOrder.nrocompro);
+    if (!saleNote) return;
   }
   if (addedProducts.length > 0) {
     const lastItem = await orderRepository.getLastItem(saleNote);
@@ -253,45 +254,8 @@ export const handleProductsInOrder = async (order, user) => {
     }
   }
 
-  const technical = await usersRepository.getByCode(order.tecnico);
-  let fileName = "";
-  const now = moment();
-
-  if (order.products.length === 0) {
-    await sendMail(
-      technical.email,
-      `ORDEN DE REPARACIÓN - ${order.nrocompro}`,
-      `Actualizacion Orden`,
-      getHtmlProductsInOrder(user, order),
-      null,
-      user.email
-    );
-  }
-
   const resultPdf = await buildOrderPDF(order, user);
-  fileName = resultPdf.fileName;
-
-  await sendMail(
-    technical.email,
-    `ORDEN DE REPARACIÓN - ${order.nrocompro}`,
-    `Actualizacion Orden`,
-    getHtmlProductsInOrder(user, order),
-    [{ path: resultPdf.pdfPath }],
-    user.email
-  );
-
-  const data = {
-    userEmail: user.email,
-    technicalEmail: technical.email,
-    order: order.nrocompro,
-    orderProducts: order.products,
-    addedProducts,
-    deletedProducts,
-    pdfName: fileName,
-    date: now,
-  };
-  //TODO see to remove this line
-  const result = await productsInOrderRepository.create(data);
+  const fileName = resultPdf.fileName;
 
   return { result: resultPdf, fileName };
 };
