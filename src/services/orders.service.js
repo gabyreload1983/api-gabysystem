@@ -236,7 +236,7 @@ export const handleProductsInOrder = async (order, user) => {
     for (const product of addedProducts) {
       await orderRepository.createSaleNoteReservation(
         saleNote,
-        oldOrder.nrocompro,
+        oldOrder,
         product,
         itemNumber
       );
