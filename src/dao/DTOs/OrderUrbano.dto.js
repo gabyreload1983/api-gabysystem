@@ -7,7 +7,7 @@ export default class OrderUrbanoDto {
     this.codiart = order.sector;
     this.descart = order.description;
     this.serie = order.serie;
-    this.operador = order.saler;
+    this.operador = order.seller;
     this.falla = order.fail;
     this.accesorios = order.accesories;
     this.prioridad = order.priority;

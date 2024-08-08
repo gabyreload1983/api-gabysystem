@@ -8,7 +8,7 @@ import {
   getCodeInvoice,
   getIvaCondition,
   getIvaPercentage,
-  getSalerName,
+  getSellerName,
 } from "../utils.js";
 import { API_INFO, LEYEND_ORDER } from "../config/info.js";
 import * as usersService from "../services/users.service.js";
@@ -242,7 +242,7 @@ export const buildInvoicePdf = async (invoice) => {
   doc
     .fontSize(10)
     .text(
-      `Vendedor: ${getSalerName(invoice.items[0].operador).toUpperCase()}`,
+      `Vendedor: ${getSellerName(invoice.items[0].operador).toUpperCase()}`,
       50,
       710
     );
