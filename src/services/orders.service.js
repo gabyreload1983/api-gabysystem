@@ -277,8 +277,6 @@ export const create = async ({ order, user }) => {
   );
   const lastOrder = await getOrder(getNroComproString(lastNrocompro));
 
-  await orderRepository.createSaleNote({ order: lastOrder });
-
   return await buildOrderPDF(lastOrder, user, true);
 };
 
