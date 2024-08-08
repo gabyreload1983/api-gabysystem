@@ -113,7 +113,13 @@ export const getOrdersByCustomer = async (code) =>
   await orderRepository.getOrdersByCustomer(code);
 
 export const take = async (order, code_technical) => {
-  const result = await orderRepository.take(order.nrocompro, code_technical);
+  let cost = Number(order.costo) > 1 ? Number(order.costo) : 1;
+
+  const result = await orderRepository.take(
+    order.nrocompro,
+    code_technical,
+    cost
+  );
   if (!result) return false;
 
   const customer = await customersRepository.getByCode(order.codigo);

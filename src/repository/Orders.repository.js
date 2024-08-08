@@ -47,8 +47,8 @@ export default class OrdersRepository {
   getOrdersByCustomer = async (code) =>
     await this.dao.getOrdersByCustomer(code);
 
-  take = async (nrocompro, code_technical) =>
-    await this.dao.take(nrocompro, code_technical);
+  take = async (nrocompro, code_technical, cost) =>
+    await this.dao.take(nrocompro, code_technical, cost);
 
   updateDiagnosis = async ({ nrocompro, diagnosis, user }) =>
     await this.dao.updateDiagnosis({
