@@ -11,29 +11,22 @@ import {
   getHtmlProductsInOrder,
 } from "./../nodemailer/html/utilsHtml.js";
 import {
-  getSaleNoteString,
   formatProduct,
   getTotalOrder,
-  getNextNrocompro,
   formatWhatsappNumber,
   __dirname,
   getDiagnosis,
+  getNroComproString,
 } from "../utils.js";
 import { nanoid } from "nanoid";
 import Users from "./../dao/mongoManagers/Users.js";
 import UsersRepository from "./../repository/Users.repository.js";
 import { buildOrderPDF } from "../pdfKit/pdfKit.js";
-import ProductsInOrder from "./../dao/mongoManagers/ProductsInOrder.js";
-import ProductsInOrderRepository from "../repository/ProductsInOrder.repository.js";
 import StatisticsTechnicalDto from "../dao/DTOs/StatisticsTechnical.dto.js";
-import OrdersMongo from "../dao/mongoManagers/Orders.js";
-import OrdersMongoRepository from "../repository/OrdersMongo.repository.js";
 import { sendOrder } from "../whatsapp/sendWhatsapp.js";
 import { isValidPhoneNumber } from "../validators/validator.js";
 import { sendPdfToSinapsisWeb } from "../ftpService/FtpService.js";
 
-const orderMongoManager = new OrdersMongo();
-const orderRepositoryMongo = new OrdersMongoRepository(orderMongoManager);
 const orderManager = new Orders();
 const orderRepository = new OrdersRepository(orderManager);
 const productManager = new Products();
@@ -42,10 +35,6 @@ const customersManager = new Customers();
 const customersRepository = new CustomersRepository(customersManager);
 const usersManager = new Users();
 const usersRepository = new UsersRepository(usersManager);
-const productsInOrderManager = new ProductsInOrder();
-const productsInOrderRepository = new ProductsInOrderRepository(
-  productsInOrderManager
-);
 
 export const getOrders = async (from, to) =>
   await orderRepository.getOrders(from, to);
@@ -126,7 +115,6 @@ export const getOrdersByCustomer = async (code) =>
 export const take = async (order, code_technical) => {
   const result = await orderRepository.take(order.nrocompro, code_technical);
   if (!result) return false;
-  const orderUpdate = await getOrder(order.nrocompro);
 
   const customer = await customersRepository.getByCode(order.codigo);
   if (customer[0].mail && process.env.NODE_ENV === "production") {
@@ -141,7 +129,7 @@ export const take = async (order, code_technical) => {
     );
   }
 
-  return await createOrdenMongo(orderUpdate);
+  return result;
 };
 
 export const updateDiagnosis = async ({ nrocompro, diagnosis, user }) =>
@@ -166,8 +154,6 @@ export const close = async (
     diag
   );
   const orderUpdate = await getOrder(nrocompro);
-  const orderMongo = await createOrdenMongo(orderUpdate);
-  await orderRepositoryMongo.update(orderMongo._id, orderUpdate);
 
   if (notification) {
     const customer = await customersRepository.getByCode(orderUpdate.codigo);
@@ -191,19 +177,13 @@ export const free = async (nrocompro) => await orderRepository.free(nrocompro);
 
 export const out = async (order, notification, user) => {
   if (order.products.length > 0) {
+    const saleNote = await orderRepository.getSaleNoteNumber(order.nrocompro);
     for (const product of order.products) {
       await productsRepository.removeReservation(product.codigo);
+      await orderRepository.removeSaleNoteReservation(saleNote, product);
     }
   }
   const result = await orderRepository.out(order.nrocompro);
-
-  const orderMongo = await orderRepositoryMongo.getByNrocompro(order.nrocompro);
-  if (orderMongo) {
-    await orderRepository.cancelSaleNoteReservation(orderMongo.saleNote);
-
-    const orderUpdate = await getOrder(order.nrocompro);
-    await orderRepositoryMongo.update(orderMongo._id, orderUpdate);
-  }
 
   if (notification) {
     const customer = await customersRepository.getByCode(order.codigo);
@@ -231,7 +211,6 @@ export const handleProductsInOrder = async (order, user) => {
     if (!p.serie) p.serie = nanoid();
   }
   const oldOrder = await getOrder(order.nrocompro);
-  const orderMongo = await createOrdenMongo(oldOrder);
 
   const addedProducts = order.products.filter((product) => {
     return !oldOrder.products.some(
@@ -244,13 +223,20 @@ export const handleProductsInOrder = async (order, user) => {
       (p) => p.codigo === product.codigo && p.serie === product.serie
     );
   });
-
+  let saleNote = "";
+  saleNote = await orderRepository.getSaleNoteNumber(oldOrder.nrocompro);
+  if (!saleNote) {
+    await orderRepository.createSaleNote({ order: oldOrder });
+    saleNote = await orderRepository.getSaleNoteNumber(oldOrder.nrocompro);
+    if (!saleNote) return;
+  }
   if (addedProducts.length > 0) {
-    const lastItem = await orderRepository.getLastItem(orderMongo.saleNote);
+    const lastItem = await orderRepository.getLastItem(saleNote);
     let itemNumber = lastItem + 1;
     for (const product of addedProducts) {
       await orderRepository.createSaleNoteReservation(
-        orderMongo,
+        saleNote,
+        oldOrder,
         product,
         itemNumber
       );
@@ -263,59 +249,15 @@ export const handleProductsInOrder = async (order, user) => {
 
   if (deletedProducts.length > 0) {
     for (const product of deletedProducts) {
-      await orderRepository.removeSaleNoteReservation(
-        orderMongo.saleNote,
-        product
-      );
+      await orderRepository.removeSaleNoteReservation(saleNote, product);
 
       await productsRepository.removeReservation(product.codigo);
       await productsRepository.removeProductFromOrder(order, product);
     }
   }
 
-  // update orderMongo
-  const updateOrder = await getOrder(order.nrocompro);
-  await orderRepositoryMongo.update(orderMongo._id, updateOrder);
-
-  const technical = await usersRepository.getByCode(order.tecnico);
-  let fileName = "";
-  const now = moment();
-
-  if (order.products.length === 0) {
-    await sendMail(
-      technical.email,
-      `ORDEN DE REPARACIÓN - ${order.nrocompro}`,
-      `Actualizacion Orden`,
-      getHtmlProductsInOrder(user, order),
-      null,
-      user.email
-    );
-  }
-
   const resultPdf = await buildOrderPDF(order, user);
-  fileName = resultPdf.fileName;
-
-  await sendMail(
-    technical.email,
-    `ORDEN DE REPARACIÓN - ${order.nrocompro}`,
-    `Actualizacion Orden`,
-    getHtmlProductsInOrder(user, order),
-    [{ path: resultPdf.pdfPath }],
-    user.email
-  );
-
-  const data = {
-    userEmail: user.email,
-    technicalEmail: technical.email,
-    order: order.nrocompro,
-    orderProducts: order.products,
-    addedProducts,
-    deletedProducts,
-    pdfName: fileName,
-    date: now,
-  };
-  //TODO see to remove this line
-  const result = await productsInOrderRepository.create(data);
+  const fileName = resultPdf.fileName;
 
   return { result: resultPdf, fileName };
 };
@@ -326,90 +268,14 @@ export const updateCustomer = async (nrocompro, customer) => {
   return true;
 };
 
-export const createOrdenMongo = async (order) => {
-  let orderMongo = await orderRepositoryMongo.getByNrocompro(order.nrocompro);
-
-  if (orderMongo) return orderMongo;
-
-  // create NV
-  const SALE_NOTE_POSITION = process.env.SALE_NOTE_POSITION;
-
-  const lastSaleNoteNumber = await orderRepository.getLastSaleNoteNumber(
-    SALE_NOTE_POSITION
-  );
-  const saleNoteNumber = lastSaleNoteNumber + 1;
-  const saleNote = getSaleNoteString(saleNoteNumber, SALE_NOTE_POSITION);
-
-  await orderRepository.createSaleNote(
-    order,
-    saleNote,
-    SALE_NOTE_POSITION,
-    saleNoteNumber
-  );
-
-  //save order in mongo
-  orderMongo = await orderRepositoryMongo.create(
-    order,
-    saleNote,
-    SALE_NOTE_POSITION,
-    saleNoteNumber
-  );
-
-  if (order.products.length > 0) {
-    const lastItem = await orderRepository.getLastItem(orderMongo.saleNote);
-    let itemNumber = lastItem + 1;
-    for (const product of order.products) {
-      orderRepository.createSaleNoteReservation(
-        orderMongo,
-        product,
-        itemNumber
-      );
-      itemNumber++;
-    }
-  }
-  return orderMongo;
-};
-
 export const create = async ({ order, user }) => {
-  const lastOrderNumber = await orderRepository.getLastOrderNumber();
-  if (!lastOrderNumber) return false;
+  await orderRepository.create(order);
 
-  const nextNrocompro = getNextNrocompro(lastOrderNumber);
-  const orderToCreate = { ...order, nrocompro: nextNrocompro };
-  const response = await orderRepository.create(orderToCreate);
-  if (!response) return false;
-
-  const lastOrder = await getOrder(nextNrocompro);
-  if (!lastOrder) return false;
-
-  await orderRepository.updateLastOrderNumber(lastOrderNumber + 1);
-
-  //TODO
-  // get from pto00xx table
-  //remove all arguments from getLastSaleNoteNumber and createSaleNote.
-  const SALE_NOTE_POSITION = process.env.SALE_NOTE_POSITION;
-  const lastSaleNoteNumber = await orderRepository.getLastSaleNoteNumber(
-    SALE_NOTE_POSITION
+  const lastNrocompro = await orderRepository.getLastNumberTable(
+    process.env.ORDER_POSITION,
+    "OR"
   );
-
-  const saleNoteNumber = lastSaleNoteNumber + 1;
-  const saleNote = getSaleNoteString(saleNoteNumber, SALE_NOTE_POSITION);
-
-  await orderRepository.createSaleNote(
-    lastOrder,
-    saleNote,
-    SALE_NOTE_POSITION,
-    saleNoteNumber
-  );
-
-  //TODO remove this, do not need save in mongo
-  //save order in mongo
-  await orderRepositoryMongo.create(
-    lastOrder,
-    saleNote,
-    SALE_NOTE_POSITION,
-    saleNoteNumber
-  );
+  const lastOrder = await getOrder(getNroComproString(lastNrocompro));
 
   return await buildOrderPDF(lastOrder, user, true);
 };

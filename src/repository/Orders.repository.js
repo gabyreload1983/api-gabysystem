@@ -1,5 +1,6 @@
 import OrderUrbanoDto from "../dao/DTOs/OrderUrbano.dto.js";
 import OrderUrbanoUpdateDto from "../dao/DTOs/OrderUrbanoUpdate.dto.js";
+import { getNroComproString, getSaleNoteString } from "../utils.js";
 
 export default class OrdersRepository {
   constructor(dao) {
@@ -83,28 +84,51 @@ export default class OrdersRepository {
   updateCustomerInProducts = async (nrocompro, customer) =>
     await this.dao.updateCustomerInProducts(nrocompro, customer);
 
-  getLastSaleNoteNumber = async (position) => {
-    const lastSaleNoteNumber = await this.dao.getLastSaleNoteNumber(position);
-    return lastSaleNoteNumber[0].nrocompro === null
-      ? 0
-      : lastSaleNoteNumber[0].nrocompro;
-  };
-
   getLastItem = async (nrocompro) => {
     const result = await this.dao.getLastItem(nrocompro);
     return result[0].lastItem === null ? 0 : result[0].lastItem;
   };
 
-  createSaleNoteReservation = async (orderMongo, product, itemNumber) =>
-    await this.dao.createSaleNoteReservation(orderMongo, product, itemNumber);
+  createSaleNoteReservation = async (saleNote, order, product, itemNumber) => {
+    const position = process.env.SALE_NOTE_POSITION;
+    const saleNoteNumber = await this.getLastNumberTable(position, "NV");
+    return await this.dao.createSaleNoteReservation(
+      saleNote,
+      position,
+      saleNoteNumber,
+      order,
+      product,
+      itemNumber
+    );
+  };
 
-  createSaleNote = async (order, saleNote, saleNotePosition, saleNoteNumber) =>
+  createSaleNote = async ({ order }) => {
+    const SALE_NOTE_POSITION = process.env.SALE_NOTE_POSITION;
+
+    const lastSaleNoteNumber = await this.getLastNumberTable(
+      SALE_NOTE_POSITION,
+      "NV"
+    );
+    const saleNoteNumber = lastSaleNoteNumber + 1;
+    const saleNote = getSaleNoteString(saleNoteNumber, SALE_NOTE_POSITION);
+
     await this.dao.createSaleNote(
       order,
       saleNote,
-      saleNotePosition,
+      SALE_NOTE_POSITION,
       saleNoteNumber
     );
+    return await this.updateLastNumberTable(
+      process.env.SALE_NOTE_POSITION,
+      "NV"
+    );
+  };
+
+  getSaleNoteNumber = async (nroOrder) => {
+    const res = await this.dao.getSaleNoteNumber(nroOrder);
+    if (res?.length > 0) return res[0].nrocompro;
+    return false;
+  };
 
   removeSaleNoteReservation = async (saleNote, product) =>
     await this.dao.removeSaleNoteReservation(saleNote, product);
@@ -112,19 +136,26 @@ export default class OrdersRepository {
   cancelSaleNoteReservation = async (saleNote) =>
     await this.dao.cancelSaleNoteReservation(saleNote);
 
-  getLastOrderNumber = async () => {
-    const ORDER_POSITION = process.env.ORDER_POSITION;
-    const result = await this.dao.getLastOrderNumber(ORDER_POSITION);
+  getLastNumberTable = async (position, tipo) => {
+    const result = await this.dao.getLastNumberTable(position, tipo);
     return result[0].numero;
   };
 
-  updateLastOrderNumber = async (lastNumber) => {
-    const ORDER_POSITION = process.env.ORDER_POSITION;
-    return await this.dao.updateLastOrderNumber(ORDER_POSITION, lastNumber);
-  };
+  updateLastNumberTable = async (position, tipo) =>
+    await this.dao.updateLastNumberTable(position, tipo);
 
-  create = async (newOrder) =>
-    await this.dao.create(new OrderUrbanoDto(newOrder));
+  create = async (order) => {
+    const lastOrderNumber = await this.getLastNumberTable(
+      process.env.ORDER_POSITION,
+      "OR"
+    );
+
+    const nextNrocompro = getNroComproString(lastOrderNumber + 1);
+    const orderToCreate = { ...order, nrocompro: nextNrocompro };
+
+    await this.dao.create(new OrderUrbanoDto(orderToCreate));
+    return await this.updateLastNumberTable(process.env.ORDER_POSITION, "OR");
+  };
 
   updateOrder = async ({ nrocompro, order }) => {
     const orderDto = new OrderUrbanoUpdateDto(order);
