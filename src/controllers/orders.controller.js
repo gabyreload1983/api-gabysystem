@@ -429,7 +429,7 @@ export const create = async (req, res) => {
         .send({ status: "error", message: "Incomplete values" });
     }
 
-    order.saler = req.user.code_technical;
+    order.seller = req.user.code_technical;
     const result = await ordersService.create({ order, user: req.user });
 
     if (!result)

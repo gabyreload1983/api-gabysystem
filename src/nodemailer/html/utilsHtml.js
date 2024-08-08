@@ -794,10 +794,10 @@ export const getHtmlEmailNotification = (message, nrocompro) => {
   ${emailSignTechnical}`;
 };
 
-export const getHtmlProductsInOrder = (saler, order) => {
+export const getHtmlProductsInOrder = (seller, order) => {
   return `
   <h3>Actualizacion de orden ${order.nrocompro}</h3>
-  <p>Cambios realizados por ${saler.first_name} ${saler.last_name}</p>
+  <p>Cambios realizados por ${seller.first_name} ${seller.last_name}</p>
   ${
     order.products.length
       ? "<p>Orden Con articulos. Se adjunta comprobante</p>"

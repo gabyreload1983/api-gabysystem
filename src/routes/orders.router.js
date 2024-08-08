@@ -29,15 +29,15 @@ router.post("/pdf", ordersController.createPdf);
 
 router.post(
   "/send/customer-pdf",
-  authorization("saler", "premium"),
+  authorization("seller", "premium"),
   ordersController.sendCustomerPdf
 );
 
-router.post("/", authorization("saler", "premium"), ordersController.create);
+router.post("/", authorization("seller", "premium"), ordersController.create);
 
 router.patch(
   "/:nrocompro",
-  authorization("saler", "premium"),
+  authorization("seller", "premium"),
   ordersController.updateOrder
 );
 
@@ -64,19 +64,19 @@ router.put(
 
 router.put(
   "/out/:nrocompro",
-  authorization("saler", "premium"),
+  authorization("seller", "premium"),
   ordersController.out
 );
 
 router.put(
   "/products",
-  authorization("saler", "premium"),
+  authorization("seller", "premium"),
   ordersController.handleProductsInOrder
 );
 
 router.put(
   "/update-customer",
-  authorization("premium"),
+  authorization("seller", "premium"),
   ordersController.updateCustomer
 );
 
