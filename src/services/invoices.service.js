@@ -1,12 +1,14 @@
 import Invoices from "../dao/sqlManager/Invoices.js";
+import InvoicesRepository from "../repository/Invoices.repository.js";
 
 const invoicesService = new Invoices();
+const invoiceRepository = new InvoicesRepository(invoicesService);
 
 export const getInvoicesCommission = async (from, to) =>
-  await invoicesService.getInvoicesCommission(from, to);
+  await invoiceRepository.getInvoicesCommission(from, to);
 
 export const getInvoicesPending = async (from, to) => {
-  const invoicesDetail = await invoicesService.getInvoicesPending(from, to);
+  const invoicesDetail = await invoiceRepository.getInvoicesPending(from, to);
   const invoices = [];
   for (let item of invoicesDetail) {
     const index = invoices.findIndex(
@@ -18,4 +20,13 @@ export const getInvoicesPending = async (from, to) => {
   }
 
   return invoices;
+};
+
+export const getServiceWorkInvoice = async (codigo, serviceworkNro) => {
+  const response = await invoiceRepository.getServiceWorkInvoice(
+    codigo,
+    serviceworkNro
+  );
+  if (response?.length === 1) return response[0].nrocompro;
+  return false;
 };

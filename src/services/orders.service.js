@@ -1,4 +1,3 @@
-import moment from "moment";
 import Customers from "../dao/sqlManager/Customers.js";
 import Products from "../dao/sqlManager/Products.js";
 import OrdersRepository from "../repository/Orders.repository.js";
@@ -6,10 +5,7 @@ import Orders from "../dao/sqlManager/Orders.js";
 import sendMail from "./../nodemailer/config.js";
 import ProductsRepository from "./../repository/Products.repository.js";
 import CustomersRepository from "./../repository/Customers.repository.js";
-import {
-  getHtmlEmailNotification,
-  getHtmlProductsInOrder,
-} from "./../nodemailer/html/utilsHtml.js";
+import { getHtmlEmailNotification } from "./../nodemailer/html/utilsHtml.js";
 import {
   formatProduct,
   getTotalOrder,
@@ -19,13 +15,12 @@ import {
   getNroComproString,
 } from "../utils.js";
 import { nanoid } from "nanoid";
-import Users from "./../dao/mongoManagers/Users.js";
-import UsersRepository from "./../repository/Users.repository.js";
 import { buildOrderPDF } from "../pdfKit/pdfKit.js";
 import StatisticsTechnicalDto from "../dao/DTOs/StatisticsTechnical.dto.js";
 import { sendOrder } from "../whatsapp/sendWhatsapp.js";
 import { isValidPhoneNumber } from "../validators/validator.js";
 import { sendPdfToSinapsisWeb } from "../ftpService/FtpService.js";
+import * as invoicesService from "./invoices.service.js";
 
 const orderManager = new Orders();
 const orderRepository = new OrdersRepository(orderManager);
@@ -33,8 +28,6 @@ const productManager = new Products();
 const productsRepository = new ProductsRepository(productManager);
 const customersManager = new Customers();
 const customersRepository = new CustomersRepository(customersManager);
-const usersManager = new Users();
-const usersRepository = new UsersRepository(usersManager);
 
 export const getOrders = async (from, to) =>
   await orderRepository.getOrders(from, to);
@@ -71,6 +64,10 @@ export const getOrder = async (nrocompro) => {
     formatProduct(product, dollar)
   );
   order.total = getTotalOrder(order);
+  order.invoice = await invoicesService.getServiceWorkInvoice(
+    order.codigo,
+    order.nrocompro
+  );
 
   return order;
 };

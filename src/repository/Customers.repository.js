@@ -3,13 +3,13 @@ export default class CustomersRepository {
     this.dao = dao;
   }
 
-  getByCode = async (codigo) => this.dao.getByCode(codigo);
+  getByCode = async (codigo) => await this.dao.getByCode(codigo);
 
-  getByName = async (description) => this.dao.getByName(description);
+  getByName = async (description) => await this.dao.getByName(description);
 
-  getCustomers = async () => this.dao.getCustomers();
+  getCustomers = async () => await this.dao.getCustomers();
 
-  getCustomersVouchers = async (id) => this.dao.getCustomersVouchers(id);
+  getCustomersVouchers = async (id) => await this.dao.getCustomersVouchers(id);
 
-  getSalesConditions = async () => this.dao.getSalesConditions();
+  getSalesConditions = async () => await this.dao.getSalesConditions();
 }
