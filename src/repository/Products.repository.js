@@ -10,7 +10,11 @@ export default class ProductsRepository {
   getByDescription = async (description, stock) =>
     await this.dao.getByDescription(description, stock);
 
-  getBySerie = async (serie) => await this.dao.getBySerie(serie);
+  getBySerie = async (serie) => {
+    const response = await this.dao.getBySerie(serie);
+    if (!response) return;
+    return response[0];
+  };
 
   getOrderList = async () => await this.dao.getOrderList();
 

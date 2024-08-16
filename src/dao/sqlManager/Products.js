@@ -40,10 +40,22 @@ export default class Products {
   getBySerie = async (serie) =>
     await sendQueryUrbano(
       `
-    SELECT * FROM articulo a
-    INNER JOIN serie2 s
-    ON a.codigo = s.codigo
-    WHERE s.serie = ? LIMIT 1`,
+      SELECT 
+      a.codigo AS code,
+      a.descrip AS description,
+      p.nombre AS supplier,
+      s.nrocompro AS voucher_s,
+      s.fecha AS purchase_date_s,
+      c.numero AS voucher_c,
+      c.fecha AS purchase_date_c
+      FROM serie2 s
+      INNER JOIN articulo a
+      ON a.codigo = s.codigo
+      INNER JOIN provedor p
+      ON s.clipro= p.codigo
+      LEFT JOIN ctapro c
+      ON c.vienede = s.nrocompro
+      WHERE serie = ?`,
       [serie]
     );
 
