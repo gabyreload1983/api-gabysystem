@@ -39,7 +39,7 @@ export const searchBySerie = async (req, res) => {
     if (!product)
       return res
         .status(404)
-        .send({ status: "error", message: "Error searching product" });
+        .send({ status: "error", message: "Product no found!" });
 
     res.send({ status: "success", payload: product });
   } catch (error) {
