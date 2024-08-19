@@ -13,6 +13,11 @@ export default class Customers {
 
   getCustomers = async () => await sendQueryUrbano(`SELECT * FROM clientes`);
 
+  getSubscribers = async () =>
+    await sendQueryUrbano(
+      `SELECT * FROM clientes WHERE condicion = 30 ORDER BY nombre`
+    );
+
   getCustomersVouchers = async (id) =>
     await sendQueryUrbano(`SELECT * FROM ctacli WHERE codigo = ?`, [id]);
 
