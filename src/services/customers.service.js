@@ -14,6 +14,9 @@ export const getCustomersByName = async (name) =>
 export const getCustomers = async () =>
   await customersRepository.getCustomers();
 
+export const getSubscribers = async () =>
+  await customersRepository.getSubscribers();
+
 export const getSummaries = async (balanceFilter = 1000) => {
   const customers = await customersRepository.getCustomers();
   const salesConditions = await customersRepository.getSalesConditions();

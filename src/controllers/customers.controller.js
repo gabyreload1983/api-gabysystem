@@ -5,11 +5,34 @@ import * as customerService from "../services/customers.service.js";
 export const getCustomers = async (req, res) => {
   try {
     const customers = await customerService.getCustomers();
+    if (!customers)
+      return res
+        .status(404)
+        .send({ status: "error", message: "Customers not found" });
 
     res.send({
       status: "success",
       message: "OK",
       payload: customers,
+    });
+  } catch (error) {
+    logger.error(error.message);
+    res.status(500).send(error);
+  }
+};
+
+export const getSubscribers = async (req, res) => {
+  try {
+    const subscribers = await customerService.getSubscribers();
+    if (!subscribers)
+      return res
+        .status(404)
+        .send({ status: "error", message: "Subscribers not found" });
+
+    res.send({
+      status: "success",
+      message: "OK",
+      payload: subscribers,
     });
   } catch (error) {
     logger.error(error.message);

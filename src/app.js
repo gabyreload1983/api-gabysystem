@@ -9,6 +9,7 @@ import logger from "./logger/logger.js";
 import usersRouter from "./routes/users.router.js";
 import ordersRouter from "./routes/orders.router.js";
 import customersRouter from "./routes/customers.router.js";
+import subscribersRouter from "./routes/subscribers.router.js";
 import productsRouter from "./routes/products.router.js";
 import alexisRouter from "./routes/alexis.router.js";
 
@@ -36,6 +37,7 @@ app.use(passport.initialize());
 app.use("/api/users", usersRouter);
 app.use("/api/orders", authToken, ordersRouter);
 app.use("/api/customers", authToken, customersRouter);
+app.use("/api/subscribers", authToken, subscribersRouter);
 app.use("/api/products", authToken, productsRouter);
 app.use("/api/alexis", authToken, alexisRouter);
 app.use("*", (req, res) =>

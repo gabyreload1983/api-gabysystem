@@ -6,6 +6,7 @@ import { authorization } from "../utils.js";
 
 router.get("/", customersController.getCustomers);
 router.get("/code/:codigo", customersController.getCustomerByCode);
+router.get("/subscribers", customersController.getSubscribers);
 
 router.get(
   "/summaries",
