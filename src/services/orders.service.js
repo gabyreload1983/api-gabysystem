@@ -186,7 +186,10 @@ export const out = async (order, notification, user) => {
       await orderRepository.removeSaleNoteReservation(saleNote, product);
     }
   }
-  const result = await orderRepository.out(order.nrocompro);
+  const result = await orderRepository.out({
+    user: user.code_technical,
+    nrocompro: order.nrocompro,
+  });
 
   if (notification) {
     const customer = await customersRepository.getByCode(order.codigo);
