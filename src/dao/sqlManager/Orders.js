@@ -102,10 +102,10 @@ export default class Orders {
       [nrocompro]
     );
 
-  out = async (nrocompro) =>
+  out = async ({ user, nrocompro }) =>
     await sendQueryUrbano(
-      `UPDATE trabajos SET ubicacion = 22 WHERE nrocompro = ?`,
-      [nrocompro]
+      `UPDATE trabajos SET ubicacion = 22, egresado = NOW(), opcional = ? WHERE nrocompro = ?`,
+      [user, nrocompro]
     );
 
   getOrders = async (from, to, filter = "ingresado") => {

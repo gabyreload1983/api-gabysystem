@@ -76,7 +76,7 @@ export default class OrdersRepository {
 
   free = async (nrocompro) => await this.dao.free(nrocompro);
 
-  out = async (nrocompro) => await this.dao.out(nrocompro);
+  out = async ({ user, nrocompro }) => await this.dao.out({ user, nrocompro });
 
   updateCustomer = async (nrocompro, customer) =>
     await this.dao.updateCustomer(nrocompro, customer);
