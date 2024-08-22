@@ -11,6 +11,10 @@ export default class CustomersRepository {
 
   getSubscribers = async () => await this.dao.getSubscribers();
 
+  addSubscriber = async (code) => await this.dao.addSubscriber(code);
+
+  removeSubscriber = async (code) => await this.dao.removeSubscriber(code);
+
   getCustomersVouchers = async (id) => await this.dao.getCustomersVouchers(id);
 
   getSalesConditions = async () => await this.dao.getSalesConditions();
