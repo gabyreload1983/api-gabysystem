@@ -117,7 +117,7 @@ export const addSubscriber = async (req, res) => {
     if (customer?.length === 0)
       return res
         .status(404)
-        .send({ status: "error", message: "User not found" });
+        .send({ status: "error", message: "Customer not found" });
 
     const response = await customerService.addSubscriber(code);
     if (!response)
