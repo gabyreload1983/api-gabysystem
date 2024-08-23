@@ -18,6 +18,18 @@ export default class Customers {
       `SELECT * FROM clientes WHERE condicion = 30 ORDER BY nombre`
     );
 
+  addSubscriber = async (code) =>
+    await sendQueryUrbano(
+      `UPDATE clientes SET condicion = 30 WHERE codigo = ?`,
+      [code]
+    );
+
+  removeSubscriber = async (code) =>
+    await sendQueryUrbano(
+      `UPDATE clientes SET condicion = 1 WHERE codigo = ?`,
+      [code]
+    );
+
   getCustomersVouchers = async (id) =>
     await sendQueryUrbano(`SELECT * FROM ctacli WHERE codigo = ?`, [id]);
 
