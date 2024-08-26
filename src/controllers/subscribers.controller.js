@@ -1,5 +1,6 @@
 import logger from "../logger/logger.js";
 import * as subscribersService from "../services/subscribers.service.js";
+import * as customersService from "../services/customers.service.js";
 
 export const getSubscriber = async (req, res) => {
   try {
@@ -64,26 +65,30 @@ export const getSubscribers = async (req, res) => {
 
 export const create = async (req, res) => {
   try {
-    const { email, code, name } = req.body;
+    const { code } = req.body;
 
-    if (!email || !code || !name)
+    if (!code)
       return res
         .status(400)
         .send({ status: "error", message: "Incomplete values!" });
 
-    const subscriber = await subscribersService.getSubscriberByEmail(email);
-    if (subscriber) {
+    const customer = await customersService.getByCode(code);
+    if (!customer)
+      return res
+        .status(404)
+        .send({ status: "error", message: "Customer not found" });
+
+    const response = await subscribersService.create({ customer });
+
+    if (!response)
       return res
         .status(400)
-        .send({ status: "error", message: "Subscriber already exists" });
-    }
-
-    await subscribersService.create({ email, code, name });
+        .send({ status: "error", message: "Error creating subscriber" });
 
     res.send({
       status: "success",
       message: "Subscriber created",
-      payload: true,
+      payload: response,
     });
   } catch (error) {
     logger.error(error.message);

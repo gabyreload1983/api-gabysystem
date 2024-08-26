@@ -5,8 +5,12 @@ import CustomersRepository from "../repository/Customers.repository.js";
 const customerManager = new Customers();
 const customersRepository = new CustomersRepository(customerManager);
 
-export const getByCode = async (codigo) =>
-  await customersRepository.getByCode(codigo);
+export const getByCode = async (codigo) => {
+  const customer = await customersRepository.getByCode(codigo);
+  if (!customer || customer?.length === 0) return;
+
+  return customer[0];
+};
 
 export const getCustomersByName = async (name) =>
   await customersRepository.getByName(name);
@@ -17,9 +21,8 @@ export const getCustomers = async () =>
 export const getSubscribers = async () =>
   await customersRepository.getSubscribers();
 
-export const addSubscriber = async (code) => {
-  return await customersRepository.addSubscriber(code);
-};
+export const addSubscriber = async (code) =>
+  await customersRepository.addSubscriber(code);
 
 export const removeSubscriber = async (code) => {
   return await customersRepository.removeSubscriber(code);

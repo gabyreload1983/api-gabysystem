@@ -17,12 +17,6 @@ router.get(
 router.get("/:name", customersController.getCustomersByName);
 
 router.put(
-  "/subscribers/add",
-  authorization("premium"),
-  customersController.addSubscriber
-);
-
-router.put(
   "/subscribers/remove",
   authorization("premium"),
   customersController.removeSubscriber
