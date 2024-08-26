@@ -96,9 +96,9 @@ export const create = async (req, res) => {
   }
 };
 
-export const remove = async (req, res) => {
+export const removeSubscription = async (req, res) => {
   try {
-    const { code } = req.params;
+    const { code } = req.body;
 
     const subscriber = await subscribersService.getSubscriberByCode(code);
     if (!subscriber)
@@ -106,11 +106,11 @@ export const remove = async (req, res) => {
         .status(404)
         .send({ status: "error", message: "Subscriber not found" });
 
-    const response = await subscribersService.remove(subscriber._id);
+    const response = await subscribersService.removeSubscription(subscriber);
     if (!response)
       return res
         .status(400)
-        .send({ status: "error", message: "Error deleting Subscriber" });
+        .send({ status: "error", message: "Error deleting Subscription" });
 
     res.send({
       status: "success",

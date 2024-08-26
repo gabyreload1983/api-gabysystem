@@ -8,4 +8,6 @@ router.get("/code/:codigo", subscribersController.getSubscriberByCode);
 
 router.post("/", subscribersController.create);
 
+router.put("/remove-subscription", subscribersController.removeSubscription);
+
 export default router;

@@ -24,9 +24,8 @@ export const getSubscribers = async () =>
 export const addSubscriber = async (code) =>
   await customersRepository.addSubscriber(code);
 
-export const removeSubscriber = async (code) => {
-  return await customersRepository.removeSubscriber(code);
-};
+export const removeSubscription = async (code) =>
+  await customersRepository.removeSubscription(code);
 
 export const getSummaries = async (balanceFilter = 1000) => {
   const customers = await customersRepository.getCustomers();

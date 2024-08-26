@@ -16,10 +16,4 @@ router.get(
 
 router.get("/:name", customersController.getCustomersByName);
 
-router.put(
-  "/subscribers/remove",
-  authorization("premium"),
-  customersController.removeSubscriber
-);
-
 export default router;

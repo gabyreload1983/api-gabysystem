@@ -14,8 +14,10 @@ export const getSubscriberByCode = async (code) =>
 export const getSubscriberByEmail = async (email) =>
   await subscribersRepository.getSubscriberByEmail(email);
 
-export const getSubscribers = async () =>
-  await subscribersRepository.getSubscribers();
+export const getSubscribers = async () => {
+  const subscribers = await subscribersRepository.getSubscribers();
+  return subscribers.filter((subscriber) => subscriber.status);
+};
 
 export const create = async ({ customer }) => {
   const subscriber = await getSubscriberByCode(customer.codigo);
@@ -33,4 +35,8 @@ export const create = async ({ customer }) => {
 export const update = async (id, subscriber) =>
   await subscribersRepository.update(id, subscriber);
 
-export const remove = async (id) => await subscribersRepository.remove(id);
+export const removeSubscription = async (subscriber) => {
+  await customersService.removeSubscription(subscriber.code);
+  const updatedSubcriber = { ...subscriber, status: false };
+  return await subscribersRepository.update(subscriber._id, updatedSubcriber);
+};

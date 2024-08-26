@@ -108,30 +108,3 @@ export const getSummaries = async (req, res) => {
     res.status(500).send(error);
   }
 };
-
-export const removeSubscriber = async (req, res) => {
-  try {
-    const { code } = req.body;
-
-    const customer = await customerService.getByCode(code);
-    if (customer?.length === 0)
-      return res
-        .status(404)
-        .send({ status: "error", message: "Customer not found" });
-
-    const response = await customerService.removeSubscriber(code);
-    if (!response)
-      return res
-        .status(400)
-        .send({ status: "error", message: "Error updating customer" });
-
-    res.send({
-      status: "success",
-      message: `Subscriber removed successfully`,
-      payload: response,
-    });
-  } catch (error) {
-    logger.error(error.message);
-    res.status(500).send(error);
-  }
-};
