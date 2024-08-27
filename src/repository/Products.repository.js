@@ -13,7 +13,7 @@ export default class ProductsRepository {
   getBySerie = async (serie) => {
     const response = await this.dao.getBySerie(serie);
     if (!response) return;
-    return response.length === 0 ? [] : response[0];
+    return response.length === 0 ? null : response[0];
   };
 
   getOrderList = async () => await this.dao.getOrderList();
