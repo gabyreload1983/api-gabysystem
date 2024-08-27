@@ -36,10 +36,6 @@ export const searchBySerie = async (req, res) => {
         .send({ status: "error", message: "You must send a serial number" });
 
     const product = await productService.searchBySerie(serialNumber);
-    if (!product)
-      return res
-        .status(404)
-        .send({ status: "error", message: "Product no found!" });
 
     res.send({ status: "success", payload: product });
   } catch (error) {
