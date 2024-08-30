@@ -49,6 +49,12 @@ const subscribersSchema = new mongoose.Schema(
           mac: {
             type: String,
             required: true,
+            unique: true,
+          },
+          equipment_type: {
+            type: String,
+            enum: ["Servidor", "Equipo", "Impresora"],
+            required: true,
           },
           name: String,
           observation: String,
