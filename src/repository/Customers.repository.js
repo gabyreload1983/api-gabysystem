@@ -13,7 +13,7 @@ export default class CustomersRepository {
 
   addSubscriber = async (code) => await this.dao.addSubscriber(code);
 
-  removeSubscriber = async (code) => await this.dao.removeSubscriber(code);
+  removeSubscription = async (code) => await this.dao.removeSubscription(code);
 
   getCustomersVouchers = async (id) => await this.dao.getCustomersVouchers(id);
 

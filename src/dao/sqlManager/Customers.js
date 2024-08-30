@@ -24,7 +24,7 @@ export default class Customers {
       [code]
     );
 
-  removeSubscriber = async (code) =>
+  removeSubscription = async (code) =>
     await sendQueryUrbano(
       `UPDATE clientes SET condicion = 1 WHERE codigo = ?`,
       [code]

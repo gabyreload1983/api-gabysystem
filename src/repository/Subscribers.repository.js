@@ -1,3 +1,5 @@
+import SubscriberCreateDto from "../dao/DTOs/SubscriberCreate.dto.js";
+import SubscriberUpdateDto from "../dao/DTOs/SubscriberUpdate.dto.js";
 export default class SubscribersRepository {
   constructor(dao) {
     this.dao = dao;
@@ -13,9 +15,11 @@ export default class SubscribersRepository {
 
   getSubscribers = async () => await this.dao.getSubscribers();
 
-  create = async (subscriber) => await this.dao.create(subscriber);
+  create = async (subscriber) =>
+    await this.dao.create(new SubscriberCreateDto(subscriber));
 
-  update = async (id, subscriber) => await this.dao.update(id, subscriber);
+  update = async (id, subscriber) =>
+    await this.dao.update(id, new SubscriberUpdateDto(subscriber));
 
   remove = async (id) => await this.dao.remove(id);
 }
