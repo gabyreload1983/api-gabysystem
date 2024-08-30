@@ -53,7 +53,7 @@ const subscribersSchema = new mongoose.Schema(
           },
           equipment_type: {
             type: String,
-            enum: ["Servidor", "Equipo", "Impresora"],
+            enum: ["server", "desktop", "notebook", "printer"],
             required: true,
           },
           name: String,
