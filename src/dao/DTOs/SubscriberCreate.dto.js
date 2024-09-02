@@ -9,7 +9,7 @@ export default class SubscriberCreateDto {
     this.balance = subscriber.saldo;
     this.condition = 30;
     this.createdAt = subscriber.alta;
-    this.email = subscriber.email;
+    this.email = subscriber.mail;
     this.list = subscriber.lista;
     this.status = true;
   }
