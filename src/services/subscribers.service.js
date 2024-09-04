@@ -32,8 +32,8 @@ export const create = async ({ customer }) => {
   return await subscribersRepository.update(subscriber.id, updatedSubcriber);
 };
 
-export const update = async (id, subscriber) =>
-  await subscribersRepository.update(id, subscriber);
+export const update = async (id, subscriberUpdate) =>
+  await subscribersRepository.update(id, subscriberUpdate);
 
 export const removeSubscription = async (subscriber) => {
   await customersService.removeSubscription(subscriber.code);

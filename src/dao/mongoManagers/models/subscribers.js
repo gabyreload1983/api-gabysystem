@@ -49,11 +49,10 @@ const subscribersSchema = new mongoose.Schema(
           mac: {
             type: String,
             required: true,
-            unique: true,
           },
           equipment_type: {
             type: String,
-            enum: ["server", "desktop", "notebook", "printer"],
+            enum: ["SERVER", "DESKTOP", "NOTEBOOK", "PRINTER"],
             required: true,
           },
           name: String,

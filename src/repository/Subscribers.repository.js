@@ -18,8 +18,8 @@ export default class SubscribersRepository {
   create = async (subscriber) =>
     await this.dao.create(new SubscriberCreateDto(subscriber));
 
-  update = async (id, subscriber) =>
-    await this.dao.update(id, new SubscriberUpdateDto(subscriber));
+  update = async (id, subscriberUpdate) =>
+    await this.dao.update(id, new SubscriberUpdateDto(subscriberUpdate));
 
   remove = async (id) => await this.dao.remove(id);
 }
