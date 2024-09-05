@@ -391,18 +391,18 @@ export const updateCustomer = async (req, res) => {
     const { nrocompro, customerId } = req.body;
 
     const customer = await customersServices.getByCode(customerId);
-    if (customer.length === 0)
+    if (!customer)
       return res
         .status(404)
         .send({ status: "error", message: "Customer not found" });
 
     const order = await ordersService.getOrder(nrocompro);
-    if (order.length === 0)
+    if (!order)
       return res
         .status(404)
         .send({ status: "error", message: "Order not found" });
 
-    const result = await ordersService.updateCustomer(nrocompro, customer[0]);
+    const result = await ordersService.updateCustomer(nrocompro, customer);
     if (!result)
       return res.status(400).send({
         status: "error",
