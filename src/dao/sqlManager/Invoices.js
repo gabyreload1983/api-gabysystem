@@ -49,7 +49,7 @@ export default class Invoices {
 
   getServiceWorkInvoice = async (codigo, serviceworkNro) =>
     await sendQueryUrbano(
-      `SELECT nrocompro FROM ctacli 
+      `SELECT nrocompro, saldo FROM ctacli 
         WHERE codigo = ? AND vienede = ?`,
       [codigo, serviceworkNro]
     );

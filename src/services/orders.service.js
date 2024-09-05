@@ -64,10 +64,14 @@ export const getOrder = async (nrocompro) => {
     formatProduct(product, dollar)
   );
   order.total = getTotalOrder(order);
-  order.invoice = await invoicesService.getServiceWorkInvoice(
+  order.invoices = false;
+  const invoice = await invoicesService.getServiceWorkInvoice(
     order.codigo,
     order.nrocompro
   );
+
+  if (invoice)
+    (order.invoice = invoice.nrocompro), (order.balance = invoice.balance);
 
   return order;
 };

@@ -27,6 +27,12 @@ export const getServiceWorkInvoice = async (codigo, serviceworkNro) => {
     codigo,
     serviceworkNro
   );
-  if (response?.length === 1) return response[0].nrocompro;
+  if (response?.length === 1) {
+    const invoice = {
+      nrocompro: response[0].nrocompro,
+      balance: response[0].saldo,
+    };
+    return invoice;
+  }
   return false;
 };
