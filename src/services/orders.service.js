@@ -327,5 +327,14 @@ export const sendCustomerPdf = async ({ order, user }) => {
   }
 
   const response = await sendOrder({ nrocompro, recipient });
+  if (response.status === 200) {
+    const nroenvio = order.nroenvio ? Number(order.nroenvio) + 1 : 1;
+
+    await orderRepository.updateOrder({
+      nrocompro: order.nrocompro,
+      order: { ...order, nroenvio },
+    });
+  }
+
   return response.status;
 };

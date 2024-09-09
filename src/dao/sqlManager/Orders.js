@@ -268,7 +268,7 @@ export default class Orders {
     SET 
     codigo = ?, nombre = ?, telefono = ?, codiart = ?, descart = ?, serie = ?, operador = ?, 
     falla = ?, accesorios = ?, estado = ?, diag = ?, diagnosticado = ?, ubicacion = ?, ubicado = ?, 
-    diagnostico = ?, prioridad = ?, tecnico = ?, costo = ?, egresado = ?, pendiente = ?
+    diagnostico = ?, prioridad = ?, tecnico = ?, costo = ?, egresado = ?, pendiente = ?, nroenvio = ?
     WHERE nrocompro = ?`,
       [
         order.codigo,
@@ -291,6 +291,7 @@ export default class Orders {
         order.costo,
         order.egresado,
         order.pendiente,
+        order.nroenvio,
         nrocompro,
       ]
     );
