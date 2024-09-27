@@ -17,7 +17,7 @@ import {
 import { nanoid } from "nanoid";
 import { buildOrderPDF } from "../pdfKit/pdfKit.js";
 import StatisticsTechnicalDto from "../dao/DTOs/StatisticsTechnical.dto.js";
-import { sendOrder } from "../whatsapp/sendWhatsapp.js";
+import { sendFinishOrder, sendOrder } from "../whatsapp/sendWhatsapp.js";
 import { isValidPhoneNumber } from "../validators/validator.js";
 import { sendPdfToSinapsisWeb } from "../ftpService/FtpService.js";
 import * as invoicesService from "./invoices.service.js";
@@ -164,18 +164,25 @@ export const close = async (
 
   if (notification) {
     const customer = await customersRepository.getByCode(orderUpdate.codigo);
-    if (!customer[0].mail) return result;
-
-    const info = await sendMail(
-      customer[0].mail,
-      "Sinapsis - ORDEN REPARACION",
-      "Notificacion Servicio Tecnico",
-      getHtmlEmailNotification(
-        `La misma se encuentra finalizada y lista para retirar.`,
-        nrocompro
-      )
-    );
-    result.email = info;
+    if (customer[0].mail) {
+      await sendMail(
+        customer[0].mail,
+        "Sinapsis - ORDEN REPARACION",
+        "Notificacion Servicio Tecnico",
+        getHtmlEmailNotification(
+          `La misma se encuentra finalizada y lista para retirar.`,
+          nrocompro
+        )
+      );
+    }
+    if (customer[0].telefono) {
+      //validate number
+      const formastPhone = customer[0].telefono; // format
+      await sendFinishOrder({
+        order: orderUpdate,
+        recipient: formastPhone,
+      });
+    }
   }
   return result;
 };

@@ -74,8 +74,8 @@ export const sendOrder = async ({ nrocompro, recipient }) => {
   return await sendWhatsapp(data);
 };
 
-export const sendFinishOrder = async ({ nrocompro, recipient }) => {
-  const component = getComponentTemplate(nrocompro);
+export const sendFinishOrder = async ({ order, recipient }) => {
+  const component = getComponentTemplate(order.nrocompro);
   const data = getDataMessageTemplate(recipient, "orden_finalizada", component);
   return await sendWhatsapp(data);
 };
