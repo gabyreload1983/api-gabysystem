@@ -67,14 +67,14 @@ export const getComponentTemplate = (text) => [
   },
 ];
 
-export const sendOrder = async ({ nrocompro, recipient }) => {
+export const sendWhatsappPdfOrder = async ({ nrocompro, recipient }) => {
   const link = `https://sinapsis.com.ar/resources/serviceworks/${nrocompro}.pdf`;
   const component = getComponentWithLink(nrocompro, link);
   const data = getDataMessageTemplate(recipient, "enviar_orden", component);
   return await sendWhatsapp(data);
 };
 
-export const sendFinishOrder = async ({ order, recipient }) => {
+export const sendWhatsappFinishOrder = async ({ order, recipient }) => {
   const component = getComponentTemplate(order.nrocompro);
   const data = getDataMessageTemplate(recipient, "orden_finalizada", component);
   return await sendWhatsapp(data);

@@ -13,11 +13,15 @@ import {
   __dirname,
   getDiagnosis,
   getNroComproString,
+  validateCelphoneNumber,
 } from "../utils.js";
 import { nanoid } from "nanoid";
 import { buildOrderPDF } from "../pdfKit/pdfKit.js";
 import StatisticsTechnicalDto from "../dao/DTOs/StatisticsTechnical.dto.js";
-import { sendFinishOrder, sendOrder } from "../whatsapp/sendWhatsapp.js";
+import {
+  sendWhatsappFinishOrder,
+  sendWhatsappPdfOrder,
+} from "../whatsapp/sendWhatsapp.js";
 import { isValidPhoneNumber } from "../validators/validator.js";
 import { sendPdfToSinapsisWeb } from "../ftpService/FtpService.js";
 import * as invoicesService from "./invoices.service.js";
@@ -176,12 +180,15 @@ export const close = async (
       );
     }
     if (customer[0].telefono) {
-      //validate number
-      const formastPhone = customer[0].telefono; // format
-      await sendFinishOrder({
-        order: orderUpdate,
-        recipient: formastPhone,
-      });
+      const number = customer[0].telefono;
+      if (validateCelphoneNumber(number)) {
+        const formatPhone = formatWhatsappNumber(number);
+
+        await sendWhatsappFinishOrder({
+          order: orderUpdate,
+          recipient: formatPhone,
+        });
+      }
     }
   }
   return result;
@@ -333,7 +340,7 @@ export const sendCustomerPdf = async ({ order, user }) => {
     if (!responseFtp) return false;
   }
 
-  const response = await sendOrder({ nrocompro, recipient });
+  const response = await sendWhatsappPdfOrder({ nrocompro, recipient });
   if (response.status === 200) {
     const nroenvio = order.nroenvio ? Number(order.nroenvio) + 1 : 1;
 
