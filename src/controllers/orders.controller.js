@@ -197,7 +197,7 @@ export const getOrdersByCustomer = async (req, res) => {
 
 export const take = async (req, res) => {
   try {
-    const { nrocompro, code_technical } = req.body;
+    const { nrocompro, code_technical, notification } = req.body;
     if (incompleteValues(nrocompro, code_technical))
       return res
         .status(400)
@@ -209,7 +209,11 @@ export const take = async (req, res) => {
         .status(400)
         .send({ status: "error", message: "No se encontro orden" });
 
-    const result = await ordersService.take(order, code_technical);
+    const result = await ordersService.take(
+      order,
+      code_technical,
+      notification
+    );
     if (!result)
       return res.status(400).send({ status: "error", message: "Error taking" });
 

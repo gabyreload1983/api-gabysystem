@@ -21,6 +21,7 @@ import StatisticsTechnicalDto from "../dao/DTOs/StatisticsTechnical.dto.js";
 import {
   sendWhatsappFinishOrder,
   sendWhatsappPdfOrder,
+  sendWhatsappTakeOrder,
 } from "../whatsapp/sendWhatsapp.js";
 import { isValidPhoneNumber } from "../validators/validator.js";
 import { sendPdfToSinapsisWeb } from "../ftpService/FtpService.js";
@@ -117,7 +118,7 @@ export const getStatistics = async (from, to) => {
 export const getOrdersByCustomer = async (code) =>
   await orderRepository.getOrdersByCustomer(code);
 
-export const take = async (order, code_technical) => {
+export const take = async (order, code_technical, notification) => {
   let cost = Number(order.costo) > 1 ? Number(order.costo) : 1;
 
   const result = await orderRepository.take(
@@ -127,17 +128,31 @@ export const take = async (order, code_technical) => {
   );
   if (!result) return false;
 
-  const customer = await customersRepository.getByCode(order.codigo);
-  if (customer[0].mail && process.env.NODE_ENV === "production") {
-    await sendMail(
-      customer[0].mail,
-      "Sinapsis - ORDEN REPARACION",
-      "Notificacion Servicio Tecnico",
-      getHtmlEmailNotification(
-        `La misma fue tomada por un técnico. Cuando este finalizada, recibiras una notificación.`,
-        order.nrocompro
-      )
-    );
+  if (notification) {
+    const customer = await customersRepository.getByCode(order.codigo);
+    if (customer[0].mail && process.env.NODE_ENV === "production") {
+      await sendMail(
+        customer[0].mail,
+        "Sinapsis - ORDEN REPARACION",
+        "Notificacion Servicio Tecnico",
+        getHtmlEmailNotification(
+          `La misma fue tomada por un técnico. Cuando este finalizada, recibiras una notificación.`,
+          order.nrocompro
+        )
+      );
+    }
+
+    if (customer[0].telefono && process.env.NODE_ENV === "production") {
+      const number = customer[0].telefono;
+      if (validateCelphoneNumber(number)) {
+        const formatPhone = formatWhatsappNumber(number);
+
+        await sendWhatsappTakeOrder({
+          order,
+          recipient: formatPhone,
+        });
+      }
+    }
   }
 
   return result;
