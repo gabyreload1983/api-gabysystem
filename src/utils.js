@@ -156,4 +156,6 @@ export const getDiagnosis = (diag) => {
 export const wait = async (delay) =>
   await new Promise((resolve) => setTimeout(resolve, delay));
 
+export const validateCelphoneNumber = (number) => number.length === 10;
+
 export const formatWhatsappNumber = (number) => `54${number}`;

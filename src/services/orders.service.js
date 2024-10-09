@@ -13,11 +13,15 @@ import {
   __dirname,
   getDiagnosis,
   getNroComproString,
+  validateCelphoneNumber,
 } from "../utils.js";
 import { nanoid } from "nanoid";
 import { buildOrderPDF } from "../pdfKit/pdfKit.js";
 import StatisticsTechnicalDto from "../dao/DTOs/StatisticsTechnical.dto.js";
-import { sendOrder } from "../whatsapp/sendWhatsapp.js";
+import {
+  sendWhatsappFinishOrder,
+  sendWhatsappPdfOrder,
+} from "../whatsapp/sendWhatsapp.js";
 import { isValidPhoneNumber } from "../validators/validator.js";
 import { sendPdfToSinapsisWeb } from "../ftpService/FtpService.js";
 import * as invoicesService from "./invoices.service.js";
@@ -164,18 +168,28 @@ export const close = async (
 
   if (notification) {
     const customer = await customersRepository.getByCode(orderUpdate.codigo);
-    if (!customer[0].mail) return result;
+    if (customer[0].mail) {
+      await sendMail(
+        customer[0].mail,
+        "Sinapsis - ORDEN REPARACION",
+        "Notificacion Servicio Tecnico",
+        getHtmlEmailNotification(
+          `La misma se encuentra finalizada y lista para retirar.`,
+          nrocompro
+        )
+      );
+    }
+    if (customer[0].telefono) {
+      const number = customer[0].telefono;
+      if (validateCelphoneNumber(number)) {
+        const formatPhone = formatWhatsappNumber(number);
 
-    const info = await sendMail(
-      customer[0].mail,
-      "Sinapsis - ORDEN REPARACION",
-      "Notificacion Servicio Tecnico",
-      getHtmlEmailNotification(
-        `La misma se encuentra finalizada y lista para retirar.`,
-        nrocompro
-      )
-    );
-    result.email = info;
+        await sendWhatsappFinishOrder({
+          order: orderUpdate,
+          recipient: formatPhone,
+        });
+      }
+    }
   }
   return result;
 };
@@ -326,7 +340,7 @@ export const sendCustomerPdf = async ({ order, user }) => {
     if (!responseFtp) return false;
   }
 
-  const response = await sendOrder({ nrocompro, recipient });
+  const response = await sendWhatsappPdfOrder({ nrocompro, recipient });
   if (response.status === 200) {
     const nroenvio = order.nroenvio ? Number(order.nroenvio) + 1 : 1;
 
