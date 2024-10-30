@@ -159,3 +159,15 @@ export const wait = async (delay) =>
 export const validateCelphoneNumber = (number) => number.length === 10;
 
 export const formatWhatsappNumber = (number) => `54${number}`;
+
+export const getFinishOrderTemplate = (diag) => {
+  if (diag === 22) return "orden_finalizada";
+  if (diag === 23) return "orden_sin_reparacion";
+};
+
+export const getFinishOrderEmailMessage = (diag) => {
+  if (diag === 22)
+    return "La misma se encuentra finalizada y lista para retirar.";
+  if (diag === 23)
+    return "La misma se encuentra finalizada, pero sin reparacion y lista para retirar.";
+};

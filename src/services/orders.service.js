@@ -14,6 +14,7 @@ import {
   getDiagnosis,
   getNroComproString,
   validateCelphoneNumber,
+  getFinishOrderEmailMessage,
 } from "../utils.js";
 import { nanoid } from "nanoid";
 import { buildOrderPDF } from "../pdfKit/pdfKit.js";
@@ -184,14 +185,12 @@ export const close = async (
   if (notification) {
     const customer = await customersRepository.getByCode(orderUpdate.codigo);
     if (customer[0].mail) {
+      const message = getFinishOrderEmailMessage(orderUpdate.diag);
       await sendMail(
         customer[0].mail,
         "Sinapsis - ORDEN REPARACION",
         "Notificacion Servicio Tecnico",
-        getHtmlEmailNotification(
-          `La misma se encuentra finalizada y lista para retirar.`,
-          nrocompro
-        )
+        getHtmlEmailNotification(message, nrocompro)
       );
     }
     if (customer[0].telefono) {
