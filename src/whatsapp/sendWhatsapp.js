@@ -1,4 +1,5 @@
 import axios from "axios";
+import { getFinishOrderTemplate } from "../utils.js";
 
 export const sendWhatsapp = (data) => {
   const config = {
@@ -82,6 +83,7 @@ export const sendWhatsappTakeOrder = async ({ order, recipient }) => {
 
 export const sendWhatsappFinishOrder = async ({ order, recipient }) => {
   const component = getComponentTemplate(order.nrocompro);
-  const data = getDataMessageTemplate(recipient, "orden_finalizada", component);
+  const template = getFinishOrderTemplate(order.diag);
+  const data = getDataMessageTemplate(recipient, template, component);
   return await sendWhatsapp(data);
 };
