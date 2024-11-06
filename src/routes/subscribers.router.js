@@ -14,6 +14,13 @@ router.put(
   authorization("premium"),
   subscribersController.removeSubscription
 );
+
+router.put(
+  "/add-equipment",
+  authorization("premium", "technical"),
+  subscribersController.addEquipment
+);
+
 router.put(
   "/:code",
   authorization("premium", "technical"),

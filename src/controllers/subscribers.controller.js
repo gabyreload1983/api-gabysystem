@@ -153,3 +153,50 @@ export const updateSubscriber = async (req, res) => {
     res.status(500).send(error);
   }
 };
+
+export const addEquipment = async (req, res) => {
+  try {
+    const { code, newEquipment } = req.body;
+
+    const subscriber = await subscribersService.getSubscriberByCode(code);
+    if (!subscriber)
+      return res
+        .status(404)
+        .send({ status: "error", message: "Subscriber not found" });
+
+    const subscribers = await subscribersService.getSubscribers();
+
+    for (const subs of subscribers) {
+      const index = subs.equipments.findIndex(
+        (equipment) => equipment.mac === newEquipment.mac
+      );
+      if (index !== -1)
+        return res
+          .status(400)
+          .send({ status: "error", message: "MAC already exists" });
+    }
+
+    const subscriberUpdate = {
+      ...subscriber,
+      equipments: [...subscriber.equipments, newEquipment],
+    };
+
+    const response = await subscribersService.update(
+      subscriber._id,
+      subscriberUpdate
+    );
+    if (!response)
+      return res
+        .status(400)
+        .send({ status: "error", message: "Error updating Subscriber" });
+
+    res.send({
+      status: "success",
+      message: "Subscriber update successfully",
+      payload: response,
+    });
+  } catch (error) {
+    logger.error(error.message);
+    res.status(500).send(error);
+  }
+};
