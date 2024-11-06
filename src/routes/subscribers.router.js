@@ -22,6 +22,12 @@ router.put(
 );
 
 router.put(
+  "/remove-equipment",
+  authorization("premium", "technical"),
+  subscribersController.removeEquipment
+);
+
+router.put(
   "/:code",
   authorization("premium", "technical"),
   subscribersController.updateSubscriber
