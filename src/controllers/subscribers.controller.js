@@ -168,12 +168,12 @@ export const addEquipment = async (req, res) => {
 
     for (const subs of subscribers) {
       const index = subs.equipments.findIndex(
-        (equipment) => equipment.mac === newEquipment.mac.toUpperCase()
+        (equipment) => equipment.uuid === newEquipment.uuid.toUpperCase()
       );
       if (index !== -1)
         return res
           .status(400)
-          .send({ status: "error", message: "MAC already exists" });
+          .send({ status: "error", message: "UUID already exists" });
     }
     const response = await subscribersService.addEquipment(
       subscriber,
@@ -209,7 +209,7 @@ export const removeEquipment = async (req, res) => {
         .send({ status: "error", message: "Subscriber not found" });
 
     const newEquipments = subscriber.equipments.filter(
-      (equipment) => equipment.mac !== equipmentToRemove.mac
+      (equipment) => equipment.uuid !== equipmentToRemove.uuid
     );
 
     const subscriberUpdate = {
@@ -224,11 +224,11 @@ export const removeEquipment = async (req, res) => {
     if (!response)
       return res
         .status(400)
-        .send({ status: "error", message: "Error updating Subscriber" });
+        .send({ status: "error", message: "Error removing equipment" });
 
     res.send({
       status: "success",
-      message: "Subscriber update successfully",
+      message: "Removing equipment successfully",
       payload: response,
     });
   } catch (error) {

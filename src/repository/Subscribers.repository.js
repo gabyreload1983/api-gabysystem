@@ -19,7 +19,7 @@ export default class SubscribersRepository {
     await this.dao.create(new SubscriberCreateDto(subscriber));
 
   addEquipment = async (subscriber, newEquipment) => {
-    newEquipment.mac = newEquipment.mac.toLocaleUpperCase();
+    newEquipment.uuid = newEquipment.uuid.toLocaleUpperCase();
 
     const subscriberUpdate = {
       ...subscriber,
