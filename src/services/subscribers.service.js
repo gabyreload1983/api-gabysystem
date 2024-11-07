@@ -32,8 +32,17 @@ export const create = async ({ customer }) => {
   return await subscribersRepository.update(subscriber.id, updatedSubcriber);
 };
 
+export const getEquipmentById = async (id) =>
+  await subscribersRepository.getEquipmentById(id);
+
 export const addEquipment = async (subscriber, newEquipment) =>
   await subscribersRepository.addEquipment(subscriber, newEquipment);
+
+export const updateEquipmentById = async (id, updatedEquipment) =>
+  await subscribersRepository.updateEquipmentById(id, updatedEquipment);
+
+export const removeEquipmentById = async (id) =>
+  await subscribersRepository.removeEquipmentById(id);
 
 export const update = async (id, subscriberUpdate) =>
   await subscribersRepository.update(id, subscriberUpdate);

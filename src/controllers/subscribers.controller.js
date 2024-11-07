@@ -198,28 +198,19 @@ export const addEquipment = async (req, res) => {
 
 export const removeEquipment = async (req, res) => {
   try {
-    const { equipmentToRemove, subscriberCode } = req.body;
+    const { equipmentToRemove } = req.body;
 
-    const subscriber = await subscribersService.getSubscriberByCode(
-      subscriberCode
+    const data = await subscribersService.getEquipmentById(
+      equipmentToRemove._id
     );
-    if (!subscriber)
+
+    if (data?.equipments.length === 0)
       return res
         .status(404)
-        .send({ status: "error", message: "Subscriber not found" });
+        .send({ status: "error", message: "Equipment not found" });
 
-    const newEquipments = subscriber.equipments.filter(
-      (equipment) => equipment.uuid !== equipmentToRemove.uuid
-    );
-
-    const subscriberUpdate = {
-      ...subscriber,
-      equipments: newEquipments,
-    };
-
-    const response = await subscribersService.update(
-      subscriber._id,
-      subscriberUpdate
+    const response = await subscribersService.removeEquipmentById(
+      equipmentToRemove._id
     );
     if (!response)
       return res
@@ -229,6 +220,48 @@ export const removeEquipment = async (req, res) => {
     res.send({
       status: "success",
       message: "Removing equipment successfully",
+      payload: response,
+    });
+  } catch (error) {
+    logger.error(error.message);
+    res.status(500).send(error);
+  }
+};
+
+export const updateEquipment = async (req, res) => {
+  try {
+    const { updatedEquipment } = req.body;
+
+    const data = await subscribersService.getEquipmentById(
+      updatedEquipment._id
+    );
+
+    if (data?.equipments.length === 0)
+      return res
+        .status(404)
+        .send({ status: "error", message: "Equipment not found" });
+
+    const equipmentFound = data?.equipments[0];
+
+    // TODO validate if UUID exists and if exists belong to the same
+    // if (updatedEquipment.uuid !== equipmentFound?.uuid)
+    //   return res
+    //     .status(400)
+    //     .send({ status: "error", message: "UUID already exists" });
+
+    const response = await subscribersService.updateEquipmentById(
+      equipmentFound._id,
+      updatedEquipment
+    );
+
+    if (!response)
+      return res
+        .status(400)
+        .send({ status: "error", message: "Error updating equipment" });
+
+    res.send({
+      status: "success",
+      message: "Updating equipment successfully",
       payload: response,
     });
   } catch (error) {

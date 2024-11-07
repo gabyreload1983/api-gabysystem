@@ -32,6 +32,13 @@ export default class SubscribersRepository {
     );
   };
 
+  getEquipmentById = async (id) => await this.dao.getEquipmentById(id);
+
+  updateEquipmentById = async (id, updatedEquipment) =>
+    await this.dao.updateEquipmentById(id, updatedEquipment);
+
+  removeEquipmentById = async (id) => await this.dao.removeEquipmentById(id);
+
   update = async (id, subscriberUpdate) =>
     await this.dao.update(id, new SubscriberUpdateDto(subscriberUpdate));
 
