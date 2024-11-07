@@ -168,31 +168,26 @@ export const addEquipment = async (req, res) => {
 
     for (const subs of subscribers) {
       const index = subs.equipments.findIndex(
-        (equipment) => equipment.mac === newEquipment.mac
+        (equipment) => equipment.mac === newEquipment.mac.toUpperCase()
       );
       if (index !== -1)
         return res
           .status(400)
           .send({ status: "error", message: "MAC already exists" });
     }
-
-    const subscriberUpdate = {
-      ...subscriber,
-      equipments: [...subscriber.equipments, newEquipment],
-    };
-
-    const response = await subscribersService.update(
-      subscriber._id,
-      subscriberUpdate
+    const response = await subscribersService.addEquipment(
+      subscriber,
+      newEquipment
     );
+
     if (!response)
       return res
         .status(400)
-        .send({ status: "error", message: "Error updating Subscriber" });
+        .send({ status: "error", message: "Error adding equipment" });
 
     res.send({
       status: "success",
-      message: "Subscriber update successfully",
+      message: "Adding equipment successfully",
       payload: response,
     });
   } catch (error) {

@@ -32,6 +32,9 @@ export const create = async ({ customer }) => {
   return await subscribersRepository.update(subscriber.id, updatedSubcriber);
 };
 
+export const addEquipment = async (subscriber, newEquipment) =>
+  await subscribersRepository.addEquipment(subscriber, newEquipment);
+
 export const update = async (id, subscriberUpdate) =>
   await subscribersRepository.update(id, subscriberUpdate);
 
