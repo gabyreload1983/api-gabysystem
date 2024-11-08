@@ -204,7 +204,7 @@ export const removeEquipment = async (req, res) => {
       equipmentToRemove._id
     );
 
-    if (data?.equipments.length === 0)
+    if (!data)
       return res
         .status(404)
         .send({ status: "error", message: "Equipment not found" });
