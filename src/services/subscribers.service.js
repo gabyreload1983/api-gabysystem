@@ -1,3 +1,4 @@
+import axios from "axios";
 import Subscribers from "../dao/mongoManagers/Subscribers.js";
 import SubscribersRepository from "../repository/Subscribers.repository.js";
 import * as customersService from "./customers.service.js";
@@ -38,8 +39,41 @@ export const getEquipmentById = async (id) =>
 export const getEquipmentByUUID = async (uuid) =>
   await subscribersRepository.getEquipmentByUUID(uuid);
 
-export const addEquipment = async (subscriber, newEquipment) =>
-  await subscribersRepository.addEquipment(subscriber, newEquipment);
+export const addEquipment = async (subscriber, newEquipment) => {
+  const { data: fileData } = await axios.get(`${ABONADOS_URL}`, {
+    headers: {
+      Authorization: `Bearer ${GITHUB_TOKEN_SUBSCRIBERS}`,
+      Accept: "application/vnd.github.v3+json",
+    },
+  });
+
+  if (!fileData) return;
+  const fileContent = Buffer.from(fileData.content, "base64").toString("utf-8");
+  const uuids = JSON.parse(fileContent);
+
+  const exists = uuids.includes(newEquipment.uuid);
+  if (exists) return;
+
+  // data.push(newEquipment.uuid);
+  // const updatedContent = [...data];
+
+  // const res = await axios.put(
+  //   `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`,
+  //   {
+  //     message: "Actualizar UUIDs en data.json",
+  //     content: updatedContent,
+  //     sha: sha,
+  //   },
+  //   {
+  //     headers: {
+  //       Authorization: `Bearer ${GITHUB_TOKEN}`,
+  //       Accept: "application/vnd.github.v3+json",
+  //     },
+  //   }
+  // );
+
+  // return await subscribersRepository.addEquipment(subscriber, newEquipment);
+};
 
 export const updateEquipmentById = async (id, updatedEquipment) =>
   await subscribersRepository.updateEquipmentById(id, updatedEquipment);
