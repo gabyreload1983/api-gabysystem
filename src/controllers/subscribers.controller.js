@@ -232,25 +232,26 @@ export const updateEquipment = async (req, res) => {
   try {
     const { updatedEquipment } = req.body;
 
-    const data = await subscribersService.getEquipmentById(
+    const dataById = await subscribersService.getEquipmentById(
       updatedEquipment._id
     );
 
-    if (data?.equipments.length === 0)
+    if (!dataById)
       return res
         .status(404)
         .send({ status: "error", message: "Equipment not found" });
 
-    const equipmentFound = data?.equipments[0];
+    const dataByUUID = await subscribersService.getEquipmentByUUID(
+      updatedEquipment.uuid
+    );
 
-    // TODO validate if UUID exists and if exists belong to the same
-    // if (updatedEquipment.uuid !== equipmentFound?.uuid)
-    //   return res
-    //     .status(400)
-    //     .send({ status: "error", message: "UUID already exists" });
+    if (dataByUUID && dataByUUID?.uuid !== dataById?.uuid)
+      return res
+        .status(400)
+        .send({ status: "error", message: "UUID already exists" });
 
     const response = await subscribersService.updateEquipmentById(
-      equipmentFound._id,
+      updatedEquipment._id,
       updatedEquipment
     );
 

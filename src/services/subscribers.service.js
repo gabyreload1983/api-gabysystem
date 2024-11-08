@@ -35,6 +35,9 @@ export const create = async ({ customer }) => {
 export const getEquipmentById = async (id) =>
   await subscribersRepository.getEquipmentById(id);
 
+export const getEquipmentByUUID = async (uuid) =>
+  await subscribersRepository.getEquipmentByUUID(uuid);
+
 export const addEquipment = async (subscriber, newEquipment) =>
   await subscribersRepository.addEquipment(subscriber, newEquipment);
 

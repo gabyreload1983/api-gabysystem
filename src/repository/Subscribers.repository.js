@@ -32,7 +32,19 @@ export default class SubscribersRepository {
     );
   };
 
-  getEquipmentById = async (id) => await this.dao.getEquipmentById(id);
+  getEquipmentById = async (id) => {
+    const data = await this.dao.getEquipmentById(id);
+    if (!data || data?.equipments.length === 0) return;
+
+    return data?.equipments[0];
+  };
+
+  getEquipmentByUUID = async (uuid) => {
+    const data = await this.dao.getEquipmentByUUID(uuid);
+    if (!data || data?.equipments.length === 0) return;
+
+    return data?.equipments[0];
+  };
 
   updateEquipmentById = async (id, updatedEquipment) =>
     await this.dao.updateEquipmentById(id, updatedEquipment);

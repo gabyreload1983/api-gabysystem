@@ -19,6 +19,12 @@ export default class Subscribers {
       { "equipments.$": 1 }
     );
 
+  getEquipmentByUUID = async (uuid) =>
+    await subscribersModel.findOne(
+      { "equipments.uuid": uuid },
+      { "equipments.$": 1 }
+    );
+
   create = async (subscriber) => await subscribersModel.create(subscriber);
 
   update = async (id, subscriber) =>
