@@ -153,3 +153,125 @@ export const updateSubscriber = async (req, res) => {
     res.status(500).send(error);
   }
 };
+
+export const addEquipment = async (req, res) => {
+  try {
+    const { code, newEquipment } = req.body;
+
+    const subscriber = await subscribersService.getSubscriberByCode(code);
+    if (!subscriber)
+      return res
+        .status(404)
+        .send({ status: "error", message: "Subscriber not found" });
+
+    const subscribers = await subscribersService.getSubscribers();
+
+    for (const subs of subscribers) {
+      const index = subs.equipments.findIndex(
+        (equipment) => equipment.uuid === newEquipment.uuid.toUpperCase()
+      );
+      if (index !== -1)
+        return res
+          .status(400)
+          .send({ status: "error", message: "UUID already exists" });
+    }
+    const response = await subscribersService.addEquipment(
+      subscriber,
+      newEquipment
+    );
+
+    if (response === false)
+      return res
+        .status(400)
+        .send({ status: "error", message: "UUID already exists" });
+
+    if (!response)
+      return res
+        .status(400)
+        .send({ status: "error", message: "Error adding equipment" });
+
+    res.send({
+      status: "success",
+      message: "Adding equipment successfully",
+      payload: response,
+    });
+  } catch (error) {
+    logger.error(error.message);
+    res.status(500).send(error);
+  }
+};
+
+export const removeEquipment = async (req, res) => {
+  try {
+    const { equipmentToRemove } = req.body;
+
+    const data = await subscribersService.getEquipmentById(
+      equipmentToRemove._id
+    );
+
+    if (!data)
+      return res
+        .status(404)
+        .send({ status: "error", message: "Equipment not found" });
+
+    const response = await subscribersService.removeEquipmentById(
+      equipmentToRemove._id
+    );
+    if (!response)
+      return res
+        .status(400)
+        .send({ status: "error", message: "Error removing equipment" });
+
+    res.send({
+      status: "success",
+      message: "Removing equipment successfully",
+      payload: response,
+    });
+  } catch (error) {
+    logger.error(error.message);
+    res.status(500).send(error);
+  }
+};
+
+export const updateEquipment = async (req, res) => {
+  try {
+    const { updatedEquipment } = req.body;
+
+    const dataById = await subscribersService.getEquipmentById(
+      updatedEquipment._id
+    );
+
+    if (!dataById)
+      return res
+        .status(404)
+        .send({ status: "error", message: "Equipment not found" });
+
+    const dataByUUID = await subscribersService.getEquipmentByUUID(
+      updatedEquipment.uuid
+    );
+
+    if (dataByUUID && dataByUUID?.uuid !== dataById?.uuid)
+      return res
+        .status(400)
+        .send({ status: "error", message: "UUID already exists" });
+
+    const response = await subscribersService.updateEquipmentById(
+      updatedEquipment._id,
+      updatedEquipment
+    );
+
+    if (!response)
+      return res
+        .status(400)
+        .send({ status: "error", message: "Error updating equipment" });
+
+    res.send({
+      status: "success",
+      message: "Updating equipment successfully",
+      payload: response,
+    });
+  } catch (error) {
+    logger.error(error.message);
+    res.status(500).send(error);
+  }
+};

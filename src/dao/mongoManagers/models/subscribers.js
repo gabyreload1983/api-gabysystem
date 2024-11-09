@@ -46,7 +46,7 @@ const subscribersSchema = new mongoose.Schema(
     equipments: {
       type: [
         {
-          mac: {
+          uuid: {
             type: String,
             required: true,
           },
