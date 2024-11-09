@@ -40,9 +40,9 @@ export const getEquipmentByUUID = async (uuid) =>
   await subscribersRepository.getEquipmentByUUID(uuid);
 
 export const addEquipment = async (subscriber, newEquipment) => {
-  const { data: fileData } = await axios.get(`${ABONADOS_URL}`, {
+  const { data: fileData } = await axios.get(`${process.env.ABONADOS_URL}`, {
     headers: {
-      Authorization: `Bearer ${GITHUB_TOKEN_SUBSCRIBERS}`,
+      Authorization: `Bearer ${process.env.GITHUB_TOKEN_SUBSCRIBERS}`,
       Accept: "application/vnd.github.v3+json",
     },
   });
@@ -52,27 +52,34 @@ export const addEquipment = async (subscriber, newEquipment) => {
   const uuids = JSON.parse(fileContent);
 
   const exists = uuids.includes(newEquipment.uuid);
-  if (exists) return;
 
-  // data.push(newEquipment.uuid);
-  // const updatedContent = [...data];
+  if (exists) return false;
 
-  // const res = await axios.put(
-  //   `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`,
-  //   {
-  //     message: "Actualizar UUIDs en data.json",
-  //     content: updatedContent,
-  //     sha: sha,
-  //   },
-  //   {
-  //     headers: {
-  //       Authorization: `Bearer ${GITHUB_TOKEN}`,
-  //       Accept: "application/vnd.github.v3+json",
-  //     },
-  //   }
-  // );
+  const newUUIDs = [...uuids, newEquipment.uuid];
 
-  // return await subscribersRepository.addEquipment(subscriber, newEquipment);
+  const sha = fileData.sha;
+  const updatedContent = Buffer.from(
+    JSON.stringify(newUUIDs, null, 2)
+  ).toString("base64");
+
+  const res = await axios.put(
+    `${process.env.ABONADOS_URL}`,
+    {
+      message: "Update UUIDs in data.json",
+      content: updatedContent,
+      sha: sha,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${process.env.GITHUB_TOKEN_SUBSCRIBERS}`,
+        Accept: "application/vnd.github.v3+json",
+      },
+    }
+  );
+
+  if (res?.status !== 200) return;
+
+  return await subscribersRepository.addEquipment(subscriber, newEquipment);
 };
 
 export const updateEquipmentById = async (id, updatedEquipment) =>

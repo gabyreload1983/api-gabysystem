@@ -180,6 +180,11 @@ export const addEquipment = async (req, res) => {
       newEquipment
     );
 
+    if (response === false)
+      return res
+        .status(400)
+        .send({ status: "error", message: "UUID already exists" });
+
     if (!response)
       return res
         .status(400)
