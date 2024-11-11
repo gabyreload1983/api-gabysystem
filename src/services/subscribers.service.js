@@ -85,8 +85,48 @@ export const addEquipment = async (subscriber, newEquipment) => {
 export const updateEquipmentById = async (id, updatedEquipment) =>
   await subscribersRepository.updateEquipmentById(id, updatedEquipment);
 
-export const removeEquipmentById = async (id) =>
-  await subscribersRepository.removeEquipmentById(id);
+export const removeEquipmentById = async (equipmentToRemove) => {
+  const { data: fileData } = await axios.get(`${process.env.ABONADOS_URL}`, {
+    headers: {
+      Authorization: `Bearer ${process.env.GITHUB_TOKEN_SUBSCRIBERS}`,
+      Accept: "application/vnd.github.v3+json",
+    },
+  });
+
+  if (!fileData) return;
+  const fileContent = Buffer.from(fileData.content, "base64").toString("utf-8");
+  const uuids = JSON.parse(fileContent);
+
+  const exists = uuids.includes(equipmentToRemove.uuid);
+
+  if (!exists) return false;
+
+  const newUUIDs = uuids.filter((uuid) => uuid !== equipmentToRemove.uuid);
+
+  const sha = fileData.sha;
+  const updatedContent = Buffer.from(
+    JSON.stringify(newUUIDs, null, 2)
+  ).toString("base64");
+
+  const res = await axios.put(
+    `${process.env.ABONADOS_URL}`,
+    {
+      message: "Update UUIDs in data.json",
+      content: updatedContent,
+      sha: sha,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${process.env.GITHUB_TOKEN_SUBSCRIBERS}`,
+        Accept: "application/vnd.github.v3+json",
+      },
+    }
+  );
+
+  if (res?.status !== 200) return;
+
+  return await subscribersRepository.removeEquipmentById(equipmentToRemove._id);
+};
 
 export const update = async (id, subscriberUpdate) =>
   await subscribersRepository.update(id, subscriberUpdate);
