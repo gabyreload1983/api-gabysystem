@@ -215,7 +215,7 @@ export const removeEquipment = async (req, res) => {
         .send({ status: "error", message: "Equipment not found" });
 
     const response = await subscribersService.removeEquipmentById(
-      equipmentToRemove._id
+      equipmentToRemove
     );
     if (!response)
       return res
