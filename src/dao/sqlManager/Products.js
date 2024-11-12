@@ -3,14 +3,14 @@ import { sendQueryUrbano } from "./sqlUtils.js";
 export default class Products {
   constructor() {}
 
-  getByCode = async (code, stock) =>
+  getByCode = async (code) =>
     await sendQueryUrbano(
       `
       SELECT *
       FROM artstk01 s
       INNER JOIN articulo a 
       ON s.codigo = a.codigo
-      WHERE a.codigo = ? AND (s.stockd01 - s.reserd01) > 0`,
+      WHERE a.codigo = ?`,
       [code]
     );
 
@@ -25,14 +25,14 @@ export default class Products {
       [ean]
     );
 
-  getByDescription = async (description, stock) =>
+  getByDescription = async (description) =>
     await sendQueryUrbano(
       `
     SELECT *
     FROM artstk01 s
     INNER JOIN articulo a 
     ON s.codigo = a.codigo
-    WHERE a.descrip LIKE ? AND (s.stockd01 - s.reserd01) > 0 
+    WHERE a.descrip LIKE ?  
     ORDER BY a.descrip`,
       [`%${description}%`]
     );
