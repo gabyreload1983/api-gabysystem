@@ -1,19 +1,20 @@
-import replacementsModel from "./models/replacements";
+import replacementsModel from "./models/replacements.js";
 
 export default class Replacements {
   constructor() {}
 
-  getReplacementById = async (id) => await Replacements.findOne({ _id: id });
+  getReplacementById = async (id) =>
+    await replacementsModel.findOne({ _id: id });
 
   getReplacementByOrderNumber = async (orderNumber) =>
-    await Replacements.findOne({ orderNumber });
+    await replacementsModel.findOne({ orderNumber });
 
-  getReplacements = async () => await Replacements.find();
+  getReplacements = async () => await replacementsModel.find();
 
-  create = async (replacement) => await Replacements.create(replacement);
+  create = async (replacement) => await replacementsModel.create(replacement);
 
   update = async (id, replacement) =>
-    await Replacements.updateOne({ _id: id }, replacement);
+    await replacementsModel.updateOne({ _id: id }, replacement);
 
-  remove = async (id) => await Replacements.deleteOne({ _id: id });
+  remove = async (id) => await replacementsModel.deleteOne({ _id: id });
 }
