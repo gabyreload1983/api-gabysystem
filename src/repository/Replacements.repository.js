@@ -1,5 +1,5 @@
-import ReplacementCreateDto from "../dao/DTOs/ReplacementCreate.dto";
-import ReplacementUpdateDto from "../dao/DTOs/ReplacementUpdate.dto";
+import ReplacementCreateDto from "../dao/DTOs/ReplacementCreate.dto.js";
+import ReplacementUpdateDto from "../dao/DTOs/ReplacementUpdate.dto.js";
 
 export default class ReplacementsRepository {
   constructor(dao) {
