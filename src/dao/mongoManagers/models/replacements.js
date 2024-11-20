@@ -5,7 +5,7 @@ const replacementsCollection = "replacements";
 const replacementsSchema = new mongoose.Schema(
   {
     orderNumber: {
-      type: Number,
+      type: String,
     },
     technical_code: {
       type: String,
