@@ -36,3 +36,6 @@ export const getServiceWorkInvoice = async (codigo, serviceworkNro) => {
   }
   return false;
 };
+
+export const getInvoiceSubscribers = async (from, to) =>
+  await invoiceRepository.getInvoiceSubscribers(from, to);

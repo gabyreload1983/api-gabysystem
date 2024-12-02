@@ -7,6 +7,12 @@ import * as subscribersController from "../controllers/subscribers.controller.js
 router.get("/:code", subscribersController.getSubscriberByCode);
 router.get("/", subscribersController.getSubscribers);
 
+router.post(
+  "/send-invoice-subscribers",
+  authorization("premium"),
+  subscribersController.sendInvoiceSubscribers
+);
+
 router.post("/", authorization("premium"), subscribersController.create);
 
 router.put(

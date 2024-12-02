@@ -2,6 +2,7 @@ import axios from "axios";
 import Subscribers from "../dao/mongoManagers/Subscribers.js";
 import SubscribersRepository from "../repository/Subscribers.repository.js";
 import * as customersService from "./customers.service.js";
+import * as invoicesService from "./invoices.service.js";
 
 const subscribersManager = new Subscribers();
 const subscribersRepository = new SubscribersRepository(subscribersManager);
@@ -135,4 +136,21 @@ export const removeSubscription = async (subscriber) => {
   await customersService.removeSubscription(subscriber.code);
   const updatedSubcriber = { ...subscriber, status: false };
   return await subscribersRepository.update(subscriber._id, updatedSubcriber);
+};
+
+export const sendInvoiceSubscribers = async () => {
+  const subscribers = await getSubscribers();
+  const activeSubscribers = subscribers.filter(
+    (subscriber) => subscriber.status
+  );
+
+  console.log(activeSubscribers);
+
+  const from = "2024-02-01";
+  const to = "2024-02-10";
+
+  const invoices = await invoicesService.getInvoiceSubscribers(from, to);
+  console.log(invoices);
+
+  return true;
 };

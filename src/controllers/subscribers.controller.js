@@ -63,6 +63,29 @@ export const getSubscribers = async (req, res) => {
   }
 };
 
+export const sendInvoiceSubscribers = async (req, res) => {
+  try {
+    console.log(1);
+
+    const response = await subscribersService.sendInvoiceSubscribers();
+
+    if (!response)
+      return res.status(400).send({
+        status: "error",
+        message: "Error sending invoice subscribers",
+      });
+
+    res.send({
+      status: "success",
+      message: "Sending invoice subscribers successfully",
+      payload: response,
+    });
+  } catch (error) {
+    logger.error(error.message);
+    res.status(500).send(error);
+  }
+};
+
 export const create = async (req, res) => {
   try {
     const { code } = req.body;

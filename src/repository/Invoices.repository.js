@@ -11,4 +11,7 @@ export default class InvoicesRepository {
 
   getServiceWorkInvoice = async (codigo, serviceworkNro) =>
     await this.dao.getServiceWorkInvoice(codigo, serviceworkNro);
+
+  getInvoiceSubscribers = async (from, to) =>
+    await this.dao.getInvoiceSubscribers(from, to);
 }
