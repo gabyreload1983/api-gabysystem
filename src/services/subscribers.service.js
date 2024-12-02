@@ -3,6 +3,9 @@ import Subscribers from "../dao/mongoManagers/Subscribers.js";
 import SubscribersRepository from "../repository/Subscribers.repository.js";
 import * as customersService from "./customers.service.js";
 import * as invoicesService from "./invoices.service.js";
+import { buildInvoicePdf } from "../pdfKit/pdfKit.js";
+import sendMail from "../nodemailer/config.js";
+import { getHtmlInvoiceSubscribers } from "../nodemailer/html/utilsHtml.js";
 
 const subscribersManager = new Subscribers();
 const subscribersRepository = new SubscribersRepository(subscribersManager);
@@ -138,19 +141,24 @@ export const removeSubscription = async (subscriber) => {
   return await subscribersRepository.update(subscriber._id, updatedSubcriber);
 };
 
-export const sendInvoiceSubscribers = async () => {
-  const subscribers = await getSubscribers();
-  const activeSubscribers = subscribers.filter(
-    (subscriber) => subscriber.status
-  );
+export const sendInvoiceSubscribers = async (from) => {
+  const invoices = await invoicesService.getInvoiceSubscribers(from);
 
-  console.log(activeSubscribers);
+  for (let invoice of invoices) {
+    const pdfPath = await buildInvoicePdf(invoice);
 
-  const from = "2024-02-01";
-  const to = "2024-02-10";
-
-  const invoices = await invoicesService.getInvoiceSubscribers(from, to);
-  console.log(invoices);
+    if (invoice.items[0].mail)
+      await sendMail(
+        // invoice.items[0].mail,
+        "gabyreload@gmail.com",
+        `ABONO - FACTURA ${invoice.invoiceId}`,
+        "FACTURA ${invoice.invoiceId}",
+        getHtmlInvoiceSubscribers(invoice),
+        [{ path: pdfPath }],
+        process.env.MAIL_BCC,
+        "comprobantes"
+      );
+  }
 
   return true;
 };

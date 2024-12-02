@@ -171,3 +171,17 @@ export const getFinishOrderEmailMessage = (diag) => {
   if (diag === 23)
     return "La misma se encuentra finalizada, pero sin reparacion y lista para retirar.";
 };
+
+export const formatInvoices = (data) => {
+  const invoices = [];
+  for (let item of data) {
+    const index = invoices.findIndex(
+      (invoice) => invoice.invoiceId === item.nrocompro
+    );
+    if (index === -1)
+      invoices.push({ invoiceId: item.nrocompro, items: [item] });
+    if (index !== -1) invoices[index].items.push(item);
+  }
+
+  return invoices;
+};

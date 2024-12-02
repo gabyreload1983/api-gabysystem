@@ -56,14 +56,19 @@ export default class Invoices {
 
   getInvoiceSubscribers = async (from, to) =>
     await sendQueryUrbano(
-      `SELECT * FROM ctacli ct
-        INNER JOIN clientes c
-        ON ct.codigo = c.codigo
+      `SELECT 
+        *, 
+        cl.provincia AS state,
+        cl.nombre AS name,
+        ct.numero AS invoiceNumber
+        FROM clientes cl
+        INNER JOIN  ctacli ct
+        ON cl.codigo = ct.codigo
         INNER JOIN ccrenglo cc
         ON ct.nrocompro = cc.nrocompro
-        WHERE c.condicion = 30
-        AND cc.codiart = '.a'
-        AND ct.fecha BETWEEN ? AND ?`,
+        WHERE cl.condicion = 30
+        AND (cc.codiart = '.a' OR cc.codiart = '802853')
+        AND cc.fecha BETWEEN ? AND ?`,
       [from, to]
     );
 }

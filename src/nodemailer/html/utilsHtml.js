@@ -1,3 +1,5 @@
+import moment from "moment";
+
 const emailSignTechnical = ` 
   <table
   id="zs-output-sig"
@@ -817,6 +819,37 @@ export const getHtmlInvoicesPending = (invoices) => {
   <p>Agradecemos confirmar la recepción de este mensaje para asegurar una comunicación efectiva.</p>
   
   <p>Para cualquier consulta o detalle adicional, nuestro equipo de ventas está a su disposición. </p>
+  
+  <p>Saludos cordiales</p>
+  <br/>
+  <p>Para mas información, registrate en nuestra pagina.</p>
+  <a href="https://sinapsis.com.ar/#linkTo-login" target="_blank">Registrate o inicia sesion acá</a>
+  <br/>
+  <br/>
+  <a href="https://www.youtube.com/watch?v=y0W0LmN3RYs" target="_blank">Tutorial para registrarte en nuestra pagina.</a>
+  <br/>
+  <br/>
+  <p>Tambien podes consultarnos por whatsapp</p>
+  <a href="https://wa.me/3476309819?text=Hola Sinaspis. " target="_blank">Hace click aca para abrir whatsapp</a>
+  <br/>
+  <br/>
+  <br/>
+  ${emailSignSales}`;
+};
+
+export const getHtmlInvoiceSubscribers = (invoice) => {
+  moment.locale("es");
+  const month = moment(invoice.items[0].fecha)
+    .subtract(1, "months")
+    .format("MMMM");
+
+  return `
+  <p>Nos comunicamos de Sinapsis SRL</p>
+  <p>Es un placer saludarlo.</p>
+  <p>Adjuntamos la factura ${invoice.invoiceId} correspondiente al abono del mes de ${month}.</p> 
+  <p>Queremos recordarles que esta factura es emitida mes vencido, por lo que solicitamos amablemente, que procedan con el pago a la mayor brevedad posible. </p>
+  
+  <p>Quedamos a su disposición para cualquier consulta que puedan tener.</p>
   
   <p>Saludos cordiales</p>
   <br/>

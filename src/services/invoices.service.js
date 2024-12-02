@@ -1,5 +1,7 @@
+import moment from "moment";
 import Invoices from "../dao/sqlManager/Invoices.js";
 import InvoicesRepository from "../repository/Invoices.repository.js";
+import { formatInvoices } from "../utils.js";
 
 const invoicesService = new Invoices();
 const invoiceRepository = new InvoicesRepository(invoicesService);
@@ -8,18 +10,8 @@ export const getInvoicesCommission = async (from, to) =>
   await invoiceRepository.getInvoicesCommission(from, to);
 
 export const getInvoicesPending = async (from, to) => {
-  const invoicesDetail = await invoiceRepository.getInvoicesPending(from, to);
-  const invoices = [];
-  for (let item of invoicesDetail) {
-    const index = invoices.findIndex(
-      (invoice) => invoice.invoiceId === item.nrocompro
-    );
-    if (index === -1)
-      invoices.push({ invoiceId: item.nrocompro, items: [item] });
-    if (index !== -1) invoices[index].items.push(item);
-  }
-
-  return invoices;
+  const data = await invoiceRepository.getInvoicesPending(from, to);
+  return formatInvoices(data);
 };
 
 export const getServiceWorkInvoice = async (codigo, serviceworkNro) => {
@@ -37,5 +29,9 @@ export const getServiceWorkInvoice = async (codigo, serviceworkNro) => {
   return false;
 };
 
-export const getInvoiceSubscribers = async (from, to) =>
-  await invoiceRepository.getInvoiceSubscribers(from, to);
+export const getInvoiceSubscribers = async (from) => {
+  const to = moment(from).add(10, "days").format("YYYY-MM-DD");
+
+  const data = await invoiceRepository.getInvoiceSubscribers(from, to);
+  return formatInvoices(data);
+};

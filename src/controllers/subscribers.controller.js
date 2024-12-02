@@ -65,9 +65,14 @@ export const getSubscribers = async (req, res) => {
 
 export const sendInvoiceSubscribers = async (req, res) => {
   try {
-    console.log(1);
+    const { from } = req.body;
+    if (!from)
+      return res.status(400).send({
+        status: "error",
+        message: "You must send date in this format: 2020-01-01",
+      });
 
-    const response = await subscribersService.sendInvoiceSubscribers();
+    const response = await subscribersService.sendInvoiceSubscribers(from);
 
     if (!response)
       return res.status(400).send({
