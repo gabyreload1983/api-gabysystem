@@ -27,7 +27,11 @@ export default class Invoices {
       [from, to]
     );
 
-  getInvoicesPending = async (from, to) =>
+  getInvoicesPending = async (
+    from,
+    to,
+    taxNumber = process.env.ORDER_POSITION
+  ) =>
     await sendQueryUrbano(
       `
     SELECT 
@@ -43,8 +47,9 @@ export default class Invoices {
     INNER JOIN condvtas cv
     ON cl.condicion = cv.numero
     WHERE ct.fecha > ? AND  ct.fecha < ? AND ct.saldo != 0 AND ct.tipo = 'FV' AND (ct.letra = 'A' OR ct.letra = 'B')
+    AND ct.puesto = ${taxNumber}
     `,
-      [from, to]
+      [from, to, taxNumber]
     );
 
   getServiceWorkInvoice = async (codigo, serviceworkNro) =>

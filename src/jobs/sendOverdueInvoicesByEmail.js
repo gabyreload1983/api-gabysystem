@@ -5,13 +5,13 @@ import logger from "../logger/logger.js";
 import moment from "moment";
 import { buildInvoicePdf } from "../pdfKit/pdfKit.js";
 import sendMail from "../nodemailer/config.js";
-import { getHtmlInvoicesPending } from "../nodemailer/html/utilsHtml.js";
+import { getHtmlOverDueInvoicesPending } from "../nodemailer/html/utilsHtml.js";
 import { trueStringToBoolean } from "../utils.js";
 
-const sendInvoicesByEmail = async () => {
+const sendOverdueInvoicesByEmail = async () => {
   try {
-    const from = moment().format("YYYY-MM-DD 00:00:00");
-    const to = moment().format("YYYY-MM-DD 23:59:59");
+    const from = moment().subtract(1, "month").format("YYYY-MM-DD 00:00:00");
+    const to = moment().subtract(1, "month").format("YYYY-MM-DD 23:59:59");
 
     const invoices = await invoicesService.getInvoicesPending(from, to);
 
@@ -27,13 +27,14 @@ const sendInvoicesByEmail = async () => {
         const pdfPath = await buildInvoicePdf(invoice);
         await sendMail(
           invoice.items[0].mail,
-          `FACTURA ${invoice.invoiceId}`,
-          `FACTURA ${invoice.invoiceId}`,
-          getHtmlInvoicesPending(invoice),
+          `FACTURA ${invoice.invoiceId} VENCIDA`,
+          `FACTURA ${invoice.invoiceId} VENCIDA`,
+          getHtmlOverDueInvoicesPending(invoice),
           [{ path: pdfPath }],
           process.env.MAIL_BCC,
           "comprobantes"
         );
+        break;
       }
 
       if (invoicesWithOutMail.length) {
@@ -72,8 +73,8 @@ const sendInvoicesByEmail = async () => {
 
 if (process.env.NODE_APP_INSTANCE === "0") {
   const job = new CronJob(
-    "0 30 20 * * *", // cronTime s m h dom mon dow
-    sendInvoicesByEmail, // onTick
+    "0 0 9 * * *", // cronTime s m h dom mon dow
+    sendOverdueInvoicesByEmail, // onTick
     null, // onComplete
     trueStringToBoolean(process.env.ENABLE_JOBS), // start
     "America/Argentina/Buenos_Aires" // timeZone
