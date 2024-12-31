@@ -13,7 +13,10 @@ const sendOverdueInvoicesByEmail = async () => {
     const from = moment().subtract(1, "month").format("YYYY-MM-DD 00:00:00");
     const to = moment().subtract(1, "month").format("YYYY-MM-DD 23:59:59");
 
-    const invoices = await invoicesService.getInvoicesPending(from, to);
+    const invoices = await invoicesService.getOverdueInvoicesByCondition(
+      from,
+      to
+    );
 
     if (invoices && invoices?.length) {
       const invoicesWithMail = invoices.filter(

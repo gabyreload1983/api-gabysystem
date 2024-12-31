@@ -10,14 +10,18 @@ export const getInvoicesCommission = async (from, to) =>
 export const getInvoicesPending = async (from, to) => {
   const invoicesDetail = await invoiceRepository.getInvoicesPending(from, to);
   const invoices = [];
-  for (let item of invoicesDetail) {
-    const index = invoices.findIndex(
-      (invoice) => invoice.invoiceId === item.nrocompro
-    );
-    if (index === -1)
-      invoices.push({ invoiceId: item.nrocompro, items: [item] });
-    if (index !== -1) invoices[index].items.push(item);
-  }
+  formatInvoices(invoicesDetail, invoices);
+
+  return invoices;
+};
+
+export const getOverdueInvoicesByCondition = async (from, to) => {
+  const invoicesDetail = await invoiceRepository.getOverdueInvoicesByCondition(
+    from,
+    to
+  );
+  const invoices = [];
+  formatInvoices(invoicesDetail, invoices);
 
   return invoices;
 };
@@ -36,3 +40,14 @@ export const getServiceWorkInvoice = async (codigo, serviceworkNro) => {
   }
   return false;
 };
+
+function formatInvoices(invoicesDetail, invoices) {
+  for (let item of invoicesDetail) {
+    const index = invoices.findIndex(
+      (invoice) => invoice.invoiceId === item.nrocompro
+    );
+    if (index === -1)
+      invoices.push({ invoiceId: item.nrocompro, items: [item] });
+    if (index !== -1) invoices[index].items.push(item);
+  }
+}
