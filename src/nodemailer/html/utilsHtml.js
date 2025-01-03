@@ -1,3 +1,5 @@
+import { CONSTANTS } from "../../config/constants/constansts.js";
+
 const emailSignTechnical = ` 
   <table
   id="zs-output-sig"
@@ -66,7 +68,7 @@ const emailSignTechnical = `
                               width="200"
                               alt="image"
                               border="0"
-                              src="https://img2.gimm.io/3cdc658d-d569-4485-a486-dec07fad03f1/-/resize/506x132/img.png"
+                              src=${CONSTANTS.EMAIL_SIGN_IMAGE}
                             />
                           </p>
                         </td>
@@ -454,7 +456,7 @@ const emailSignSales = `
                               width="200"
                               alt="image"
                               border="0"
-                              src="https://img2.gimm.io/3cdc658d-d569-4485-a486-dec07fad03f1/-/resize/506x132/img.png"
+                              src=${CONSTANTS.EMAIL_SIGN_IMAGE}
                             />
                           </p>
                         </td>
@@ -837,16 +839,18 @@ export const getHtmlInvoicesPending = (invoices) => {
 
 export const getHtmlOverDueInvoicesPending = (invoices) => {
   return `
-  <p>Nos comunicamos de Sinapsis SRL</p>
-  <p>Nos ponemos en contacto para informar que la factura ${invoices.invoiceId} adjunta se encuentra vencida.</p>
-  <p>Solicitamos amablemente confirmar su estado actual y proporcionarnos una fecha estimada para su pago.</p>  
-  <p>En caso de ser necesario, les pedimos remitir este mensaje al área correspondiente para agilizar su gestión.</p>  
-  <p>Agradecemos confirmar la recepción de este mensaje para garantizar una comunicación efectiva y oportuna.</p>  
-  <p>Quedamos atentos a su pronta respuesta para resolver esta situación a la brevedad.</p>  
+  <p>Nos comunicamos de Sinapsis SRL.</p>
+  <p>
+    Nos ponemos en contacto para informar que la factura <strong>${invoices.invoiceId}</strong> adjunta se encuentra <strong>vencida</strong>.
+    Solicitamos amablemente confirmar su estado actual y proporcionarnos una fecha estimada para su pago.
+    En caso de ser necesario, les pedimos remitir este mensaje al área correspondiente para agilizar su gestión.
+  </p>  
+  <p>
+    Agradecemos confirmar la recepción de este mensaje para garantizar una comunicación efectiva y oportuna.
+    Quedamos atentos a su pronta respuesta para resolver esta situación a la brevedad.
+  </p>  
   
-  <p>Atentamente</p>
-  <p>Equipo de Ventas</p>
-  <p>Sinapsis SRL</p>
+  <p>Equipo de Ventas Sinapsis SRL</p>
   <br/>
     <p>Tambien podes consultarnos por whatsapp</p>
   <a href="https://wa.me/3476309819?text=Hola Sinaspis. " target="_blank">Hace click aca para abrir whatsapp</a>

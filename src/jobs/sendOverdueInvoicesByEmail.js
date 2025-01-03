@@ -18,57 +18,58 @@ const sendOverdueInvoicesByEmail = async () => {
       to
     );
 
-    if (invoices && invoices?.length) {
-      const invoicesWithMail = invoices.filter(
+    const filteredInvoice = invoices;
+
+    if (filteredInvoice && filteredInvoice?.length) {
+      const invoicesWithMail = filteredInvoice.filter(
         (invoice) => invoice.items[0].mail
       );
-      const invoicesWithOutMail = invoices.filter(
+      const invoicesWithOutMail = filteredInvoice.filter(
         (invoice) => !invoice.items[0].mail
       );
 
-      for (let invoice of invoicesWithMail) {
-        const pdfPath = await buildInvoicePdf(invoice);
+      for (let filteredInvoice of invoicesWithMail) {
+        const pdfPath = await buildInvoicePdf(filteredInvoice);
         await sendMail(
-          invoice.items[0].mail,
-          `FACTURA ${invoice.invoiceId} VENCIDA`,
-          `FACTURA ${invoice.invoiceId} VENCIDA`,
-          getHtmlOverDueInvoicesPending(invoice),
+          filteredInvoice.items[0].mail,
+          `FACTURA ${filteredInvoice.invoiceId} VENCIDA`,
+          `FACTURA ${filteredInvoice.invoiceId} VENCIDA`,
+          getHtmlOverDueInvoicesPending(filteredInvoice),
           [{ path: pdfPath }],
           process.env.MAIL_BCC,
           "comprobantes"
         );
-        break;
       }
 
       if (invoicesWithOutMail.length) {
         const pdfArray = [];
-        for (let invoice of invoicesWithOutMail) {
-          const pdfPath = await buildInvoicePdf(invoice);
+        for (let filteredInvoice of invoicesWithOutMail) {
+          const pdfPath = await buildInvoicePdf(filteredInvoice);
           pdfArray.push({ path: pdfPath });
         }
 
         await sendMail(
           process.env.MAIL_FROM_COMPROBANTES,
-          "INFO FACTURAS SIN MAIL",
-          "INFO FACTURAS SIN MAIL",
-          `<p>Se adjuntan ${invoicesWithOutMail.length} facturas sin mail y con saldo.`,
+          "INFO FACTURAS VENCIDAS SIN MAIL",
+          "INFO FACTURAS VENCIDAS SIN MAIL",
+          `<p>Se adjuntan ${invoicesWithOutMail.length} facturas vencidas sin mail y con saldo.`,
           pdfArray
         );
       }
 
       await sendMail(
         process.env.MAIL_FROM_COMPROBANTES,
-        "INFO FACTURAS PDF",
-        "INFO FACTURAS PDF",
-        `<p>Se enviaron ${invoicesWithMail.length} facturas en PDF por mail.`
+        "INFO FACTURAS VENCIDAS",
+        "INFO FACTURAS VENCIDAS",
+        `<p>Se enviaron ${invoicesWithMail.length} facturas vencidas en PDF por mail.`
       );
     }
   } catch (error) {
     logger.error(error.message);
     await sendMail(
       process.env.MAIL_FROM_COMPROBANTES,
-      "ERROR INFO FACTURAS",
-      "ERROR INFO FACTURAS",
+      "ERROR INFO FACTURAS VENCIDAS",
+      "ERROR INFO FACTURAS VENCIDAS",
       `<p>Error: ${error.message}`
     );
   }
