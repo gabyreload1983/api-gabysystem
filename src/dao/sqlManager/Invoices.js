@@ -68,7 +68,9 @@ export default class Invoices {
     ON ct.nrocompro = cc.nrocompro
     INNER JOIN condvtas cv
     ON cl.condicion = cv.numero
-    WHERE ct.fecha > ? AND  ct.fecha < ? AND ct.saldo != 0 AND ct.tipo = 'FV' AND (ct.letra = 'A' OR ct.letra = 'B')
+    WHERE ct.fecha > ? AND  ct.fecha < ? 
+    AND ct.importe = ct.saldo
+    AND ct.tipo = 'FV' AND (ct.letra = 'A' OR ct.letra = 'B')
     AND ct.puesto = ?
     AND cl.condicion = ?
     `,

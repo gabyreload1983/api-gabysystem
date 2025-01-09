@@ -18,23 +18,21 @@ const sendOverdueInvoicesByEmail = async () => {
       to
     );
 
-    const filteredInvoice = invoices;
-
-    if (filteredInvoice && filteredInvoice?.length) {
-      const invoicesWithMail = filteredInvoice.filter(
+    if (invoices && invoices?.length) {
+      const invoicesWithMail = invoices.filter(
         (invoice) => invoice.items[0].mail
       );
-      const invoicesWithOutMail = filteredInvoice.filter(
+      const invoicesWithOutMail = invoices.filter(
         (invoice) => !invoice.items[0].mail
       );
 
-      for (let filteredInvoice of invoicesWithMail) {
-        const pdfPath = await buildInvoicePdf(filteredInvoice);
+      for (let invoices of invoicesWithMail) {
+        const pdfPath = await buildInvoicePdf(invoices);
         await sendMail(
-          filteredInvoice.items[0].mail,
-          `FACTURA ${filteredInvoice.invoiceId} VENCIDA`,
-          `FACTURA ${filteredInvoice.invoiceId} VENCIDA`,
-          getHtmlOverDueInvoicesPending(filteredInvoice),
+          invoices.items[0].mail,
+          `FACTURA ${invoices.invoiceId} VENCIDA`,
+          `FACTURA ${invoices.invoiceId} VENCIDA`,
+          getHtmlOverDueInvoicesPending(invoices),
           [{ path: pdfPath }],
           process.env.MAIL_BCC,
           "comprobantes"
@@ -43,8 +41,8 @@ const sendOverdueInvoicesByEmail = async () => {
 
       if (invoicesWithOutMail.length) {
         const pdfArray = [];
-        for (let filteredInvoice of invoicesWithOutMail) {
-          const pdfPath = await buildInvoicePdf(filteredInvoice);
+        for (let invoices of invoicesWithOutMail) {
+          const pdfPath = await buildInvoicePdf(invoices);
           pdfArray.push({ path: pdfPath });
         }
 
