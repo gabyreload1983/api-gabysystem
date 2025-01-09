@@ -1,3 +1,4 @@
+import { CONSTANTS } from "../../config/constants/constansts.js";
 import { sendQueryUrbano } from "./sqlUtils.js";
 
 export default class Invoices {
@@ -45,6 +46,35 @@ export default class Invoices {
     WHERE ct.fecha > ? AND  ct.fecha < ? AND ct.saldo != 0 AND ct.tipo = 'FV' AND (ct.letra = 'A' OR ct.letra = 'B')
     `,
       [from, to]
+    );
+
+  getOverdueInvoicesByCondition = async (
+    from,
+    to,
+    taxNumber = process.env.ORDER_POSITION,
+    condition = CONSTANTS.CURRENT_ACCOUNT_30_DAYS
+  ) =>
+    await sendQueryUrbano(
+      `
+    SELECT 
+    *, 
+    cl.provincia AS state,
+    cl.nombre AS name,
+    ct.numero AS invoiceNumber
+    FROM clientes cl
+    INNER JOIN  ctacli ct
+    ON cl.codigo = ct.codigo
+    INNER JOIN ccrenglo cc
+    ON ct.nrocompro = cc.nrocompro
+    INNER JOIN condvtas cv
+    ON cl.condicion = cv.numero
+    WHERE ct.fecha > ? AND  ct.fecha < ? 
+    AND ct.importe = ct.saldo
+    AND ct.tipo = 'FV' AND (ct.letra = 'A' OR ct.letra = 'B')
+    AND ct.puesto = ?
+    AND cl.condicion = ?
+    `,
+      [from, to, taxNumber, condition]
     );
 
   getServiceWorkInvoice = async (codigo, serviceworkNro) =>
