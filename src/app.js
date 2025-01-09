@@ -12,6 +12,7 @@ import customersRouter from "./routes/customers.router.js";
 import subscribersRouter from "./routes/subscribers.router.js";
 import productsRouter from "./routes/products.router.js";
 import alexisRouter from "./routes/alexis.router.js";
+import jobsRouter from "./routes/jobs.router.js";
 
 import "./dao/dbMongoConfig.js";
 import "./config/init.js";
@@ -42,6 +43,7 @@ app.use("/api/customers", authToken, customersRouter);
 app.use("/api/subscribers", authToken, subscribersRouter);
 app.use("/api/products", authToken, productsRouter);
 app.use("/api/alexis", authToken, alexisRouter);
+app.use("/api/jobs", authToken, jobsRouter);
 app.use("*", (req, res) =>
   res.status(404).send({ error: "error", message: "Page Not Found" })
 );
