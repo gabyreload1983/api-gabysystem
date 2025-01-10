@@ -1,15 +1,23 @@
 import { CronJob } from "cron";
 import * as invoicesService from "../services/invoices.service.js";
+import * as jobsService from "../services/jobs.service.js";
 
 import logger from "../logger/logger.js";
 import moment from "moment";
 import { buildInvoicePdf } from "../pdfKit/pdfKit.js";
 import sendMail from "../nodemailer/config.js";
 import { getHtmlOverDueInvoicesPending } from "../nodemailer/html/utilsHtml.js";
-import { trueStringToBoolean } from "../utils.js";
+
+const jobConfig = await jobsService.getByName("sendOverdueInvoicesByEmail");
 
 const sendOverdueInvoicesByEmail = async () => {
   try {
+    const { enabled } = await jobsService.getByName(
+      "sendOverdueInvoicesByEmail"
+    );
+
+    if (!enabled) return;
+
     const from = moment().subtract(1, "month").format("YYYY-MM-DD 00:00:00");
     const to = moment().subtract(1, "month").format("YYYY-MM-DD 23:59:59");
 
@@ -75,10 +83,10 @@ const sendOverdueInvoicesByEmail = async () => {
 
 if (process.env.NODE_APP_INSTANCE === "0") {
   const job = new CronJob(
-    "0 0 9 * * *", // cronTime s m h dom mon dow
+    jobConfig?.schedule, // cronTime s m h dom mon dow
     sendOverdueInvoicesByEmail, // onTick
     null, // onComplete
-    trueStringToBoolean(process.env.ENABLE_JOBS), // start
+    jobConfig?.enabled, // start
     "America/Argentina/Buenos_Aires" // timeZone
   );
 }
