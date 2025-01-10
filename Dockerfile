@@ -1,4 +1,4 @@
-FROM node:20.10.0-bullseye
+FROM node:lts
 
 RUN ln -sf /usr/share/zoneinfo/America/Argentina/Buenos_Aires /etc/localtime
 RUN npm install -g npm@latest
