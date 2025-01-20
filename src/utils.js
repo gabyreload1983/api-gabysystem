@@ -6,6 +6,7 @@ import jwt from "jsonwebtoken";
 import logger from "./logger/logger.js";
 
 const PRIVATE_KEY_JWT = process.env.PRIVATE_KEY_JWT;
+const PRIVATE_CUSTOM_KEY_JWT = process.env.PRIVATE_CUSTOM_KEY_JWT;
 
 const __filename = fileURLToPath(import.meta.url);
 export const __dirname = dirname(__filename);
@@ -33,6 +34,26 @@ export const authToken = (req, res, next) => {
     req.user = credentials.user;
     next();
   });
+};
+
+export const authCustomToken = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader) {
+    logger.error(`Not authenticated. ${req.socket?.remoteAddress}`);
+    return res
+      .status(401)
+      .send({ status: "error", message: "Not authenticated" });
+  }
+
+  const customToken = authHeader.split(" ")[1];
+  if (PRIVATE_CUSTOM_KEY_JWT !== customToken)
+    return res.status(403).send({
+      status: "error",
+      message: "Invalid Token",
+    });
+
+  next();
 };
 
 export const createHash = (password) =>

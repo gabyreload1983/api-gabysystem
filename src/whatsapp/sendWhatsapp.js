@@ -87,3 +87,13 @@ export const sendWhatsappFinishOrder = async ({ order, recipient }) => {
   const data = getDataMessageTemplate(recipient, template, component);
   return await sendWhatsapp(data);
 };
+
+export const sendWhatsappOnlineSales = async ({
+  recipient,
+  text = "Compra Web",
+}) => {
+  const component = getComponentTemplate(text);
+  const template = "inicio_ventas";
+  const data = getDataMessageTemplate(recipient, template, component);
+  return await sendWhatsapp(data);
+};

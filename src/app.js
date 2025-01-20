@@ -12,6 +12,7 @@ import customersRouter from "./routes/customers.router.js";
 import subscribersRouter from "./routes/subscribers.router.js";
 import productsRouter from "./routes/products.router.js";
 import alexisRouter from "./routes/alexis.router.js";
+import webRouter from "./routes/web.router.js";
 
 import "./dao/dbMongoConfig.js";
 import "./config/init.js";
@@ -21,7 +22,7 @@ import "./jobs/salesToFree.js";
 import "./jobs/sendInvoicesByEmail.js";
 import "./jobs/sendOverdueInvoicesByEmail.js";
 
-import { __dirname, authToken } from "./utils.js";
+import { __dirname, authCustomToken, authToken } from "./utils.js";
 
 const app = express();
 
@@ -42,6 +43,7 @@ app.use("/api/customers", authToken, customersRouter);
 app.use("/api/subscribers", authToken, subscribersRouter);
 app.use("/api/products", authToken, productsRouter);
 app.use("/api/alexis", authToken, alexisRouter);
+app.use("/api/web", authCustomToken, webRouter);
 app.use("*", (req, res) =>
   res.status(404).send({ error: "error", message: "Page Not Found" })
 );
@@ -50,3 +52,6 @@ const PORT = process.env.PORT;
 app.listen(PORT, () =>
   logger.info(`Listening on port ${PORT} - ${process.env.NODE_ENV}`)
 );
+
+logger.info("NODE_APP_INSTANCE:", process.env.NODE_APP_INSTANCE);
+logger.info("INSTANCE_ID:", process.env.INSTANCE_ID);
