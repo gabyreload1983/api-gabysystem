@@ -6,6 +6,7 @@ import jwt from "jsonwebtoken";
 import logger from "./logger/logger.js";
 
 const PRIVATE_KEY_JWT = process.env.PRIVATE_KEY_JWT;
+const PRIVATE_CUSTOM_KEY_JWT = process.env.PRIVATE_CUSTOM_KEY_JWT;
 
 const __filename = fileURLToPath(import.meta.url);
 export const __dirname = dirname(__filename);
@@ -24,6 +25,8 @@ export const authToken = (req, res, next) => {
   }
 
   const token = authHeader.split(" ")[1];
+  if (PRIVATE_CUSTOM_KEY_JWT === token) return next();
+
   jwt.verify(token, PRIVATE_KEY_JWT, (error, credentials) => {
     if (error)
       return res.status(403).send({

@@ -48,11 +48,11 @@ export default class Invoices {
       [from, to]
     );
 
-  getOverdueInvoicesByCondition = async (
+  getOverdueInvoices = async (
     from,
     to,
-    taxNumber = process.env.ORDER_POSITION,
-    condition = CONSTANTS.CURRENT_ACCOUNT_30_DAYS
+    condition = CONSTANTS.CURRENT_ACCOUNT_30_DAYS,
+    taxNumber = process.env.ORDER_POSITION
   ) =>
     await sendQueryUrbano(
       `
@@ -71,10 +71,10 @@ export default class Invoices {
     WHERE ct.fecha > ? AND  ct.fecha < ? 
     AND ct.importe = ct.saldo
     AND ct.tipo = 'FV' AND (ct.letra = 'A' OR ct.letra = 'B')
-    AND ct.puesto = ?
     AND cl.condicion = ?
+    AND ct.puesto = ?
     `,
-      [from, to, taxNumber, condition]
+      [from, to, condition, taxNumber]
     );
 
   getServiceWorkInvoice = async (codigo, serviceworkNro) =>
