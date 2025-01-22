@@ -15,10 +15,11 @@ export const getInvoicesPending = async (from, to) => {
   return invoices;
 };
 
-export const getOverdueInvoicesByCondition = async (from, to) => {
-  const invoicesDetail = await invoiceRepository.getOverdueInvoicesByCondition(
+export const getOverdueInvoices = async (from, to, condition) => {
+  const invoicesDetail = await invoiceRepository.getOverdueInvoices(
     from,
-    to
+    to,
+    condition
   );
   const invoices = [];
   formatInvoices(invoicesDetail, invoices);
