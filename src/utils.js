@@ -164,7 +164,7 @@ export const validateCelphoneNumber = (number) => number.length === 10;
 export const formatWhatsappNumber = (number) => `54${number}`;
 
 export const getFinishOrderTemplate = (diag) => {
-  if (diag === 22) return "orden_finalizada";
+  if (diag === 22) return "orden_finalizada_costo";
   if (diag === 23) return "orden_sin_reparacion";
 };
 
@@ -173,4 +173,12 @@ export const getFinishOrderEmailMessage = (diag) => {
     return "La misma se encuentra finalizada y lista para retirar.";
   if (diag === 23)
     return "La misma se encuentra finalizada, pero sin reparacion y lista para retirar.";
+};
+
+export const formatPrice = (price) => {
+  let p = price.toLocaleString("en-US");
+  let index = p.indexOf(".");
+  return index === -1
+    ? p.replaceAll(",", ".")
+    : p.slice(0, index).replaceAll(",", ".");
 };
