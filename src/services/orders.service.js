@@ -184,7 +184,7 @@ export const close = async (
 
   if (notification) {
     const customer = await customersRepository.getByCode(orderUpdate.codigo);
-    if (customer[0].mail) {
+    if (customer[0].mail && process.env.NODE_ENV === "production") {
       const message = getFinishOrderEmailMessage(orderUpdate.diag);
       await sendMail(
         customer[0].mail,
@@ -193,7 +193,7 @@ export const close = async (
         getHtmlEmailNotification(message, nrocompro)
       );
     }
-    if (customer[0].telefono) {
+    if (customer[0].telefono && process.env.NODE_ENV === "production") {
       const number = customer[0].telefono;
       if (validateCelphoneNumber(number)) {
         const formatPhone = formatWhatsappNumber(number);
