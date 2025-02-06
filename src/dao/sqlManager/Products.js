@@ -70,23 +70,23 @@ export default class Products {
     user,
     product,
     quantity,
-    customerName = "",
-    obervation = ""
+    customerCode = "",
+    observation = ""
   ) =>
     await sendQueryUrbano(
       `INSERT INTO octmp 
       (fecha, solicitoc, soliciton, codiart, descart, cantidad, cliente, nombre, pedira, espedido, selector, 
       procesado, observa, equipo, operador, oc, rt, estado, provedor) 
       VALUES 
-      (NOW(), ?, ?, ?, ?, ?, '', ?, '', 'N', 'G', 'N', ?, 'GSYSTEM', 'GSYSTEM', '', '', 'P', '')`,
+      (NOW(), ?, ?, ?, ?, ?, ?, '', '', 'N', 'G', 'N', ?, 'GSYSTEM', 'GSYSTEM', '', '', 'P', '')`,
       [
         user.code_technical,
         user.first_name,
         product.codigo,
         product.descrip,
         quantity,
-        customerName,
-        obervation,
+        customerCode,
+        observation,
       ]
     );
 

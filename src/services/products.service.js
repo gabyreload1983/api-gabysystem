@@ -32,15 +32,15 @@ export const requestProduct = async (
   user,
   product,
   quantity,
-  customerName,
-  obervation
+  customerCode,
+  observation
 ) =>
   await productsRepository.requestProduct(
     user,
     product,
     quantity,
-    customerName,
-    obervation
+    customerCode,
+    observation
   );
 
 export const getOrderList = async () => await productsRepository.getOrderList();

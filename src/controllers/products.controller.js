@@ -46,7 +46,7 @@ export const searchBySerie = async (req, res) => {
 
 export const request = async (req, res) => {
   try {
-    const { code, quantity, customerName, obervation } = req.body;
+    const { code, quantity, customerCode, observation } = req.body;
     const user = req.user;
 
     if (!code || !quantity)
@@ -72,8 +72,8 @@ export const request = async (req, res) => {
       user,
       product,
       quantity,
-      customerName,
-      obervation
+      customerCode,
+      observation
     );
 
     res.send({ status: "success", payload: response });
