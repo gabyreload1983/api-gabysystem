@@ -8,11 +8,7 @@ router.get("/search-by", productsController.searchBy);
 
 router.get("/serie/:serialNumber", productsController.searchBySerie);
 
-router.get(
-  "/order-list",
-  authorization("premium"),
-  productsController.getOrderList
-);
+router.get("/order-list", productsController.getOrderList);
 
 router.post("/request", productsController.request);
 
