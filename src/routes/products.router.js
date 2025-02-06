@@ -14,6 +14,8 @@ router.get(
   productsController.getOrderList
 );
 
+router.post("/request", productsController.request);
+
 router.delete(
   "/clear-order-list",
   authorization("premium"),

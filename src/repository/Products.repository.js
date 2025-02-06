@@ -18,6 +18,15 @@ export default class ProductsRepository {
 
   getOrderList = async () => await this.dao.getOrderList();
 
+  requestProduct = async (user, product, quantity, customerName, obervation) =>
+    await this.dao.requestProduct(
+      user,
+      product,
+      quantity,
+      customerName,
+      obervation
+    );
+
   clearOrderList = async () => await this.dao.clearOrderList();
 
   deleteProductOrderList = async (id) =>

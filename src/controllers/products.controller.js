@@ -44,6 +44,45 @@ export const searchBySerie = async (req, res) => {
   }
 };
 
+export const request = async (req, res) => {
+  try {
+    const { code, quantity, customerName, obervation } = req.body;
+    const user = req.user;
+
+    if (!code || !quantity)
+      return res
+        .status(400)
+        .send({ status: "error", message: "You send an invalid info" });
+
+    const product = await productService.getByCode(code);
+    if (!product)
+      return res
+        .status(404)
+        .send({ status: "error", message: "Error searching product" });
+
+    const list = await productService.getOrderList();
+    const exist = list.find((item) => item.codiart === product.codigo);
+    if (exist)
+      return res.status(400).send({
+        status: "error",
+        message: "This product already exists in the list",
+      });
+
+    const response = await productService.requestProduct(
+      user,
+      product,
+      quantity,
+      customerName,
+      obervation
+    );
+
+    res.send({ status: "success", payload: response });
+  } catch (error) {
+    logger.error(error.message);
+    res.status(500).send(error);
+  }
+};
+
 export const getOrderList = async (req, res) => {
   try {
     const products = await productService.getOrderList();
