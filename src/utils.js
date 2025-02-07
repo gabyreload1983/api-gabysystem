@@ -182,3 +182,7 @@ export const formatPrice = (price) => {
     ? p.replaceAll(",", ".")
     : p.slice(0, index).replaceAll(",", ".");
 };
+
+export const isGreaterThan = (a, b) => a > b;
+
+export const isNumeric = (value) => !isNaN(value);

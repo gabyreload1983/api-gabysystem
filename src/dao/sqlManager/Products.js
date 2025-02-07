@@ -66,6 +66,30 @@ export default class Products {
     return Number(dollar[0].valorlibre);
   };
 
+  requestProduct = async (
+    user,
+    product,
+    quantity,
+    customerCode = "",
+    observation = ""
+  ) =>
+    await sendQueryUrbano(
+      `INSERT INTO octmp 
+      (fecha, solicitoc, soliciton, codiart, descart, cantidad, cliente, nombre, pedira, espedido, selector, 
+      procesado, observa, equipo, operador, oc, rt, estado, provedor) 
+      VALUES 
+      (NOW(), ?, ?, ?, ?, ?, ?, '', '', 'N', 'G', 'N', ?, 'GSYSTEM', 'GSYSTEM', '', '', 'P', '')`,
+      [
+        user.code_technical,
+        user.first_name,
+        product.codigo,
+        product.descrip,
+        quantity,
+        customerCode,
+        observation,
+      ]
+    );
+
   getOrderList = async () =>
     await sendQueryUrbano(
       `SELECT * FROM octmp o LEFT JOIN clientes c ON o.cliente = c.codigo WHERE o.procesado = 'N'`

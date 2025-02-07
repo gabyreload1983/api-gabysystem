@@ -1,5 +1,6 @@
 import logger from "../logger/logger.js";
 import * as productService from "../services/products.service.js";
+import { isGreaterThan, isNumeric } from "../utils.js";
 
 export const searchBy = async (req, res) => {
   try {
@@ -38,6 +39,56 @@ export const searchBySerie = async (req, res) => {
     const product = await productService.searchBySerie(serialNumber);
 
     res.send({ status: "success", payload: product });
+  } catch (error) {
+    logger.error(error.message);
+    res.status(500).send(error);
+  }
+};
+
+export const request = async (req, res) => {
+  try {
+    const { productCode, quantity, customerCode, observation } = req.body;
+    const user = req.user;
+
+    if (!productCode || !quantity)
+      return res
+        .status(400)
+        .send({ status: "error", message: "You send an invalid info" });
+
+    if (!isNumeric(quantity) || !isGreaterThan(quantity, 0))
+      return res.status(400).send({
+        status: "error",
+        message: "Quantity must be a number greater than 0",
+      });
+
+    const product = await productService.getByCode(productCode);
+    if (!product)
+      return res
+        .status(404)
+        .send({ status: "error", message: "Error searching product" });
+
+    const list = await productService.getOrderList();
+    const exist = list.find((item) => item.codiart === product.codigo);
+    if (exist)
+      return res.status(400).send({
+        status: "error",
+        message: "This product already exists in the list",
+      });
+
+    const response = await productService.requestProduct(
+      user,
+      product,
+      quantity,
+      customerCode,
+      observation
+    );
+
+    if (!response)
+      return res
+        .status(500)
+        .send({ status: "error", message: "Error adding request" });
+
+    res.send({ status: "success", payload: response });
   } catch (error) {
     logger.error(error.message);
     res.status(500).send(error);
