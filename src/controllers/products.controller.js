@@ -1,5 +1,6 @@
 import logger from "../logger/logger.js";
 import * as productService from "../services/products.service.js";
+import { isGreaterThan, isNumeric } from "../utils.js";
 
 export const searchBy = async (req, res) => {
   try {
@@ -53,6 +54,14 @@ export const request = async (req, res) => {
       return res
         .status(400)
         .send({ status: "error", message: "You send an invalid info" });
+
+    if (!isNumeric(quantity) || !isGreaterThan(quantity, 0))
+      return res
+        .status(400)
+        .send({
+          status: "error",
+          message: "Quantity must be a number greater than 0",
+        });
 
     const product = await productService.getByCode(code);
     if (!product)

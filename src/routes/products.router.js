@@ -20,7 +20,7 @@ router.delete(
 
 router.delete(
   "/order-list/:productId",
-  authorization("premium"),
+  authorization("premium", "seller"),
   productsController.deleteProductOrderList
 );
 
