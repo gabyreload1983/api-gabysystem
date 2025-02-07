@@ -83,6 +83,11 @@ export const request = async (req, res) => {
       observation
     );
 
+    if (!response)
+      return res
+        .status(500)
+        .send({ status: "error", message: "Error adding request" });
+
     res.send({ status: "success", payload: response });
   } catch (error) {
     logger.error(error.message);
