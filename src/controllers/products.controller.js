@@ -47,23 +47,21 @@ export const searchBySerie = async (req, res) => {
 
 export const request = async (req, res) => {
   try {
-    const { code, quantity, customerCode, observation } = req.body;
+    const { productCode, quantity, customerCode, observation } = req.body;
     const user = req.user;
 
-    if (!code || !quantity)
+    if (!productCode || !quantity)
       return res
         .status(400)
         .send({ status: "error", message: "You send an invalid info" });
 
     if (!isNumeric(quantity) || !isGreaterThan(quantity, 0))
-      return res
-        .status(400)
-        .send({
-          status: "error",
-          message: "Quantity must be a number greater than 0",
-        });
+      return res.status(400).send({
+        status: "error",
+        message: "Quantity must be a number greater than 0",
+      });
 
-    const product = await productService.getByCode(code);
+    const product = await productService.getByCode(productCode);
     if (!product)
       return res
         .status(404)
