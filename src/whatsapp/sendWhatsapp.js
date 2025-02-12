@@ -84,9 +84,19 @@ export const sendWhatsappTakeOrder = async ({ order, recipient }) => {
 };
 
 export const sendWhatsappFinishOrder = async ({ order, recipient }) => {
-  const totalOrderWithTax = formatPrice(getTotalOrder(order));
-  const component = getComponentTemplate(order.nrocompro, totalOrderWithTax);
-  const template = getFinishOrderTemplate(order.diag);
+  const totalOrderWithTax = getTotalOrder(order);
+  const template = getFinishOrderTemplate(order.diag, totalOrderWithTax);
+
+  let component;
+
+  if (totalOrderWithTax === 1) {
+    component = getComponentTemplate(order.nrocompro);
+  }
+  if (totalOrderWithTax !== 1) {
+    const formatTotalOrderWithTax = formatPrice(totalOrderWithTax);
+    component = getComponentTemplate(order.nrocompro, formatTotalOrderWithTax);
+  }
+
   const data = getDataMessageTemplate(recipient, template, component);
   return await sendWhatsapp(data);
 };

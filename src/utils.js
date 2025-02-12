@@ -163,8 +163,9 @@ export const validateCelphoneNumber = (number) => number.length === 10;
 
 export const formatWhatsappNumber = (number) => `54${number}`;
 
-export const getFinishOrderTemplate = (diag) => {
-  if (diag === 22) return "orden_finalizada_costo";
+export const getFinishOrderTemplate = (diag, cost) => {
+  if (cost === 1 && diag === 22) return "orden_finalizada_sin_costo";
+  if (cost !== 1 && diag === 22) return "orden_finalizada_costo";
   if (diag === 23) return "orden_sin_reparacion";
 };
 
