@@ -48,19 +48,18 @@ export default class Invoices {
       [from, to]
     );
 
-  getOverdueInvoices = async (
-    from,
-    to,
-    condition = CONSTANTS.CURRENT_ACCOUNT_30_DAYS,
-    taxNumber = process.env.ORDER_POSITION
-  ) =>
+  getOverdueInvoices = async (from, to) =>
     await sendQueryUrbano(
       `
     SELECT 
     *, 
     cl.provincia AS state,
     cl.nombre AS name,
-    ct.numero AS invoiceNumber
+    ct.numero AS invoiceNumber,
+    cl.codigo AS customerCode,
+    cl.condicion AS customerCondition,
+    cl.mail AS customerEmail,
+    cl.telefono AS customerPhone
     FROM clientes cl
     INNER JOIN  ctacli ct
     ON cl.codigo = ct.codigo
@@ -70,11 +69,9 @@ export default class Invoices {
     ON cl.condicion = cv.numero
     WHERE ct.fecha > ? AND  ct.fecha < ? 
     AND ct.importe = ct.saldo
-    AND ct.tipo = 'FV' AND (ct.letra = 'A' OR ct.letra = 'B')
-    AND cl.condicion = ?
-    AND ct.puesto = ?
+    AND ct.tipo = 'FV'
     `,
-      [from, to, condition, taxNumber]
+      [from, to]
     );
 
   getServiceWorkInvoice = async (codigo, serviceworkNro) =>

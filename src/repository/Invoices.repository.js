@@ -9,8 +9,8 @@ export default class InvoicesRepository {
   getInvoicesPending = async (from, to) =>
     await this.dao.getInvoicesPending(from, to);
 
-  getOverdueInvoices = async (from, to, condition) =>
-    await this.dao.getOverdueInvoices(from, to, condition);
+  getOverdueInvoices = async (from, to) =>
+    await this.dao.getOverdueInvoices(from, to);
 
   getServiceWorkInvoice = async (codigo, serviceworkNro) =>
     await this.dao.getServiceWorkInvoice(codigo, serviceworkNro);
