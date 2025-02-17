@@ -95,6 +95,34 @@ export const request = async (req, res) => {
   }
 };
 
+export const bought = async (req, res) => {
+  try {
+    const { productCode } = req.body;
+
+    if (!productCode)
+      return res
+        .status(400)
+        .send({ status: "error", message: "You send an invalid info" });
+
+    const product = await productService.getByCode(productCode);
+    if (!product)
+      return res
+        .status(404)
+        .send({ status: "error", message: "Error searching product" });
+
+    const response = await productService.boughtProduct(product);
+    if (!response)
+      return res
+        .status(500)
+        .send({ status: "error", message: "Error buying product" });
+
+    res.send({ status: "success", payload: response });
+  } catch (error) {
+    logger.error(error.message);
+    res.status(500).send(error);
+  }
+};
+
 export const getOrderList = async (req, res) => {
   try {
     const products = await productService.getOrderList();
