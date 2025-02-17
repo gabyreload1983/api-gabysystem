@@ -3,17 +3,13 @@ import * as invoicesService from "../services/invoices.service.js";
 
 export const getOverdueInvoices = async (req, res) => {
   try {
-    const { from, to, condition } = req.query;
+    const { from, to } = req.query;
     if (!from || !to)
       return res
         .status(400)
         .send({ status: "error", message: "You send an invalid search query" });
 
-    const invoices = await invoicesService.getOverdueInvoices(
-      from,
-      to,
-      condition
-    );
+    const invoices = await invoicesService.getOverdueInvoices(from, to);
     if (!invoices)
       return res
         .status(404)
