@@ -43,6 +43,9 @@ export const requestProduct = async (
     observation
   );
 
+export const boughtProduct = async (product) =>
+  await productsRepository.boughtProduct(product);
+
 export const getOrderList = async () => await productsRepository.getOrderList();
 
 export const clearOrderList = async () =>

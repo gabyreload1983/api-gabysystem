@@ -16,6 +16,8 @@ export default class ProductsRepository {
     return response.length === 0 ? null : response[0];
   };
 
+  boughtProduct = async (product) => await this.dao.boughtProduct(product);
+
   getOrderList = async () => await this.dao.getOrderList();
 
   requestProduct = async (user, product, quantity, customerCode, observation) =>

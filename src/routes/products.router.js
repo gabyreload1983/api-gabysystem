@@ -11,6 +11,7 @@ router.get("/serie/:serialNumber", productsController.searchBySerie);
 router.get("/order-list", productsController.getOrderList);
 
 router.post("/request", productsController.request);
+router.post("/request/bought", productsController.bought);
 
 router.delete(
   "/clear-order-list",
