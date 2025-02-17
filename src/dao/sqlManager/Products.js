@@ -92,7 +92,7 @@ export default class Products {
 
   getOrderList = async () =>
     await sendQueryUrbano(
-      `SELECT * FROM octmp o LEFT JOIN clientes c ON o.cliente = c.codigo WHERE o.procesado = 'N'`
+      `SELECT *, o.estado AS status FROM octmp o LEFT JOIN clientes c ON o.cliente = c.codigo WHERE o.procesado = 'N'`
     );
 
   clearOrderList = async () =>
