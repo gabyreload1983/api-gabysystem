@@ -43,6 +43,10 @@ const subscribersSchema = new mongoose.Schema(
     status: {
       type: Boolean,
     },
+    totalEquipments: {
+      type: Number,
+    },
+
     equipments: {
       type: [
         {

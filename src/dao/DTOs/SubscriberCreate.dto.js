@@ -12,5 +12,6 @@ export default class SubscriberCreateDto {
     this.email = subscriber.mail;
     this.list = subscriber.lista;
     this.status = true;
+    this.totalEquipments = 0;
   }
 }
