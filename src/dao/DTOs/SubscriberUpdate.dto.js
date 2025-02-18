@@ -10,6 +10,7 @@ export default class SubscriberUpdateDto {
     this.email = subscriber.email;
     this.list = subscriber.lista;
     this.status = subscriber.status;
+    this.totalEquipments = subscriber.totalEquipments;
     this.equipments = subscriber.equipments;
   }
 }
