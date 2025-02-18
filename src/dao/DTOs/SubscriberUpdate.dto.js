@@ -11,6 +11,7 @@ export default class SubscriberUpdateDto {
     this.list = subscriber.lista;
     this.status = subscriber.status;
     this.totalEquipments = subscriber.totalEquipments;
+    this.totalServers = subscriber.totalServers;
     this.equipments = subscriber.equipments;
   }
 }

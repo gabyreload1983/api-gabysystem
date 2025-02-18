@@ -46,6 +46,9 @@ const subscribersSchema = new mongoose.Schema(
     totalEquipments: {
       type: Number,
     },
+    totalServers: {
+      type: Number,
+    },
 
     equipments: {
       type: [
