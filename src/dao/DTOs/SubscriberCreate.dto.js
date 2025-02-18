@@ -13,5 +13,6 @@ export default class SubscriberCreateDto {
     this.list = subscriber.lista;
     this.status = true;
     this.totalEquipments = 0;
+    this.totalServers = 0;
   }
 }
