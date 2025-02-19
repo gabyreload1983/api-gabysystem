@@ -4,47 +4,49 @@ const replacementsCollection = "replacements";
 
 const replacementsSchema = new mongoose.Schema(
   {
-    orderNumber: {
+    requests: {
       type: String,
-    },
-    technical_code: {
-      type: String,
+      required: true,
     },
     description: {
       type: String,
+      required: true,
     },
-    images: {
+    orderNumber: {
       type: String,
-    },
-    supplier_code: {
-      type: String,
+      default: "",
     },
     supplier: {
       type: String,
+      default: "",
     },
     cost: {
       type: Number,
+      default: 0,
     },
     finalPrice: {
       type: Number,
+      default: 0,
     },
     delay: {
       type: Number,
-    },
-    shipmment: {
-      type: String,
+      default: 0,
     },
     customerConfirmation: {
       type: Boolean,
+      default: false,
     },
     status: {
       type: String,
+      default: "pending",
     },
     linkSupplier: {
       type: String,
+      default: "",
     },
     notes: {
       type: String,
+      default: "",
     },
   },
   { timestamps: true }
