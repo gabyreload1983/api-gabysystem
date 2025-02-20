@@ -144,3 +144,16 @@ export const remove = async (req, res) => {
     res.status(500).send(error);
   }
 };
+
+export const uploadImages = async (req, res) => {
+  try {
+    res.send({
+      status: "success",
+      message: "Se cargaros las imagenes con exito",
+      payload: true,
+    });
+  } catch (error) {
+    logger.error(error.message);
+    res.status(500).send(error);
+  }
+};

@@ -1,14 +1,23 @@
 import multer from "multer";
 import path from "path";
 import { __dirname } from "../utils.js";
+import fs from "fs";
 
-// Configuración de almacenamiento
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, `${__dirname}/public/replacements/`); // Carpeta donde se guardarán las imágenes
+    const path = `${__dirname}/public/replacements/`;
+    if (!fs.existsSync(path)) {
+      fs.mkdirSync(path);
+    }
+    cb(null, path);
   },
   filename: (req, file, cb) => {
-    cb(null, `${Date.now()}-${file.originalname}`); // Renombra el archivo
+    const { rid } = req.params;
+    const extension = path.extname(file.originalname);
+    const index = req.files.length;
+
+    const newFilename = `${rid}-${String(index).padStart(2, "0")}${extension}`;
+    cb(null, newFilename);
   },
 });
 

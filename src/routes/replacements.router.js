@@ -23,13 +23,11 @@ router.get(
 
 router.post("/", replacementsController.create);
 
-router.post("/images", upload.array("imagesReplacement", 5), (req, res) => {
-  try {
-    res.json({ message: "Imágenes subidas con éxito", files: req.files });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
+router.post(
+  "/images/:rid",
+  upload.array("imagesReplacement", 5),
+  replacementsController.uploadImages
+);
 
 router.put("/:id", replacementsController.update);
 
