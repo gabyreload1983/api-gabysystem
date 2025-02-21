@@ -11,5 +11,6 @@ export default class ReplacementCreateDto {
     this.status = replacement?.status;
     this.linkSupplier = replacement?.linkSupplier;
     this.notes = replacement?.notes;
+    this.images = replacement?.images;
   }
 }
