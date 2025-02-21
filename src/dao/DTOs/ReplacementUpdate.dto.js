@@ -6,7 +6,7 @@ export default class ReplacementUpdateDto {
     this.supplier = replacement.supplier;
     this.cost = replacement.cost;
     this.finalPrice = replacement.finalPrice;
-    this.delay = replacement.delay;
+    this.deliveryDate = replacement.deliveryDate;
     this.customerConfirmation = replacement.customerConfirmation;
     this.status = replacement.status;
     this.linkSupplier = replacement.linkSupplier;

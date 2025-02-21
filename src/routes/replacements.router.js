@@ -11,7 +11,7 @@ router.get(
   replacementsController.getReplacementById
 );
 router.get(
-  "/:code",
+  "/service-work/:code",
 
   replacementsController.getReplacementByOrderNumber
 );

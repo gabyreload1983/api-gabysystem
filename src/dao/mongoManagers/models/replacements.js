@@ -28,9 +28,9 @@ const replacementsSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
-    delay: {
-      type: Number,
-      default: 0,
+    deliveryDate: {
+      type: Date,
+      default: null,
     },
     customerConfirmation: {
       type: Boolean,

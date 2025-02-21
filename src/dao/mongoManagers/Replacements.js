@@ -7,7 +7,7 @@ export default class Replacements {
     await replacementsModel.findOne({ _id: id });
 
   getReplacementByOrderNumber = async (orderNumber) =>
-    await replacementsModel.findOne({ orderNumber });
+    await replacementsModel.find({ orderNumber });
 
   getReplacements = async () => await replacementsModel.find();
 
