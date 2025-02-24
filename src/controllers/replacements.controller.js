@@ -132,7 +132,7 @@ export const remove = async (req, res) => {
     if (!response)
       return res
         .status(500)
-        .send({ status: "error", message: "Error removing replcement" });
+        .send({ status: "error", message: "Error removing replacement" });
 
     res.send({
       status: "success",
@@ -147,6 +147,19 @@ export const remove = async (req, res) => {
 
 export const uploadImages = async (req, res) => {
   try {
+    const { files } = req;
+    const { rid } = req.params;
+    const replacement = await replacementsService.getReplacementById(rid);
+    const replacementUpdated = { ...replacement._doc };
+    for (const file of files) {
+      replacementUpdated.images.push(file.filename);
+    }
+    const response = await replacementsService.update(rid, replacementUpdated);
+    if (!response)
+      return res
+        .status(500)
+        .send({ status: "error", message: "Error updating images" });
+
     res.send({
       status: "success",
       message: "Se cargaros las imagenes con exito",

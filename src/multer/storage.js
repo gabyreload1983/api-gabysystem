@@ -5,7 +5,8 @@ import fs from "fs";
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const path = `${__dirname}/public/replacements/`;
+    const { rid } = req.params;
+    const path = `${__dirname}/public/replacements/${rid}/`;
     if (!fs.existsSync(path)) {
       fs.mkdirSync(path);
     }
@@ -16,7 +17,7 @@ const storage = multer.diskStorage({
     const extension = path.extname(file.originalname);
     const index = req.files.length;
 
-    const newFilename = `${rid}-${String(index).padStart(2, "0")}${extension}`;
+    const newFilename = `${String(index).padStart(2, "0")}${extension}`;
     cb(null, newFilename);
   },
 });
