@@ -24,6 +24,10 @@ const replacementsSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    deliveryCost: {
+      type: Number,
+      default: 0,
+    },
     finalPrice: {
       type: Number,
       default: 0,
@@ -33,8 +37,8 @@ const replacementsSchema = new mongoose.Schema(
       default: null,
     },
     customerConfirmation: {
-      type: Boolean,
-      default: false,
+      type: String,
+      default: "no",
     },
     status: {
       type: String,

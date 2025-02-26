@@ -5,6 +5,7 @@ export default class ReplacementCreateDto {
     this.description = replacement.description;
     this.supplier = replacement?.supplier;
     this.cost = replacement?.cost;
+    this.deliveryCost = replacement?.deliveryCost;
     this.finalPrice = replacement?.finalPrice;
     this.deliveryDate = replacement?.deliveryDate;
     this.customerConfirmation = replacement?.customerConfirmation;
