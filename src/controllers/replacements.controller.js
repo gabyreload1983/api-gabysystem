@@ -130,6 +130,13 @@ export const update = async (req, res) => {
 export const archived = async (req, res) => {
   try {
     const { id } = req.params;
+    const { archived } = req.query;
+    if (!archived)
+      return res
+        .status(400)
+        .send({ status: "error", message: "You send an invalid search query" });
+
+    const archivedQuery = archived === "true";
 
     const replacement = await replacementsService.getReplacementById(id);
 
@@ -138,7 +145,10 @@ export const archived = async (req, res) => {
         .status(404)
         .send({ status: "error", message: "Replacement not found" });
 
-    const archivedReplacement = { ...replacement._doc, archived: true };
+    const archivedReplacement = {
+      ...replacement._doc,
+      archived: archivedQuery,
+    };
 
     const response = await replacementsService.update(id, archivedReplacement);
 
