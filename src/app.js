@@ -43,7 +43,7 @@ app.use("/api/customers", authToken, customersRouter);
 app.use("/api/subscribers", authToken, subscribersRouter);
 app.use("/api/products", authToken, productsRouter);
 app.use("/api/invoices", authToken, invoicesRouter);
-app.use("/api/replacements", replacementsRouter);
+app.use("/api/replacements", authToken, replacementsRouter);
 app.use("/api/alexis", authToken, alexisRouter);
 app.use("*", (req, res) =>
   res.status(404).send({ error: "error", message: "Page Not Found" })

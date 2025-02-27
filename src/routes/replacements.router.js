@@ -30,9 +30,17 @@ router.post(
   replacementsController.uploadImages
 );
 
-router.put("/archived/:id", replacementsController.archived);
-router.put("/:id", replacementsController.update);
+router.put(
+  "/archived/:id",
+  authorization("premium"),
+  replacementsController.archived
+);
+router.put(
+  "/:id",
+  authorization("premium", "technical"),
+  replacementsController.update
+);
 
-router.delete("/:id", replacementsController.remove);
+router.delete("/:id", authorization("premium"), replacementsController.remove);
 
 export default router;
