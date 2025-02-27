@@ -29,6 +29,7 @@ router.post(
   replacementsController.uploadImages
 );
 
+router.put("/archived/:id", replacementsController.archived);
 router.put("/:id", replacementsController.update);
 
 router.delete("/:id", replacementsController.remove);

@@ -103,12 +103,43 @@ export const update = async (req, res) => {
     if (!response)
       return res
         .status(500)
-        .send({ status: "error", message: "Error updating replcement" });
+        .send({ status: "error", message: "Error updating replacement" });
 
     res.send({
       status: "success",
       message: "OK",
       payload: replacement,
+    });
+  } catch (error) {
+    logger.error(error.message);
+    res.status(500).send(error);
+  }
+};
+
+export const archived = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const replacement = await replacementsService.getReplacementById(id);
+
+    if (!replacement)
+      return res
+        .status(404)
+        .send({ status: "error", message: "Replacement not found" });
+
+    const archivedReplacement = { ...replacement._doc, archived: true };
+
+    const response = await replacementsService.update(id, archivedReplacement);
+
+    if (!response)
+      return res
+        .status(500)
+        .send({ status: "error", message: "Error archiving replacement" });
+
+    res.send({
+      status: "success",
+      message: "OK",
+      payload: response,
     });
   } catch (error) {
     logger.error(error.message);
