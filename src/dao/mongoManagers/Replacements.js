@@ -9,7 +9,8 @@ export default class Replacements {
   getReplacementByOrderNumber = async (orderNumber) =>
     await replacementsModel.find({ orderNumber });
 
-  getReplacements = async () => await replacementsModel.find();
+  getReplacements = async () =>
+    await replacementsModel.find({ archived: false });
 
   create = async (replacement) => await replacementsModel.create(replacement);
 

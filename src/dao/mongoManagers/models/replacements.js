@@ -56,6 +56,10 @@ const replacementsSchema = new mongoose.Schema(
       type: [String],
       default: [],
     },
+    archived: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );

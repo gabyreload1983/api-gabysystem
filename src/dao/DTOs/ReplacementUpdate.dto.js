@@ -13,5 +13,6 @@ export default class ReplacementUpdateDto {
     this.linkSupplier = replacement.linkSupplier;
     this.notes = replacement.notes;
     this.images = replacement.images;
+    this.archived = replacement.archived;
   }
 }
