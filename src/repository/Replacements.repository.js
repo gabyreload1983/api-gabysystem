@@ -11,7 +11,8 @@ export default class ReplacementsRepository {
   getReplacementByOrderNumber = async (orderNumber) =>
     await this.dao.getReplacementByOrderNumber(orderNumber);
 
-  getReplacements = async () => await this.dao.getReplacements();
+  getReplacements = async (archived) =>
+    await this.dao.getReplacements(archived);
 
   create = async (replacement) =>
     await this.dao.create(new ReplacementCreateDto(replacement));

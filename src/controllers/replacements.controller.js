@@ -47,7 +47,18 @@ export const getReplacementByOrderNumber = async (req, res) => {
 
 export const getReplacements = async (req, res) => {
   try {
-    const replacements = await replacementsService.getReplacements();
+    const { archived } = req.query;
+    const archivedQuery = archived === "true" ? true : false;
+
+    if (!archived)
+      return res
+        .status(400)
+        .send({ status: "error", message: "You send an invalid search query" });
+
+    const replacements = await replacementsService.getReplacements(
+      archivedQuery
+    );
+
     if (!replacements)
       return res
         .status(404)

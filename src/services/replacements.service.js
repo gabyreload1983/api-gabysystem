@@ -10,8 +10,8 @@ export const getReplacementById = async (id) =>
 export const getReplacementByOrderNumber = async (orderNumber) =>
   await replacementsRepository.getReplacementByOrderNumber(orderNumber);
 
-export const getReplacements = async () =>
-  await replacementsRepository.getReplacements();
+export const getReplacements = async (archived) =>
+  await replacementsRepository.getReplacements(archived);
 
 export const create = async (replacement) =>
   await replacementsRepository.create(replacement);
