@@ -21,6 +21,7 @@ services:
     volumes:
       - ~/pdfHistory:/app/src/public/pdfHistory
       - ~/pdfInvoices:/app/src/public/pdfInvoices
+      - ~/replacements:/app/src/public/replacements
     environment:
       - NODE_ENV=
       - PORT=
@@ -39,6 +40,7 @@ services:
       - SQL_TICKETS_USER=
       - SQL_TICKETS_PASSWORD=
       - SQL_TICKETS_DATABASE=
+      - PRIVATE_CUSTOM_KEY_JWT=
       - PRIVATE_KEY_JWT=
       - MAIL_HOST=
       - MAIL_USER=
@@ -50,4 +52,13 @@ services:
       - MAIL_FROM_COMPROBANTES=
       - COOKIE_TOKEN=
       - SALE_NOTE_POSITION=
-      - ENABLE_SENDING_INVOICES=
+      - ENABLE_JOBS=
+      - ORDER_POSITION=
+      - FTP_HOST=
+      - FTP_USER=
+      - FTP_PASSWORD=
+      - ACCESS_TOKEN=
+      - VERSION=
+      - PHONE_NUMBER_ID=
+      - GITHUB_TOKEN_SUBSCRIBERS=
+      - ABONADOS_URL=
