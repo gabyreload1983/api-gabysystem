@@ -5,7 +5,12 @@ import * as userController from "../controllers/users.controller.js";
 import { authToken, authorization } from "../utils.js";
 import { CONSTANTS } from "../config/constants/constansts.js";
 
-router.get("/", authToken, authorization(), userController.getUsers);
+router.get(
+  "/",
+  authToken,
+  authorization(CONSTANTS.ADMIN),
+  userController.getUsers
+);
 router.get("/jwt", authToken, userController.getUserFromJwt);
 
 router.get(
