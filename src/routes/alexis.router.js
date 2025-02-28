@@ -2,25 +2,26 @@ import { Router } from "express";
 import * as alexisAccountController from "../controllers/alexisAccount.controller.js";
 import * as salesCommissionsController from "../controllers/salesCommissions.controller.js";
 import { authorization } from "../utils.js";
+import { CONSTANTS } from "../config/constants/constansts.js";
 
 const router = Router();
 
 // ACCOUNT ROUTE
 router.get(
   "/account",
-  authorization("premium"),
+  authorization(CONSTANTS.PREMIUM),
   alexisAccountController.getAll
 );
 
 router.get(
   "/account/:id",
-  authorization("premium"),
+  authorization(CONSTANTS.PREMIUM),
   alexisAccountController.findById
 );
 
 router.delete(
   "/account/:id",
-  authorization("premium"),
+  authorization(CONSTANTS.PREMIUM),
   alexisAccountController.remove
 );
 
@@ -28,7 +29,7 @@ router.delete(
 
 router.post(
   "/payment",
-  authorization("premium"),
+  authorization(CONSTANTS.PREMIUM),
   alexisAccountController.create
 );
 
@@ -36,24 +37,24 @@ router.post(
 
 router.get(
   "/sales",
-  authorization("premium"),
+  authorization(CONSTANTS.PREMIUM),
   salesCommissionsController.getSales
 );
 router.get(
   "/sales/:id",
-  authorization("premium"),
+  authorization(CONSTANTS.PREMIUM),
   salesCommissionsController.getSale
 );
 
 router.post(
   "/sales/refresh",
-  authorization("premium"),
+  authorization(CONSTANTS.PREMIUM),
   salesCommissionsController.refresh
 );
 
 router.patch(
   "/sales",
-  authorization("premium"),
+  authorization(CONSTANTS.PREMIUM),
   salesCommissionsController.updateSale
 );
 

@@ -1,3 +1,4 @@
+import { CONSTANTS } from "../config/constants/constansts.js";
 import User from "../dao/mongoManagers/Users.js";
 import UsersRepository from "../repository/Users.repository.js";
 
@@ -19,7 +20,7 @@ export const getByEmail = async (email) =>
 export const login = async (user) => await usersRepository.login(user);
 
 export const update = async (user, userUpdate) => {
-  if (userUpdate.role === "admin") userUpdate.role === user.role;
+  if (userUpdate.role === CONSTANTS.ADMIN) userUpdate.role === user.role;
   userUpdate = { ...user, ...userUpdate };
   return await usersRepository.update(user._id, userUpdate);
 };
