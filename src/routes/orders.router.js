@@ -3,6 +3,7 @@ import { Router } from "express";
 const router = Router();
 import * as ordersController from "../controllers/orders.controller.js";
 import { authorization } from "../utils.js";
+import { CONSTANTS } from "../config/constants/constansts.js";
 
 router.get("/in-process", ordersController.getInProcess);
 router.get("/to-deliver", ordersController.getToDeliver);
@@ -19,7 +20,7 @@ router.get("/:nrocompro", ordersController.getOrder);
 
 router.get(
   "/statitstics/:from/:to",
-  authorization("premium"),
+  authorization(CONSTANTS.PREMIUM),
   ordersController.getStatistics
 );
 
@@ -29,54 +30,58 @@ router.post("/pdf", ordersController.createPdf);
 
 router.post(
   "/send/customer-pdf",
-  authorization("seller", "premium"),
+  authorization(CONSTANTS.SELLER, CONSTANTS.PREMIUM),
   ordersController.sendCustomerPdf
 );
 
-router.post("/", authorization("seller", "premium"), ordersController.create);
+router.post(
+  "/",
+  authorization(CONSTANTS.SELLER, CONSTANTS.PREMIUM),
+  ordersController.create
+);
 
 router.patch(
   "/:nrocompro",
-  authorization("seller", "premium"),
+  authorization(CONSTANTS.SELLER, CONSTANTS.PREMIUM),
   ordersController.updateOrder
 );
 
 router.put(
   "/take",
-  authorization("technical", "premium"),
+  authorization(CONSTANTS.TECHNICAL, CONSTANTS.PREMIUM),
   ordersController.take
 );
 router.put(
   "/update",
-  authorization("technical", "premium"),
+  authorization(CONSTANTS.TECHNICAL, CONSTANTS.PREMIUM),
   ordersController.updateDiagnosis
 );
 router.put(
   "/close",
-  authorization("technical", "premium"),
+  authorization(CONSTANTS.TECHNICAL, CONSTANTS.PREMIUM),
   ordersController.close
 );
 router.put(
   "/free",
-  authorization("technical", "premium"),
+  authorization(CONSTANTS.TECHNICAL, CONSTANTS.PREMIUM),
   ordersController.free
 );
 
 router.put(
   "/out/:nrocompro",
-  authorization("seller", "premium"),
+  authorization(CONSTANTS.SELLER, CONSTANTS.PREMIUM),
   ordersController.out
 );
 
 router.put(
   "/products",
-  authorization("seller", "premium"),
+  authorization(CONSTANTS.SELLER, CONSTANTS.PREMIUM),
   ordersController.handleProductsInOrder
 );
 
 router.put(
   "/update-customer",
-  authorization("seller", "premium"),
+  authorization(CONSTANTS.SELLER, CONSTANTS.PREMIUM),
   ordersController.updateCustomer
 );
 

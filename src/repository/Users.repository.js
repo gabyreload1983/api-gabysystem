@@ -1,6 +1,7 @@
 import UsersLoginDto from "../dao/DTOs/UsersLogin.dto.js";
 import UsersCreateDto from "../dao/DTOs/UsersCreate.dto.js";
 import UserUpdateDto from "../dao/DTOs/UserUpdate.dto.js";
+import { CONSTANTS } from "../config/constants/constansts.js";
 
 export default class UsersRepository {
   constructor(dao) {
@@ -16,7 +17,7 @@ export default class UsersRepository {
     const users = await this.dao.getUsers();
     return users
       .map((user) => new UsersLoginDto(user))
-      .filter((user) => user.role !== "admin");
+      .filter((user) => user.role !== CONSTANTS.ADMIN);
   };
 
   getByCode = async (code_technical) =>

@@ -4,6 +4,7 @@ import { authorization } from "../utils.js";
 const router = Router();
 import * as replacementsController from "../controllers/replacements.controller.js";
 import { upload } from "../multer/storage.js";
+import { CONSTANTS } from "../config/constants/constansts.js";
 
 router.get(
   "/:id",
@@ -32,15 +33,19 @@ router.post(
 
 router.put(
   "/archived/:id",
-  authorization("premium"),
+  authorization(CONSTANTS.PREMIUM),
   replacementsController.archived
 );
 router.put(
   "/:id",
-  authorization("premium", "technical"),
+  authorization(CONSTANTS.PREMIUM, CONSTANTS.TECHNICAL),
   replacementsController.update
 );
 
-router.delete("/:id", authorization("premium"), replacementsController.remove);
+router.delete(
+  "/:id",
+  authorization(CONSTANTS.PREMIUM),
+  replacementsController.remove
+);
 
 export default router;
