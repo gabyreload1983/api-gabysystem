@@ -15,8 +15,11 @@ export const getByCode = async (codigo) => {
 export const getCustomersByName = async (name) =>
   await customersRepository.getByName(name);
 
-export const getCustomers = async () =>
-  await customersRepository.getCustomers();
+export const getCustomers = async (phone) => {
+  if (phone) return await customersRepository.getCustomersBy("telefono", phone);
+
+  return await customersRepository.getCustomers();
+};
 
 export const getSubscribers = async () =>
   await customersRepository.getSubscribers();

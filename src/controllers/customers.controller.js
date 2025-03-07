@@ -4,7 +4,9 @@ import * as customerService from "../services/customers.service.js";
 
 export const getCustomers = async (req, res) => {
   try {
-    const customers = await customerService.getCustomers();
+    const { phone } = req.query;
+
+    const customers = await customerService.getCustomers(phone);
     if (!customers)
       return res
         .status(404)
