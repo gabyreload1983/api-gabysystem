@@ -9,10 +9,7 @@ export const getInvoicesCommission = async (from, to) =>
 
 export const getInvoicesPending = async (from, to) => {
   const invoicesDetail = await invoiceRepository.getInvoicesPending(from, to);
-  const invoices = [];
-  formatInvoices(invoicesDetail, invoices);
-
-  return invoices;
+  return formatInvoices(invoicesDetail);
 };
 
 export const getOverdueInvoices = async (from, to) => {
