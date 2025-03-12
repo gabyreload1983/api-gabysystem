@@ -8,6 +8,8 @@ export default class CustomersRepository {
   getByName = async (description) => await this.dao.getByName(description);
 
   getCustomers = async () => await this.dao.getCustomers();
+  
+  getCustomersByCondition = async (condition) => await this.dao.getCustomersByCondition(condition);
 
   getCustomersBy = async (field, value) =>
     await this.dao.getCustomersBy(field, value);

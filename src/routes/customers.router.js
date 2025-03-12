@@ -10,6 +10,12 @@ router.get("/code/:codigo", customersController.getCustomerByCode);
 router.get("/subscribers", customersController.getSubscribers);
 
 router.get(
+  "/summaries/current-account-30-days",
+  authorization(CONSTANTS.PREMIUM),
+  customersController.getSummariesCurrentAccount30Days
+);
+
+router.get(
   "/summaries",
   authorization(CONSTANTS.PREMIUM),
   customersController.getSummaries

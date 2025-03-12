@@ -1,6 +1,7 @@
 import moment from "moment";
 import Customers from "../dao/sqlManager/Customers.js";
 import CustomersRepository from "../repository/Customers.repository.js";
+import { CONSTANTS } from "../config/constants/constansts.js";
 
 const customerManager = new Customers();
 const customersRepository = new CustomersRepository(customerManager);
@@ -76,4 +77,30 @@ export const getSummaries = async (balanceFilter = 1000) => {
   return customers
     .filter((customer) => customer.balance > balanceFilter)
     .sort((a, b) => b.balance - a.balance);
+};
+export const getSummariesCurrentAccount30Days = async () => {
+  const customers = await customersRepository.getCustomersByCondition(
+    CONSTANTS.CURRENT_ACCOUNT_30_DAYS
+  );
+
+  const filterCustomers = [];
+  for (const customer of customers) {
+    const invoices = await customersRepository.getCustomersVouchers(
+      customer.codigo
+    );
+
+    const filterInvoices = invoices.filter(
+      (invoice) => Number(invoice.saldo) === Number(invoice.importe)
+    );
+    if (filterInvoices.length) {
+      customer.balance = filterInvoices.reduce(
+        (acc, val) => acc + Number(val.importe),
+        0
+      );
+
+      filterCustomers.push(customer);
+    }
+  }
+
+  return filterCustomers;
 };
