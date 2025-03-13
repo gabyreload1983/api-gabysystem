@@ -13,6 +13,11 @@ export default class Customers {
 
   getCustomers = async () => await sendQueryUrbano(`SELECT * FROM clientes`);
 
+  getCustomersByCondition = async (condition) =>
+    await sendQueryUrbano(`SELECT * FROM clientes WHERE condicion = ?`, [
+      condition,
+    ]);
+
   getCustomersBy = async (field, value) =>
     await sendQueryUrbano(`SELECT * FROM clientes WHERE ${field} LIKE ?`, [
       `%${value}%`,

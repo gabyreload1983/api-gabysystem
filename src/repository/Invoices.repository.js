@@ -3,6 +3,9 @@ export default class InvoicesRepository {
     this.dao = dao;
   }
 
+  getCustomerInvoicesPending = async (id, from, to) =>
+    await this.dao.getCustomerInvoicesPending(id, from, to);
+
   getInvoicesCommission = async (from, to) =>
     await this.dao.getInvoicesCommission(from, to);
 
