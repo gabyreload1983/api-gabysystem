@@ -4,6 +4,7 @@ import fs from "fs/promises";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import logger from "./logger/logger.js";
+import { CONSTANTS } from "./config/constants/constansts.js";
 
 const PRIVATE_KEY_JWT = process.env.PRIVATE_KEY_JWT;
 const PRIVATE_CUSTOM_KEY_JWT = process.env.PRIVATE_CUSTOM_KEY_JWT;
@@ -187,3 +188,15 @@ export const formatPrice = (price) => {
 export const isGreaterThan = (a, b) => a > b;
 
 export const isNumeric = (value) => !isNaN(value);
+
+export const getSaleConditionDescription = (condition) => {
+  if (condition === CONSTANTS.CASH) return "CONTADO";
+  if (condition === CONSTANTS.CURRENT_ACCOUNT_14_DAYS) return "CTA CTE 14 DIAS";
+  if (condition === CONSTANTS.CURRENT_ACCOUNT_30_DAYS) return "CTA CTE 30 DIAS";
+  if (condition === CONSTANTS.ALEXIS) return "ALEXIS";
+  if (condition === CONSTANTS.CURRENT_ACCOUNT) return "CTA CTE";
+  if (condition === CONSTANTS.CURRENT_ACCOUNT_RETAILER)
+    return "CTA CTE REVENDEDOR";
+  if (condition === CONSTANTS.SUBSCRIBER) return "ABONADO";
+  return "";
+};

@@ -80,4 +80,10 @@ export default class Invoices {
         WHERE codigo = ? AND vienede = ?`,
       [codigo, serviceworkNro]
     );
+
+  getCustomerInvoicesPending = async (id, from, to) =>
+    await sendQueryUrbano(
+      `SELECT * FROM ctacli WHERE codigo = ? AND tipo = 'FV' AND saldo = importe AND fecha > ? AND fecha < ?`,
+      [id, from, to]
+    );
 }

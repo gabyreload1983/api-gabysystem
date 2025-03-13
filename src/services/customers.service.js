@@ -1,10 +1,15 @@
 import moment from "moment";
 import Customers from "../dao/sqlManager/Customers.js";
 import CustomersRepository from "../repository/Customers.repository.js";
+import Invoices from "../dao/sqlManager/Invoices.js";
+import InvoicesRepository from "../repository/Invoices.repository.js";
 import { CONSTANTS } from "../config/constants/constansts.js";
+import { getSaleConditionDescription } from "../utils.js";
 
 const customerManager = new Customers();
 const customersRepository = new CustomersRepository(customerManager);
+const invoicesManager = new Invoices();
+const invoicesRepository = new InvoicesRepository(invoicesManager);
 
 export const getByCode = async (codigo) => {
   const customer = await customersRepository.getByCode(codigo);
@@ -35,8 +40,11 @@ export const removeSubscription = async (code) =>
   await customersRepository.removeSubscription(code);
 
 export const getSummaries = async (balanceFilter = 1000) => {
-  const customers = await customersRepository.getCustomers();
-  const salesConditions = await customersRepository.getSalesConditions();
+  const allCustomers = await customersRepository.getCustomers();
+  const customersNotIncluided = [".CF"];
+  const customers = allCustomers.filter(
+    (customer) => !customersNotIncluided.includes(customer.codigo)
+  );
 
   for (const customer of customers) {
     const vouchers = await customersRepository.getCustomersVouchers(
@@ -45,12 +53,7 @@ export const getSummaries = async (balanceFilter = 1000) => {
     customer.balance = 0;
     customer.lastPay = "";
 
-    const index = salesConditions.findIndex((condition) => {
-      return condition.code === Number(customer.condicion);
-    });
-    if (index !== -1) {
-      customer.condicion = salesConditions[index].description;
-    }
+    customer.saleCondition = getSaleConditionDescription(customer.condicion);
 
     for (const voucher of vouchers) {
       if (
@@ -83,21 +86,26 @@ export const getSummariesCurrentAccount30Days = async () => {
     CONSTANTS.CURRENT_ACCOUNT_30_DAYS
   );
 
+  const oneYearAgo = moment().subtract(1, "year").format("YYYY-MM-DD");
+  const thirtyDaysAgo = moment()
+    .subtract(30, "days")
+    .format("YYYY-MM-DD 23:59:59");
+
   const filterCustomers = [];
+
   for (const customer of customers) {
-    const invoices = await customersRepository.getCustomersVouchers(
-      customer.codigo
+    const invoices = await invoicesRepository.getCustomerInvoicesPending(
+      customer.codigo,
+      oneYearAgo,
+      thirtyDaysAgo
     );
 
-    const filterInvoices = invoices.filter(
-      (invoice) => Number(invoice.saldo) === Number(invoice.importe)
-    );
-    if (filterInvoices.length) {
-      customer.balance = filterInvoices.reduce(
-        (acc, val) => acc + Number(val.importe),
+    if (invoices.length) {
+      customer.balance = invoices.reduce(
+        (acc, val) => acc + Number(val.saldo),
         0
       );
-
+      customer.saleCondition = getSaleConditionDescription(customer.condicion);
       filterCustomers.push(customer);
     }
   }
