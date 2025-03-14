@@ -2,6 +2,7 @@ import multer from "multer";
 import path from "path";
 import { __dirname } from "../utils.js";
 import fs from "fs";
+import { nanoid } from "nanoid";
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -15,9 +16,9 @@ const storage = multer.diskStorage({
   filename: (req, file, cb) => {
     const { rid } = req.params;
     const extension = path.extname(file.originalname);
-    const index = req.files.length;
+    const photoId = nanoid();
 
-    const newFilename = `${String(index).padStart(2, "0")}${extension}`;
+    const newFilename = `${String(photoId)}${extension}`;
     cb(null, newFilename);
   },
 });
