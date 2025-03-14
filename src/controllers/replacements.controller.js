@@ -204,7 +204,9 @@ export const uploadImages = async (req, res) => {
     const replacement = await replacementsService.getReplacementById(rid);
     const replacementUpdated = { ...replacement._doc };
     for (const file of files) {
-      replacementUpdated.images.push(file.filename);
+      replacementUpdated.images.push(
+        `/replacements/${replacementUpdated._id}/${file.filename}`
+      );
     }
     const response = await replacementsService.update(rid, replacementUpdated);
     if (!response)
