@@ -14,6 +14,7 @@ import productsRouter from "./routes/products.router.js";
 import invoicesRouter from "./routes/invoices.router.js";
 import replacementsRouter from "./routes/replacements.router.js";
 import alexisRouter from "./routes/alexis.router.js";
+import stockControlRouter from "./routes/stockControl.router.js";
 
 import "./dao/dbMongoConfig.js";
 import "./config/init.js";
@@ -45,6 +46,7 @@ app.use("/api/products", authToken, productsRouter);
 app.use("/api/invoices", authToken, invoicesRouter);
 app.use("/api/replacements", authToken, replacementsRouter);
 app.use("/api/alexis", authToken, alexisRouter);
+app.use("/api/stock-control", stockControlRouter);
 app.use("*", (req, res) =>
   res.status(404).send({ error: "error", message: "Page Not Found" })
 );
