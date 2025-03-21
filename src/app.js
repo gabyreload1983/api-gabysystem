@@ -46,7 +46,7 @@ app.use("/api/products", authToken, productsRouter);
 app.use("/api/invoices", authToken, invoicesRouter);
 app.use("/api/replacements", authToken, replacementsRouter);
 app.use("/api/alexis", authToken, alexisRouter);
-app.use("/api/stock-control", stockControlRouter);
+app.use("/api/stock-control", authToken, stockControlRouter);
 app.use("*", (req, res) =>
   res.status(404).send({ error: "error", message: "Page Not Found" })
 );
